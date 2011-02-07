@@ -1,0 +1,25 @@
+citHeader("To cite this package, use:")
+
+citEntry(entry="misc",
+         title = "Multiplatform data integration for ge/cn",
+         author = personList(
+	 	person(first ="Leo", last="Lahti", email = "leo.lahti@iki.fi"),
+	 	person(first ="Martin", last="Sch{\"a}fer"),
+	 	person(first ="Hans-Ulrich", last="Klein"),
+	 	person(first ="Silvio", last="Bicciato"),
+	 	person(first ="Martin", last="Dugas")
+	 	  ),
+	 note = "Review in ... (to appear)",
+	 year = "2011",
+	 publisher = "publisher..",
+         textVersion =
+         paste("Leo Lahti et al.",
+               "Multiplatform data integration for ge/cn",
+               "Review in ... (to appear)",
+               sep=" ")
+         )
+
+citFooter("gecn has been created by Leo Lahti and Martin
+          Sch{\"a}fer. Please cite also the R package when using it for
+          data analysis.")
+

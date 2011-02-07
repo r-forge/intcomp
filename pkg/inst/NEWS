@@ -1,0 +1,24 @@
+
+
+CHANGES IN VERSION 0.2.3 (2010-12-28)
+
+ o updates to the method functions
+
+CHANGES IN VERSION 0.2.2 (2010-12-1)
+
+ o added in internals.R the get.pma.table function; modified
+   test.geneorder.pma and test.geneorder.pipeline accordingly to call
+   this - now empirical p-values are calculated, based on permutations of
+   the genes.
+
+CHANGES IN VERSION 0.2.1 (2010-11-11)
+
+o test.geneorder.pipeline function: added option methods, which can be
+  used to select the methods to test
+
+o in test.geneorder.dri.cor, in permute_dr_corr calls, replace method
+  with meth; this fixes a bug
+
+CHANGES IN VERSION 0.2 (2010-10-20)
+
+o Initial release

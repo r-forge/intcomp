@@ -1,0 +1,114 @@
+%\VignetteIndexEntry{gecn}
+%The above line is needed to remove a warning in R CMD check
+\documentclass[a4paper]{article}
+
+\title{gecn:\\Pairwise integration of gene expression and copy number data}
+
+\author{Leo Lahti\footnote{leo.lahti@iki.fi} and Martin Sch{\"a}fer}
+
+\usepackage{Sweave}
+\usepackage{float}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage[authoryear,round]{natbib}
+
+\usepackage{hyperref}
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+%* motivation
+
+A number of algorithms have been recently suggested for integrating
+gene expression and DNA copy number observations. This R package
+provides simulated example data and a comparison pipeline to evaluate
+the performance of the different approaches.
+
+\subsection{Comparison methods}
+
+The current version compares the following algorithms: DRI \citep{Salari2010},
+edira \citep{Schafer09}, intCNGEan \citep{Wieringen09}, SIM \citep{Menezes2009}, pint
+\citep{Lahti09mlsp}, PMA \citep{Witten09}.
+
+\section{Examples}
+
+This Section shows how to run the simulated data through the
+comparison pipeline, and to reproduce the results.
+
+\subsection{Simulated data}
+
+Use of the package is demonstrated with a simulated example data set
+containing paired observations of gene expression and copy number.
+
+%Load the package and example data:
+%<<>>=
+%library(gecn)
+%@
+
+
+Example data set contains (i) gene expression matrix, (ii) gene copy
+number matrix, (iii) sample class labels (tumor/normal), and (iv) list
+of 'known' cancer genes.
+
+% consists of a list with two items: $data$ and $info$. The probes in
+% gene expression and gene copy number are assumed to be
+% paired. $data$ is a data matrix with gene expression or gene copy
+% number data. Genes are in rows and samples in columns and rows and
+% columns should be named. $info$ is a data frame with additional
+% information about genes. It has three elements: $loc$, $chr$ and
+% $arm$. $loc$ indicates the genomic location of the probes in base
+% pairs (numeric); $chr$ and $arm$ are factors indicating the
+% chromosome and chromosomal arm of the probe.
+
+\subsection{Pollack et al. breast cancer data set}
+
+Read Pollack et al. (2002) data set
+(4719CopyNoGeneDataset.tsv\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
+  accessed June 2, 2010.}) and a list of known breast cancer
+genes. Ground truth list of known breast cancer
+genes\footnote{http://www.nature.com/onc/journal/v18/n56/abs/1203335a.html}
+('tgdb\_by\_name.cgi.html' and 'tgdb.txt'
+\footnote{http://www.tumor-gene.org/cgi-bin/TGDB/tgdb\_by\_name.cgi
+  accessed 5.6.2010.})
+
+<<getdata>>=
+library(gecn)
+data(pollack) # #clone2geneid, CopyNoGeneDataset4719 
+#dat <- read.pollack(chrs = 1:22)
+#ge <- dat$ge$data        # gene expression matrix
+#cn <- dat$cn$data        # copy number matrix
+#gene.info <- dat$ge$info # gene location info
+library("org.Hs.eg.db")
+#cancerGenes <- get.brca.genes(rownames(dat$ge$data), as.list(org.Hs.egALIAS2EG))
+#auc <- test.geneorder.pipeline(ge, cn, controls = NULL, cancerGenes, nperm = 1e2)
+@
+
+\section{Methods}
+
+\subsection*{Acknowledgements}
+
+The package has been supported by EuGESMA COST Action BM0801: European
+Genetic and Epigenetic Study on AML and MDS.
+
+%* references
+
+\bibliographystyle{plain}
+\bibliography{/home/lmlahti/pub/leo,/home/lmlahti/pub/library}
+
+%\begin{thebibliography}{1}
+%\bibitem{Lahti09mlsp}
+%Leo Lahti, Samuel Myllykangas, Sakari Knuutila, and Samuel Kaski.
+%\newblock Dependency detection with similarity constraints.
+%\newblock In {\em Proc. MLSP'09 IEEE International Workshop on Machine Learning
+%  for Signal Processing}, 2009.
+%\end{thebibliography}
+
+
+
+\end{document}

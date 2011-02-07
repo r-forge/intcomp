@@ -1,0 +1,18 @@
+import(methods)
+
+export(get.brca.genes,
+       read.pollack,
+       read.hyman,
+       roc.auc,
+       simulation,
+       test.geneorder.dri.cor,
+       test.geneorder.dri.sam,
+       test.geneorder.edira,
+       test.geneorder.intcngean,
+       test.geneorder.pint,
+       test.geneorder.pipeline,
+       test.geneorder.pma,
+       test.geneorder.pma.rawscore,
+       test.geneorder.sim,
+       test.geneorder.sodegir
+       )
