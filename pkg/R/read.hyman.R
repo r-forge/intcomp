@@ -1,4 +1,5 @@
 
+
 read.hyman <- function (chrs = 1:22, xx) {
 
   # Load cdna, cgh, genenames 

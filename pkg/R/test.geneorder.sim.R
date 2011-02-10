@@ -9,7 +9,7 @@ test.geneorder.sim <- function (ge, cn, Labels=NULL, meth = "full", runname = "s
   chr.starts <- c()
   abs.starts <- c(); n <- 1
   for (chrx in 1:22) {
-    starts <- subset(cn$info, chr == chrx)[["loc"]]
+    starts <- cn$info[cn$info[["chr"]] == chrx, "loc"]
     chr.starts <- c(chr.starts, starts)
     abs.starts <- c(abs.starts, n + starts)
     n <- max(abs.starts) + 1

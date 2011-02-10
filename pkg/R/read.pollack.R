@@ -1,7 +1,7 @@
 read.pollack <- function (chrs = 1:22) {
 
   #http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html               
-  library(gecn)
+  require(intcomp)
   data(pollack) #clone2geneid, CopyNoGeneDataset4719   
   dat <- CopyNoGeneDataset4719         
 		       

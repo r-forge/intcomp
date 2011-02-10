@@ -156,29 +156,35 @@ form2 <- function(X, samplenames, rm.chr = NULL){
   colnames(ret) <- c(colnames(ret)[1:(length(colnames(ret))-2)], "chromosome", "position")
   return(ret)
 }
-  
-
-get.entrez.info <- function (geneids) {
-
-  # Get Entrez GeneID chromosomal location information from entrez
-
-  require(biomaRt)
-  
-  ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
-  geneid.info <- getBM(attributes = c("entrezgene", "start_position", "end_position", "chromosome_name"), values = rownames(ge), mart = ensembl)
-
-  # Remove duplicated geneids
-  genes.uniq <- names(which(table(geneid.info[, "entrezgene"]) == 1))
-  geneid.info <- subset(geneid.info, entrezgene %in% genes.uniq)
-
-  # Pick and arrange information
-  info <- geneid.info[, c("start_position", "end_position", "chromosome_name")]
-  colnames(info) <- c("start","end","chr")
-  rownames(info) <- geneid.info[, "entrezgene"]
-  info
-}
-
-
+  
+
+get.entrez.info <- function ( geneids ) {
+
+  # Get Entrez GeneID chromosomal location information from entrez
+  require(biomaRt)
+  
+  ensembl <- useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+  geneid.info <- getBM(attributes = c("entrezgene", "start_position", "end_position", "chromosome_name"), values = geneids, mart = ensembl)
+
+  # Remove duplicated geneids
+  genes.uniq <- names(which(table(geneid.info[, "entrezgene"]) == 1))
+  #geneid.info <- subset(geneid.info, entrezgene %in% genes.uniq)
+  geneid.info <- geneid.info[geneid.info[["entrezgene"]] %in% genes.uniq, ]
+
+  # Pick and arrange information
+  info <- geneid.info[, c("start_position", "end_position", "chromosome_name")]
+  colnames(info) <- c("start","end","chr")
+  rownames(info) <- geneid.info[, "entrezgene"]
+
+  info
+  
+}
+
+
+
+
+
+
 get.neighboring.probes <- function (X, Y, chr, max.dist, control.arms = TRUE) {
 
   xinds <- yinds <- c()

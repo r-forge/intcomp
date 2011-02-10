@@ -7,7 +7,9 @@
 # version       (applies to some methods only) "normal" performs gene-sampling, while "approximate" performs sample-sampling
 # methods       which methods should be performed? at least one of c("edira","DRI.cp","DRI.cs","DRI.ct","SIM.full","SIM.window","intcngean","PMA","PMA.raw","pint","PREDA","DRI.ss","DRI.srank","DRI.sraw")
 
-test.geneorder.pipeline <- function (ge, cn, cn.raw=NULL, Labels=NULL, cancerGenes, nperm = 1e2, input="real", version = "normal", methods = NULL, chromosomes=chr) {
+test.geneorder.pipeline <- function (ge, cn, cn.raw=NULL, Labels=NULL,
+cancerGenes, nperm = 1e2, input="real", version = "normal", methods =
+NULL, chromosomes = as.character(1:22)) {
 
   # If no labels given, use the same Label for all samples
   if (is.null(Labels)) {

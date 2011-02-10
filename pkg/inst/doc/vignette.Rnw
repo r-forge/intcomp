@@ -1,8 +1,8 @@
-%\VignetteIndexEntry{gecn}
+%\VignetteIndexEntry{intcomp}
 %The above line is needed to remove a warning in R CMD check
 \documentclass[a4paper]{article}
 
-\title{gecn:\\Pairwise integration of gene expression and copy number data}
+\title{intcomp:\\Pairwise integration of gene expression and copy number data}
 
 \author{Leo Lahti\footnote{leo.lahti@iki.fi} and Martin Sch{\"a}fer}
 
@@ -48,7 +48,7 @@ containing paired observations of gene expression and copy number.
 
 %Load the package and example data:
 %<<>>=
-%library(gecn)
+%library(intcomp)
 %@
 
 
@@ -78,7 +78,7 @@ genes\footnote{http://www.nature.com/onc/journal/v18/n56/abs/1203335a.html}
   accessed 5.6.2010.})
 
 <<getdata>>=
-library(gecn)
+library(intcomp)
 data(pollack) # #clone2geneid, CopyNoGeneDataset4719 
 #dat <- read.pollack(chrs = 1:22)
 #ge <- dat$ge$data        # gene expression matrix
