@@ -7,7 +7,7 @@
 # version       (applies to some methods only) "normal" performs gene-sampling, while "approximate" performs sample-sampling
 # methods       which methods should be performed? at least one of c("edira","DRI.cp","DRI.cs","DRI.ct","SIM.full","SIM.window","intcngean","PMA","PMA.raw","pint","PREDA","DRI.ss","DRI.srank","DRI.sraw")
 
-test.geneorder.pipeline <- function (ge, cn, cn.raw=NULL, Labels=NULL,
+test.geneorder.pipeline <- function (ge, cn = NULL, cn.raw=NULL, Labels=NULL,
 cancerGenes, nperm = 1e2, input="real", version = "normal", methods =
 NULL, chromosomes = as.character(1:22)) {
 
@@ -41,10 +41,10 @@ NULL, chromosomes = as.character(1:22)) {
   if (!is.null(methods) && ("SIM.full" %in% methods)) {
 
     if(input == "real"){
-      ordg <- test.geneorder.sim(ge, cn, meth = "full", runname = "simtest", regs = 1:22)
+      ordg <- test.geneorder.sim(ge, cn, meth = "full", runname = paste("simtest-", abs(rnorm(1)), sep = ""), regs = 1:22)
     }
     if(input == "simulations.equal.dimensions" || input == "simulations.unequal.dimensions"){
-      ordg <- test.geneorder.sim(ge, cn, meth = "full", runname = "simtest", regs = 1)
+      ordg <- test.geneorder.sim(ge, cn, meth = "full", runname = paste("simtest-", abs(rnorm(1)), sep = ""), regs = 1)
     }
     auc[["SIM.full"]] <- roc.auc(ordg, cancerGenes)
   }
@@ -52,10 +52,10 @@ NULL, chromosomes = as.character(1:22)) {
   if (!is.null(methods) && ("SIM.window" %in% methods)) {
 
     if(input == "real"){
-      ordg <- test.geneorder.sim(ge, cn, meth = "window", runname = "simtest", regs = 1:22, win = 1e6)
+      ordg <- test.geneorder.sim(ge, cn, meth = "window", runname = paste("simtest-", abs(rnorm(1)), sep = ""), regs = 1:22, win = 1e6)
     }
     if(input == "simulations.equal.dimensions" || input == "simulations.unequal.dimensions"){
-      ordg <- test.geneorder.sim(ge, cn, meth = "window", runname = "simtest", regs = 1, win = 1e6)
+      ordg <- test.geneorder.sim(ge, cn, meth = "window", runname = paste("simtest-", abs(rnorm(1)), sep = ""), regs = 1, win = 1e6)
     }
     auc[["SIM.window"]] <- roc.auc(ordg, cancerGenes)
   }
@@ -93,6 +93,7 @@ NULL, chromosomes = as.character(1:22)) {
   }
   
   if (!is.null(methods) && ("pint" %in% methods)) {
+    #print("RIVEJA:"); print(nrow(cn.raw))
     ordg <- test.geneorder.pint(ge, cn.raw, Labels)
     auc[["pint"]] <- roc.auc(ordg, cancerGenes)
   }
