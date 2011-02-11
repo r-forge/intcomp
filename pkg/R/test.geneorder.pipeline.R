@@ -7,10 +7,13 @@
 # version       (applies to some methods only) "normal" performs gene-sampling, while "approximate" performs sample-sampling
 # methods       which methods should be performed? at least one of c("edira","DRI.cp","DRI.cs","DRI.ct","SIM.full","SIM.window","intcngean","PMA","PMA.raw","pint","PREDA","DRI.ss","DRI.srank","DRI.sraw")
 
-test.geneorder.pipeline <- function (ge, cn = NULL, cn.raw=NULL, Labels=NULL,
+test.geneorder.pipeline <- function (ge, cn = NULL, cn.raw=NULL, ge.norm = NULL, cn.norm = NULL, Labels=NULL,
 cancerGenes, nperm = 1e2, input="real", version = "normal", methods =
 NULL, chromosomes = as.character(1:22)) {
-
+  
+  ge2 <- list(data=cbind(ge$data,ge.norm$data), info=ge$info) 
+  cn2 <- list(data=cbind(cn$data,cn.norm$data), info=cn$info)
+    
   # If no labels given, use the same Label for all samples
   if (is.null(Labels)) {
     Labels <- rep(1, ncol(ge$data))
@@ -102,7 +105,7 @@ NULL, chromosomes = as.character(1:22)) {
     ordg <- test.geneorder.preda(ge, cn, Labels, nperm=nperm, cancerGenes=cancerGenes,
         ge.qval.threshold=1, cn.qval.threshold=1, smoothMethod="spline",
         ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5,
-        cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1,
+        cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="none",
         chromosomes=unique(ge$info$chr))
     best_case <- roc.auc(ordg$best_case_order, cancerGenes)
     worst_case <- roc.auc(ordg$worst_case_order, cancerGenes)

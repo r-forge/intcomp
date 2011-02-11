@@ -1,10 +1,8 @@
 import(methods)
 
 export(get.brca.genes,
-       get.leukemia.genes,
        read.pollack,
        read.hyman,
-       read.mullighan,
        roc.auc,
        simulation,
        test.geneorder.dri.cor,

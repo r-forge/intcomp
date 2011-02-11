@@ -3,7 +3,7 @@
 #### The simulation setup roughly follows the one of Schäfer et al. (2009): Integrated analysis of copy number alterations and gene expression: a bivariate assessment of equally directed abnormalities.
 #### A joint distribution for the CN and GE values is assumed.
 
-# GE_data      a matrix of gene expression data, without annotaion
+# GE_data      a matrix of gene expression data, without annotation
 # CN_data      a matrix of copy number data, without annotaion
 # Inner        indices of inner grid points for simulation of the copy number data
 # Outer        indices of outer grid points for simulation of the copy number data
@@ -159,7 +159,9 @@ ind <- 1:nrow(simulation_x_doppelt_geordnet1)
 teile <- 16
 breaks <- c(0,(1:teile)*length(ind)/teile)
 for(i in 1:(length(breaks)-1)){
-   ind[(breaks[i]+1):breaks[i+1]] <- sample(ind[(breaks[i]+1):breaks[i+1]],length(ind[(breaks[i]+1):breaks[i+1]]))
+   #ind[(breaks[i]+1):breaks[i+1]] <- sample(ind[(breaks[i]+1):breaks[i+1]],length(ind[(breaks[i]+1):breaks[i+1]]))
+   sortiert_breaks <- sort(apply(simulation_y_doppelt_geordnet1[(breaks[i]+1):breaks[i+1],],1,median), index.return=TRUE)
+   ind[(breaks[i]+1):breaks[i+1]] <- ind[(breaks[i]+1):breaks[i+1]][sortiert_breaks$ix]
 }
 ind_rueck <- sort(ind, index.return=TRUE)
 

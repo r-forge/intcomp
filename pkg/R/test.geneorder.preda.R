@@ -1,4 +1,4 @@
-test.geneorder.preda <- function(ge, cn, Labels, nperm, ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod="spline", ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5, cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, chromosomes=1:22, cancerGenes){
+test.geneorder.preda <- function(ge, cn, Labels, nperm, ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod, ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5, cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, chromosomes=1:22, correction.method, cancerGenes){
 require(PREDA)
 
 # prepare annotation for gene expression
@@ -19,7 +19,7 @@ GEGenomicsAnnotationsForPREDA <- GenomicAnnotations2GenomicAnnotationsForPREDA(G
 SODEGIRGEDataForPREDA <- MergeStatisticAnnotations2DataForPREDA(GEStatisticsForPREDA, GEGenomicsAnnotationsForPREDA, sortAndCleanNA = TRUE)
 
 # gene expression analysis
-SODEGIRGEanalysisResults <- PREDA_main(SODEGIRGEDataForPREDA, smoothMethod = smoothMethod, nperms = nperm)
+SODEGIRGEanalysisResults <- PREDA_main(SODEGIRGEDataForPREDA, smoothMethod = smoothMethod, multTestCorrection = correction.method, nperms = nperm)
 
 SODEGIR_GE_UP <- PREDAResults2GenomicRegions(SODEGIRGEanalysisResults,
    qval.threshold = ge.qval.threshold, smoothStatistic.tail = "upper",
@@ -46,7 +46,7 @@ CNGenomicsAnnotationsForPREDA <- GenomicAnnotations2GenomicAnnotationsForPREDA(C
 SODEGIRCNDataForPREDA <- MergeStatisticAnnotations2DataForPREDA(CNStatisticsForPREDA, CNGenomicsAnnotationsForPREDA, sortAndCleanNA = TRUE, quiet = FALSE, MedianCenter = TRUE)
 
 # copy number analysis
-SODEGIRCNanalysisResults <- PREDA_main(SODEGIRCNDataForPREDA, outputGenomicAnnotationsForPREDA = SODEGIRGEDataForPREDA, smoothMethod = smoothMethod, nperms = nperm)
+SODEGIRCNanalysisResults <- PREDA_main(SODEGIRCNDataForPREDA, outputGenomicAnnotationsForPREDA = SODEGIRGEDataForPREDA, smoothMethod = smoothMethod, multTestCorrection = correction.method, nperms = nperm)
 
 SODEGIR_CN_GAIN <- PREDAResults2GenomicRegions(SODEGIRCNanalysisResults,
     qval.threshold = cn.qval.threshold, smoothStatistic.tail = "upper",
