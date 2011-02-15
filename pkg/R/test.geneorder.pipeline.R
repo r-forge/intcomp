@@ -8,16 +8,13 @@
 # methods       which methods should be performed? at least one of c("edira","DRI.cp","DRI.cs","DRI.ct","SIM.full","SIM.window","intcngean","PMA","PMA.raw","pint","PREDA","DRI.ss","DRI.srank","DRI.sraw")
 
 test.geneorder.pipeline <- function (ge, cn = NULL, cn.raw=NULL, ge.norm = NULL, cn.norm = NULL, Labels=NULL,
-cancerGenes, nperm = 1e2, input="real", version = "normal", methods =
-NULL, chromosomes = as.character(1:22)) {
+cancerGenes, nperm = 1e2, input="real", version = "normal", methods = NULL, chromosomes = as.character(1:22)) {
   
   ge2 <- list(data=cbind(ge$data,ge.norm$data), info=ge$info) 
   cn2 <- list(data=cbind(cn$data,cn.norm$data), info=cn$info)
     
   # If no labels given, use the same Label for all samples
-  if (is.null(Labels)) {
-    Labels <- rep(1, ncol(ge$data))
-  }
+  if (is.null(Labels)) { Labels <- rep(1, ncol(ge$data)) }
   
   auc <- list()
   
@@ -96,8 +93,7 @@ NULL, chromosomes = as.character(1:22)) {
   }
   
   if (!is.null(methods) && ("pint" %in% methods)) {
-    #print("RIVEJA:"); print(nrow(cn.raw))
-    ordg <- test.geneorder.pint(ge, cn.raw, Labels)
+    ordg <- test.geneorder.pint(ge, cn, Labels)
     auc[["pint"]] <- roc.auc(ordg, cancerGenes)
   }
   

@@ -1,6 +1,6 @@
 
 
-read.hyman <- function (chrs = 1:22, xx) {
+read.hyman <- function (cdna, cgh, genenames, chrs = 1:22, xx) {
 
   # Load cdna, cgh, genenames 
   # preprocessed as in Berger et al., 2002
@@ -12,7 +12,6 @@ read.hyman <- function (chrs = 1:22, xx) {
   #cdna <- as.matrix(read.csv("/share/mi/data/pint10/Hyman2002/HymancdnaDataA.tab", sep = " ", header = FALSE))
   #cgh <- as.matrix(read.csv("/share/mi/data/pint10/Hyman2002/HymancghDataA.tab", sep = " ", header = FALSE))
   #genenames <- readLines("/share/mi/data/pint10/Hyman2002/HymanAcc.mat")
-  data(hyman) 
   
   # Remove rows with no gene name
   keep <- !genenames == ""   

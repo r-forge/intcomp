@@ -1,9 +1,6 @@
-read.pollack <- function (chrs = 1:22) {
+read.pollack <- function (chrs = 1:22, dat, clone2geneid) {
 
-  #http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html               
-  require(intcomp)
-  data(pollack) #clone2geneid, CopyNoGeneDataset4719   
-  dat <- CopyNoGeneDataset4719         
+  #http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
 		       
   cn <- dat[, 3:48]
   colnames(cn) <- unname(sapply(colnames(cn), function(s) { x <- paste(unlist(strsplit(s, "\\."))); paste(x[1:min(length(x),2)], collapse = "")}))

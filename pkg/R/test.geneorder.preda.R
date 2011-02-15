@@ -1,6 +1,13 @@
 test.geneorder.preda <- function(ge, cn, Labels, nperm, ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod, ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5, cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, chromosomes=1:22, correction.method, cancerGenes){
 require(PREDA)
 
+# If no start/end positions given for the probes,
+# use artificial probe length of location +/- 100
+if (!"start" %in% names(ge$info)) { ge$info[["start"]] <- ge$info[["loc"]] - 100 }
+if (!"end" %in% names(ge$info)) { ge$info[["end"]] <- ge$info[["loc"]] + 100 }
+if (!"start" %in% names(cn$info)) { cn$info[["start"]] <- cn$info[["loc"]] - 100 }
+if (!"end" %in% names(cn$info)) { cn$info[["end"]] <- cn$info[["loc"]] + 100 }
+
 # prepare annotation for gene expression
 GEdataFile <- as.data.frame(cbind(rownames(ge$data),ge$data))
 GEStatisticsForPREDA <- StatisticsForPREDAFromdataframe(StatisticsForPREDA_dataframe=GEdataFile,ids_column=1,statistic_columns=2:(ncol(ge$data)+1), testedTail="both")
