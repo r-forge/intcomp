@@ -103,7 +103,7 @@ NULL, chromosomes = as.character(1:22)) {
   
   if (!is.null(methods) && ("PREDA" %in% methods)) {
     ordg <- test.geneorder.preda(ge, cn, Labels, nperm=nperm, cancerGenes=cancerGenes,
-        ge.qval.threshold=1, cn.qval.threshold=1, smoothMethod="spline",
+        ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod="lokern_scaledBandwidth_repeated",
         ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5,
         cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="none",
         chromosomes=unique(ge$info$chr))
