@@ -96,12 +96,17 @@ cancerGenes, nperm = 1e2, input="real", version = "normal", methods = NULL, chro
     ordg <- test.geneorder.pint(ge, cn, Labels)
     auc[["pint"]] <- roc.auc(ordg, cancerGenes)
   }
-  
+
+  if (!is.null(methods) && ("jrivas" %in% methods)) {      
+    ordg <- test.geneorder.jrivas(ge, cn, Labels)
+    auc[["jrivas"]] <- roc.auc(ordg, cancerGenes)              
+  }                                      
+	      
   if (!is.null(methods) && ("PREDA" %in% methods)) {
     ordg <- test.geneorder.preda(ge, cn, Labels, nperm=nperm, cancerGenes=cancerGenes,
         ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod="lokern_scaledBandwidth_repeated",
         ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5,
-        cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="none",
+        cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="fdr",
         chromosomes=unique(ge$info$chr))
     best_case <- roc.auc(ordg$best_case_order, cancerGenes)
     worst_case <- roc.auc(ordg$worst_case_order, cancerGenes)
