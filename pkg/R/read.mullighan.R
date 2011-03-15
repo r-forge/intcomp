@@ -1,11 +1,11 @@
-read.mullighan <- function(data.path, chrs = 1:22, location.table) {
+read.mullighan <- function(chrs = 1:22, location.table, cnAnnotation, cnData, cn, eSet) {
   
   require(affy)
 
   ### Expression data ###  
   # The probeset IDs are "ENTREZID_at"
   #load("/share/mi/data/CMG/integration-review-2010/Mullighan/eSet.RData")
-  load(paste(data.path, "eSet.RData", sep = "/"))  
+  #load(paste(data.path, "eSet.RData", sep = "/"))  
   X <- exprs(eSet)
   medExprs <- apply(exprs(eSet), 1, median) # median expression
   X <- exprs(eSet) <- exprs(eSet) - medExprs
@@ -39,12 +39,12 @@ read.mullighan <- function(data.path, chrs = 1:22, location.table) {
   
   # Segmented CN data: mcr x patients matrix
   # "cnAnnotation" "cnData"
-  load(paste(data.path, "cnMCRs.RData", sep = "/"))  
+  #load(paste(data.path, "cnMCRs.RData", sep = "/"))  
   # Each array segmented separately, no MCRs
   #load(paste(data.path, "segmentedCn.RData", sep = "/"))
 
   # Raw CN data; required by intCNGEan
-  load(paste(data.path, "rawCn.RData", sep = "/"))    
+  #load(paste(data.path, "rawCn.RData", sep = "/")) # cn
   #cn.raw <- as.matrix(ldply(cn, function (x) {x})[,-1])
   cn.raw <- NULL
   info.raw <- NULL

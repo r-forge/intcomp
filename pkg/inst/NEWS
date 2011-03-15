@@ -1,4 +1,9 @@
 
+CHANGES IN VERSION 0.2.90 (2011-02-23)
+
+ o added runtime field in test.geneorder.pipeline output to indicate
+   running times of the algorithms (in minutes)
+
 CHANGES IN VERSION 0.2.85 (2011-02-14)
 
  o test.geneorder.preda added check for ge$info and cn$info fields for
