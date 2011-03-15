@@ -99,7 +99,7 @@ Genetic and Epigenetic Study on AML and MDS.
 %* references
 
 \bibliographystyle{plain}
-\bibliography{/home/lmlahti/pub/leo,/home/lmlahti/pub/library}
+\bibliography{intcomp.bib}
 
 %\begin{thebibliography}{1}
 %\bibitem{Lahti09mlsp}
