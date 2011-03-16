@@ -1,4 +1,11 @@
 
+CHANGES IN VERSION 0.2.92 (2011-02-24)
+
+ o changed permutations in test.geneorder.dri and test.geneorder.sam
+   into sampling with replacement (previously without, which causes
+   problems when many permutations are used); this now corresponds to
+   a bootstrap approach 
+
 CHANGES IN VERSION 0.2.91 (2011-02-23)
 
  o added runtime field in test.geneorder.pipeline output to indicate
