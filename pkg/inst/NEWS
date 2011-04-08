@@ -1,6 +1,11 @@
 
 CHANGES IN VERSION 0.2.92 (2011-02-24)
 
+  o changed back into sampling without replacement in
+    test.geneorder.dri.cor and test.geneorder.dri.sam
+
+CHANGES IN VERSION 0.2.92 (2011-02-24)
+
  o changed permutations in test.geneorder.dri and test.geneorder.sam
    into sampling with replacement (previously without, which causes
    problems when many permutations are used); this now corresponds to

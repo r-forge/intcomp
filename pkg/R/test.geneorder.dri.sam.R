@@ -7,7 +7,8 @@ test.geneorder.dri.sam <- function (ge, cn, Labels=NULL, nperm = 1e2, transform.
   RNA.norm.data <- as.matrix(ge$data[,Labels==0])
   Labels.sam <- c(rep(1,ncol(DNA.data)),rep(2,ncol(DNA.norm.data)))
   if(version=="normal"){
-    auswahl <- sample(1:nrow(DNA.data), nperm, replace = TRUE)
+    #auswahl <- sample(1:nrow(DNA.data), nperm, replace = TRUE)
+    auswahl <- sample(1:nrow(DNA.data), nperm, replace = FALSE)
     dr_ttest_results <- function(z){
         permute_dr_sam <- function(pos_ge){
            drsam(DNA.data=matrix(rep(c(DNA.data[z,],DNA.norm.data[z,]),2), nrow=2, byrow=TRUE), RNA.data=matrix(rep(c(RNA.data[pos_ge,],RNA.norm.data[pos_ge,]),2), nrow=2, byrow=TRUE), labels=Labels.sam, transform.type = transform.type)$test.summed[1]
@@ -21,7 +22,8 @@ test.geneorder.dri.sam <- function (ge, cn, Labels=NULL, nperm = 1e2, transform.
   }
   
   if(version=="approx"){
-    permutation <- sample(1:nrow(DNA.data), nrow(DNA.data), replace = TRUE)
+    #permutation <- sample(1:nrow(DNA.data), nrow(DNA.data), replace = TRUE)
+    permutation <- sample(1:nrow(DNA.data), nrow(DNA.data), replace = FALSE)
     obs <- drsam(DNA.data, RNA.data, Labels, transform.type = transform.type)
     distribution_dr_sam <- drsam(DNA.data, RNA.data[permutation,], labels=Labels.sam, transform.type = transform.type)
         calculate_pvalue <- function(z){
