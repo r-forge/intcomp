@@ -116,7 +116,7 @@ cancerGenes, nperm = 1e2, input="real", version = "normal", methods = NULL, chro
   
   if (!is.null(methods) && ("pint" %in% methods)) {
     start.time <- Sys.time()
-    ordg <- test.geneorder.pint(ge, cn, Labels)
+    ordg <- test.geneorder.pint(ge, cn.raw, Labels)
     end.time <- Sys.time()
     runtime[["pint"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
     auc[["pint"]] <- roc.auc(ordg, cancerGenes)
