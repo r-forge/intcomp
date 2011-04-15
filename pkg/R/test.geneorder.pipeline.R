@@ -91,7 +91,7 @@ cancerGenes, nperm = 1e2, input="real", version = "normal", methods = NULL, chro
       ordg <- test.geneorder.intcngean(ge, cn=NULL, cn.raw,
                                        meth="wmw",
                                        analysis.type="univariate", probespanCN = 16, probespanGE = 100,
-                                       nperm = nperm, pth = 0.1, callprobs=sim$callprobs, prior="all", organism = "other", match="TRUE")
+                                       nperm = nperm, pth = 0.1, prior="all", organism = "other", match="TRUE")
     }
     end.time <- Sys.time()
     runtime[["intCNGEan.wmw.univariate"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
@@ -129,7 +129,7 @@ cancerGenes, nperm = 1e2, input="real", version = "normal", methods = NULL, chro
     runtime[["jrivas"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["jrivas"]] <- roc.auc(ordg, cancerGenes)              
   }                                      
-	      
+          
   if (!is.null(methods) && ("PREDA" %in% methods)) {
     start.time <- Sys.time()
     ordg <- test.geneorder.preda(ge, cn, Labels, nperm=nperm, cancerGenes=cancerGenes,
