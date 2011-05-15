@@ -1,17 +1,12 @@
 
-CHANGES IN VERSION 0.2.92 (2011-02-24)
+CHANGES IN VERSION 0.2.91 (2011-05-15)
 
-  o changed back into sampling without replacement in
-    test.geneorder.dri.cor and test.geneorder.dri.sam
+  o moved calculation of segmented and called data outside of
+    test.geneorder.pipeline
 
-CHANGES IN VERSION 0.2.92 (2011-02-24)
-
- o changed permutations in test.geneorder.dri and test.geneorder.sam
-   into sampling with replacement (previously without, which causes
-   problems when many permutations are used); this now corresponds to
-   a bootstrap approach 
-
-CHANGES IN VERSION 0.2.91 (2011-02-23)
+  o added CNAmet
+  
+CHANGES IN VERSION 0.2.90 (2011-02-23)
 
  o added runtime field in test.geneorder.pipeline output to indicate
    running times of the algorithms (in minutes)

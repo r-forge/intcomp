@@ -99,15 +99,8 @@ Genetic and Epigenetic Study on AML and MDS.
 %* references
 
 \bibliographystyle{plain}
-\bibliography{intcomp.bib}
+\bibliography{leo,library}
 
-%\begin{thebibliography}{1}
-%\bibitem{Lahti09mlsp}
-%Leo Lahti, Samuel Myllykangas, Sakari Knuutila, and Samuel Kaski.
-%\newblock Dependency detection with similarity constraints.
-%\newblock In {\em Proc. MLSP'09 IEEE International Workshop on Machine Learning
-%  for Signal Processing}, 2009.
-%\end{thebibliography}
 
 
 

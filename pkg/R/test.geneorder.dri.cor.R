@@ -6,8 +6,7 @@ test.geneorder.dri.cor <- function (ge, cn, Labels = NULL, nperm, meth, version)
   
   # DR-Correlate analysis to find genes with correlated DNA/RNA measurements
   if(version=="normal"){
-  #auswahl <- sample(1:nrow(DNA.data), nperm, replace = TRUE)
-  auswahl <- sample(1:nrow(DNA.data), nperm, replace = FALSE)
+  auswahl <- sample(1:nrow(DNA.data), nperm)
     if(meth=="pearson" | meth=="spearman"){
   # Get null distribution based on gene permutations
         dr_corr_results <- function(z){
