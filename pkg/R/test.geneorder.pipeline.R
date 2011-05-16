@@ -32,63 +32,84 @@ NULL, chromosomes = as.character(1:22)) {
   if (is.null(Labels)) { Labels <- rep(1, ncol(ge$data)) }
   
   auc <- list()
+  runtime <- list()
 
   if (!is.null(methods) && ("edira" %in% methods)) {
       message("edira")
+      start.time <- Sys.time()      
       ordg <- test.geneorder.edira(ge, cn, Labels)
+      end.time <- Sys.time()
+      runtime[["edira"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
       auc[["edira"]] <- roc.auc(ordg, cancerGenes)
   }
 
   if (!is.null(methods) && ("DRI.cp" %in% methods)) {
     message("DRI.cp")
+    start.time <- Sys.time()
     ordg <- test.geneorder.dri.cor(ge, cn, nperm=nperm, meth="pearson", version=version)
+    end.time <- Sys.time()
+    runtime[["DRI.cp"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["DRI.cp"]] <- roc.auc(ordg, cancerGenes)
   }
   
   if (!is.null(methods) && ("DRI.cs" %in% methods)) {
     message("DRI.cs")
+    start.time <- Sys.time()    
     ordg <- test.geneorder.dri.cor(ge, cn, nperm=nperm, meth="spearman", version=version)
+    end.time <- Sys.time()
+    runtime[["DRI.cs"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["DRI.cs"]] <- roc.auc(ordg, cancerGenes)
   }
 
   if (!is.null(methods) && ("DRI.ct" %in% methods)) {
       message("DRI.ct")
+      start.time <- Sys.time()      
       ordg <- test.geneorder.dri.cor(ge, cn, nperm=nperm, meth="ttest", version=version)
+      end.time <- Sys.time()
+      runtime[["DRI.ct"]] <- as.numeric(difftime(end.time, start.time, units='mins'))      
       auc[["DRI.ct"]] <- roc.auc(ordg, cancerGenes)
   }
  
   if (!is.null(methods) && ("SIM.full" %in% methods)) {
     message("SIM.full")
-
+    start.time <- Sys.time()
     if(input == "real"){
       ordg <- test.geneorder.sim(ge, cn, meth = "full", runname = paste("simtest-", abs(rnorm(1)), sep = ""), regs = 1:22)
     }
     if(input == "simulations.equal.dimensions" || input == "simulations.unequal.dimensions"){
       ordg <- test.geneorder.sim(ge, cn, meth = "full", runname = paste("simtest-", abs(rnorm(1)), sep = ""), regs = 1)
     }
+    end.time <- Sys.time()
+    runtime[["SIM.full"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
     auc[["SIM.full"]] <- roc.auc(ordg, cancerGenes)
   }
   
   if (!is.null(methods) && ("SIM.window" %in% methods)) {
     message("SIM.window")
-    
+    start.time <- Sys.time()    
     if(input == "real"){
       ordg <- test.geneorder.sim(ge, cn, meth = "window", runname = paste("simtest-", abs(rnorm(1)), sep = ""), regs = 1:22, win = 1e6)
     }
     if(input == "simulations.equal.dimensions" || input == "simulations.unequal.dimensions"){
       ordg <- test.geneorder.sim(ge, cn, meth = "window", runname = paste("simtest-", abs(rnorm(1)), sep = ""), regs = 1, win = 1e6)
     }
+    end.time <- Sys.time()
+    runtime[["SIM.window"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
     auc[["SIM.window"]] <- roc.auc(ordg, cancerGenes)
   }
 
   if (!is.null(methods) && ("CNAmet" %in% methods)) {
      message("CNAmet")
+     start.time <- Sys.time()     
      ordg <- test.geneorder.CNAmet(ge, cn=cn.call, Labels=NULL, nperm)
+     end.time <- Sys.time()
+     runtime[["CNAmet"]] <- as.numeric(difftime(end.time, start.time, units='mins'))     
      auc[["CNAmet"]] <- roc.auc(ordg, cancerGenes)
   }
   
   if (!is.null(methods) && ("intcngean" %in% methods)) {
     message("intCNGEan")
+    start.time <- Sys.time()    
     if(input == "real"){
       ordg <- test.geneorder.intcngean(ge, cn=cghCall, meth = "wmw", analysis.type = "univariate", 
                                        nperm = nperm, pth = 0.1)
@@ -106,35 +127,50 @@ NULL, chromosomes = as.character(1:22)) {
                                        analysis.type="univariate", 
                                        nperm = nperm, pth = 0.1, callprobs=sim$callprobs)
     }
+    end.time <- Sys.time()
+    runtime[["intCNGEan.wmw.univariate"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["intCNGEan.wmw.univariate"]] <- roc.auc(ordg, cancerGenes)
   }
 
   if (!is.null(methods) && ("PMA" %in% methods)) {
     message("PMA")
+    start.time <- Sys.time()    
     ordg <- test.geneorder.pma(ge, cn, Labels, nperm)
+    end.time <- Sys.time()
+    runtime[["PMA"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["PMA"]]  <- roc.auc(ordg, cancerGenes)
   }
   
   if (!is.null(methods) && ("PMA.raw" %in% methods)) {
     message("PMA.raw")
+    start.time <- Sys.time()    
     ordg <- test.geneorder.pma.rawscore(ge, cn, Labels)
+    end.time <- Sys.time()
+    runtime[["PMA.raw"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["PMA.raw"]]  <- roc.auc(ordg, cancerGenes)
   }
   
   if (!is.null(methods) && ("pint" %in% methods)) {
     message("pint")
+    start.time <- Sys.time()    
     ordg <- test.geneorder.pint(ge, cn, Labels)
+    end.time <- Sys.time()
+    runtime[["pint"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["pint"]] <- roc.auc(ordg, cancerGenes)
   }
 
   if (!is.null(methods) && ("jrivas" %in% methods)) {
     message("jrivas")
+    start.time <- Sys.time()    
     ordg <- test.geneorder.jrivas(ge, cn, Labels)
+    end.time <- Sys.time()
+    runtime[["jrivas"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["jrivas"]] <- roc.auc(ordg, cancerGenes)              
   }                                      
 	      
   if (!is.null(methods) && ("PREDA" %in% methods)) {
     message("PREDA")
+    start.time <- Sys.time()    
     ordg <- test.geneorder.preda(ge, cn, Labels, nperm=nperm, cancerGenes=cancerGenes,
         ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod="lokern_scaledBandwidth_repeated",
         ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5,
@@ -142,6 +178,8 @@ NULL, chromosomes = as.character(1:22)) {
         chromosomes=unique(ge$info$chr))
     best_case <- roc.auc(ordg$best_case_order, cancerGenes)
     worst_case <- roc.auc(ordg$worst_case_order, cancerGenes)
+    end.time <- Sys.time()
+    runtime[["preda"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
     auc[["preda"]] <- mean(c(best_case,worst_case))
   }
   
@@ -151,24 +189,33 @@ NULL, chromosomes = as.character(1:22)) {
     # DRI-SAM
     if (!is.null(methods) && ("DRI.ss" %in% methods)) {
       message("DRI.ss")
+      start.time <- Sys.time()      
       ordg <- test.geneorder.dri.sam(ge=ge2, cn=cn2, Labels, nperm=nperm, transform.type="standardize", version=version)
+      end.time <- Sys.time()
+      runtime[["DRI.ss"]] <- as.numeric(difftime(end.time, start.time, units='mins'))      
       auc[["DRI.ss"]] <- roc.auc(ordg, cancerGenes)
     }
 
     if (!is.null(methods) && ("DRI.srank" %in% methods)) {
       message("DRI.srank")
+      start.time <- Sys.time()      
       ordg <- test.geneorder.dri.sam(ge=ge2, cn=cn2, Labels, nperm=nperm, transform.type="rank", version=version)
+      end.time <- Sys.time()
+      runtime[["DRI.srank"]] <- as.numeric(difftime(end.time, start.time, units='mins'))      
       auc[["DRI.srank"]] <- roc.auc(ordg, cancerGenes)
     }
     
     if (!is.null(methods) && ("DRI.sraw" %in% methods)) {
       message("DRI.sraw")
+      start.time <- Sys.time()      
       ordg <- test.geneorder.dri.sam(ge=ge2, cn=cn2, Labels, nperm=nperm, transform.type="raw", version=version)
+      end.time <- Sys.time()
+      runtime[["DRI.sraw"]] <- as.numeric(difftime(end.time, start.time, units='mins'))      
       auc[["DRI.sraw"]] <- roc.auc(ordg, cancerGenes)
     }
 
   }
 
-  return(auc)
+  return(list(auc = auc, runtime = runtime))
   
 }
