@@ -52,7 +52,6 @@ packages. Install the  dependencies from within R using the following
 commands:
 
 <<deps>>=
-install.packages(c("XML", "RCurl"))
 source("http://www.bioconductor.org/biocLite.R") 
 biocLite(c("biomaRt", "DNAcopy", "DRI", "edira", 
 "hgu133ahsentrezg.db", "intCNGEan", "org.Hs.eg.db", 
