@@ -2,7 +2,7 @@
 %The above line is needed to remove a warning in R CMD check
 \documentclass[a4paper]{article}
 
-\title{intcomp:\\Pairwise integration of gene expression and copy number data}
+\title{intcomp:\\Benchmarking tool for gene expression - copy number data integration models}
 
 \author{Leo Lahti\footnote{leo.lahti@iki.fi} and Martin Sch{\"a}fer}
 
@@ -23,73 +23,152 @@
 
 \section{Introduction}
 
-%* motivation
-
-A number of algorithms have been recently suggested for integrating
-gene expression and DNA copy number observations. This R package
-provides simulated example data and a comparison pipeline to evaluate
-the performance of the different approaches.
+Several algorithms have been suggested to integrate gene expression
+and DNA copy number measurement to discover novel cancer-associated
+genes and chromosomal regions. However, quantitative comparison of
+these models has been missing. This R package provides a benchmarking
+pipeline for integrative cancer gene detection methods. Cancer gene
+detection performance of each algorithm is evaluated by comparing the
+prioritized candidate gene list from each method to a golden standard
+list of known cancer genes in simulated and real data sets.
 
 \subsection{Comparison methods}
 
-The current version compares the following algorithms: DRI \citep{Salari2010},
-edira \citep{Schafer09}, intCNGEan \citep{Wieringen09}, SIM \citep{Menezes2009}, pint
-\citep{Lahti09mlsp}, PMA \citep{Witten09}.
+The current version implements the comparison of the following ge/cn
+ integration algorithms: CNAmet \cite{Hautaniemi04,Louhimo11}, DRI
+ \citep{Salari2010}, edira \citep{Schafer09}, intCNGEan
+ \citep{Wieringen09}, Ortiz-Estevez \cite{Ortiz-Estevez11}, pint
+ \citep{Lahti09mlsp}, PMA \citep{Witten09}, PREDA/SODEGIR
+ \cite{Bicciato09}, and SIM \citep{Menezes2009}. Multiple variants are
+ evaluated for some methods \cite{Lahti11review}.
+
 
 \section{Examples}
 
-This Section shows how to run the simulated data through the
-comparison pipeline, and to reproduce the results.
+\subsection{Installing dependencies}
 
-\subsection{Simulated data}
+The benchmarking pipeline depends on various external R
+packages. Install the  dependencies from within R using the following
+commands:
 
-Use of the package is demonstrated with a simulated example data set
-containing paired observations of gene expression and copy number.
+<<deps>>=
+install.packages(c("XML", "RCurl"))
+source("http://www.bioconductor.org/biocLite.R") 
+biocLite(c("biomaRt", "DNAcopy", "DRI", "edira", 
+"hgu133ahsentrezg.db", "intCNGEan", "org.Hs.eg.db", 
+"PMA", "SIM", "PREDA", "CGHcall", "CNAmet"))
+@
 
-%Load the package and example data:
-%<<>>=
-%library(intcomp)
-%@
+You may need to install the following packages manually: curl
+library\footnote{http://curl.haxx.se/download.html} and the R packages
+XML\footnote{http://cran.r-project.org/web/packages/XML/index.html},
+RCurl\footnote{http://www.omegahat.org/RCurl/},
+edira\footnote{http://www.statistik.tu-dortmund.de/~schaefer/},
+intCNGEan\footnote{http://www.few.vu.nl/~wvanwie/software/intCNGEan/intCNGEan.html},
+org.Hs.eg.db\footnote{http://www.bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html},
+PREDA/SODEGIR\footnote{http://www.xlab.unimo.it/PREDA/PREDAinstall.R},
+and CNAmet\footnote{http://csbi.ltdk.helsinki.fi/CNAmet/}.
 
+\section{Running the comparison tests}
 
-Example data set contains (i) gene expression matrix, (ii) gene copy
-number matrix, (iii) sample class labels (tumor/normal), and (iv) list
-of 'known' cancer genes.
+\subsection{Loading example data}
 
-% consists of a list with two items: $data$ and $info$. The probes in
-% gene expression and gene copy number are assumed to be
-% paired. $data$ is a data matrix with gene expression or gene copy
-% number data. Genes are in rows and samples in columns and rows and
-% columns should be named. $info$ is a data frame with additional
-% information about genes. It has three elements: $loc$, $chr$ and
-% $arm$. $loc$ indicates the genomic location of the probes in base
-% pairs (numeric); $chr$ and $arm$ are factors indicating the
-% chromosome and chromosomal arm of the probe.
+The package contains the data sets from \cite{Hyman2002} and
+\cite{Pollack2002}. These two data sets are available from public
+sources and have been used to validate multiple alternative
+integration algorithms.
 
-\subsection{Pollack et al. breast cancer data set}
+\subsubsection{Pollack et al. (2002)}
 
-Read Pollack et al. (2002) data set
-(4719CopyNoGeneDataset.tsv\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
-  accessed June 2, 2010.}) and a list of known breast cancer
-genes. Ground truth list of known breast cancer
-genes\footnote{http://www.nature.com/onc/journal/v18/n56/abs/1203335a.html}
-('tgdb\_by\_name.cgi.html' and 'tgdb.txt'
-\footnote{http://www.tumor-gene.org/cgi-bin/TGDB/tgdb\_by\_name.cgi
-  accessed 5.6.2010.})
+The \cite{Pollack2002} data
+set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
+accessed June 2, 2010.}).
 
 <<getdata>>=
 library(intcomp)
-data(pollack) # #clone2geneid, CopyNoGeneDataset4719 
-#dat <- read.pollack(chrs = 1:22)
-#ge <- dat$ge$data        # gene expression matrix
-#cn <- dat$cn$data        # copy number matrix
-#gene.info <- dat$ge$info # gene location info
-library("org.Hs.eg.db")
-#cancerGenes <- get.brca.genes(rownames(dat$ge$data), as.list(org.Hs.egALIAS2EG))
-#auc <- test.geneorder.pipeline(ge, cn, controls = NULL, cancerGenes, nperm = 1e2)
+data(pollack)
+dat <- read.pollack(chrs = 1:22, CopyNoGeneDataset4719, clone2geneid)
+ge <- dat$ge$data        # gene expression matrix
+cn.raw <- dat$cn$data        # copy number matrix
+gene.info <- dat$ge$info # gene location info
 @
 
-\section{Methods}
+\subsubsection{Hyman et al. (2002)}
+
+The \cite{Hyman2002} data set\footnote{HymancdnaDataA.tab,
+HymancghDataA.tab and HymanAcc.mat obtained from
+http://www.ece.ucsb.edu/pubs/ieee/index.shtml accessed June 2,
+2010.}).
+
+<<getdata>>=
+data(hyman)
+library("org.Hs.eg.db")
+dat <- read.hyman(cdna, cgh, genenames, chrs = 1:22, as.list(org.Hs.egALIAS2EG))
+ge <- dat$ge$data        # gene expression matrix
+cn.raw <- dat$cn$data        # copy number matrix
+gene.info <- dat$ge$info # gene location info
+@
+
+\subsection{Preprocessing copy number data
+
+Some methods require segmented and/or called copy number data, obtained with
+
+<<preprocess.cn>>=
+cgh <- process.copynumber(cn.raw)
+cn.seg <- list(data = assayDataElement(cgh, 'segmented'), info = cn.raw$info)
+cn.call <- list(data = assayDataElement(cgh, 'calls'), info = cn.raw$info)
+rownames(cn.call$data) <- rownames(cn.call$info) <- rownames(cn.seg$data) <- rownames(cn.seg$info) <- rownames(ge$data)
+@ 
+
+
+\subsection{Golden standard list of known cancer genes}
+
+The golden standard list of known breast cancer genes from The Breast
+Cancer Gene
+Database\footnote{http://www.tumor-gene.org/cgi-bin/TGDB/tgdb\_by\_name.cgi
+accessed 5.6.2010; 'tgdb\_by\_name.cgi.html' and 'tgdb.txt'})
+\cite{Baasiri99} was downloaded and stored to the tgdb object. This
+script details how to load the list, convert to Entrez GeneIDs and
+select the genes that are included in the experimental data:
+
+<<getcancergenes>>=
+library("org.Hs.eg.db")
+data(tgdb)
+cancerGenes <- get.brca.genes(rownames(dat$ge$data), as.list(org.Hs.egALIAS2EG), tgdb)
+@
+
+
+\section{Running the benchmarking pipeline}
+
+The example data set now contains (i) gene expression data (ge), (ii)
+gene copy number data (cn), (iii) optional sample class labels
+(tumor/normal), and (iv) golden standard list of known cancer
+genes. The ge and cn data sets are lists containing $data$ and $info$
+fields. The probes in gene expression and gene copy number are paired;
+$data$ is a data matrix with gene expression (ge$data) or gene copy
+number (cn$data) data; $info$ field is a data frame containing
+additional information about genes: $loc$ indicates the genomic
+location of the probes in base pairs (numeric); $chr$ and $arm$ are
+factors indicating the chromosome and chromosomal arm of the probe,
+respectively. To run the benchmarking tests for all methods, use:
+
+<<run>>=
+auc <- test.geneorder.pipeline(ge, cn, labels = NULL, cancerGenes, nperm = 20)
+auc.ordered <- sort(unlist(res$auc))
+methods <- c("CNAmet", "edira", "pint")
+res <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw, cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh, Labels = NULL, cancerGenes = cancerGenes, nperm=nperm, input = "real", version = "normal", methods = methods)
+@
+
+The following methods are available: "OrtizEstevez", "intcngean",
+"edira", "pint", "SIM.window", "SIM.full", "DRI.cp", "DRI.cs",
+"PMA.raw", "CNAmet", "PREDA" and for two-group comparisons (requires
+Labels) "DRI.ct", "DRI.ss", "DRI.srank", "DRI.sraw". The cancer gene
+prioritization of each method is compared to the golden standard list
+of known cancer genes; the result contains running times of the
+algorithms and the AUC values from ROC analysis
+\cite{Lahti11review}. The AUC values provide quantitative estimates of
+model performance in cancer gene detection and provide the basis for
+comparisons.
 
 \subsection*{Acknowledgements}
 
@@ -99,7 +178,7 @@ Genetic and Epigenetic Study on AML and MDS.
 %* references
 
 \bibliographystyle{plain}
-\bibliography{leo,library}
+\bibliography{intcomp}
 
 
 

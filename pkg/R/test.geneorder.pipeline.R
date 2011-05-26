@@ -133,6 +133,8 @@ NULL, chromosomes = as.character(1:22)) {
   }
 
   if (!is.null(methods) && ("PMA" %in% methods)) {
+    # NOTE: PMA.raw is the original PMA method. This PMA function contains
+    # additional permutation test to calculate significances
     message("PMA")
     start.time <- Sys.time()    
     ordg <- test.geneorder.pma(ge, cn, Labels, nperm)
@@ -159,13 +161,13 @@ NULL, chromosomes = as.character(1:22)) {
     auc[["pint"]] <- roc.auc(ordg, cancerGenes)
   }
 
-  if (!is.null(methods) && ("jrivas" %in% methods)) {
-    message("jrivas")
+  if (!is.null(methods) && ("OrtizEstevez" %in% methods)) {
+    message("OrtizEstevez")
     start.time <- Sys.time()    
-    ordg <- test.geneorder.jrivas(ge, cn, Labels)
+    ordg <- test.geneorder.OrtizEstevez(ge, cn, Labels)
     end.time <- Sys.time()
-    runtime[["jrivas"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
-    auc[["jrivas"]] <- roc.auc(ordg, cancerGenes)              
+    runtime[["OrtizEstevez"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
+    auc[["OrtizEstevez"]] <- roc.auc(ordg, cancerGenes)              
   }                                      
 	      
   if (!is.null(methods) && ("PREDA" %in% methods)) {

@@ -1,4 +1,4 @@
-process.copynumber <- function (cn.raw, cn.seg, probespanCN, prior = "all", organism = "other") {
+process.copynumber <- function (cn.raw, cn.seg = NULL, probespanCN = 100, prior = "all", organism = "other") {
   
   require(CGHcall)
      
