@@ -1,7 +1,4 @@
-#and to use the function:
-#orderedGeneList <- getOrderedGenes(cn, ge, N=300).
-
-test.geneorder.jrivas <- function (ge, cn, Labels = NULL) {
+test.geneorder.OrtizEstevez <- function (ge, cn, Labels = NULL) {
 
   require("DNAcopy")
 
