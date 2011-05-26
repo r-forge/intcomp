@@ -111,9 +111,9 @@ http://www.ece.ucsb.edu/pubs/ieee/index.shtml accessed June 2,
 data(hyman)
 library("org.Hs.eg.db")
 dat <- read.hyman(cdna, cgh, genenames, chrs = 1:22, as.list(org.Hs.egALIAS2EG))
-ge <- dat$ge$data        # gene expression matrix
-cn.raw <- dat$cn        # copy number matrix
-gene.info <- dat$ge$info # gene location info
+ge <- dat$ge        # gene expression matrix + info
+cn.raw <- dat$cn    # copy number matrix + info
+gene.info <- dat$cn.raw$info # gene location info
 @
 
 \subsection{Preprocessing copy number data
@@ -160,10 +160,9 @@ factors indicating the chromosome and chromosomal arm of the probe,
 respectively. To run the benchmarking tests for all methods, use:
 
 <<run>>=
-auc <- test.geneorder.pipeline(ge, cn, labels = NULL, cancerGenes, nperm = 20)
 auc.ordered <- sort(unlist(res$auc))
 methods <- c("CNAmet", "edira", "pint")
-res <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw, cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh, Labels = NULL, cancerGenes = cancerGenes, nperm=nperm, input = "real", version = "normal", methods = methods)
+res <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw, cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh, Labels = NULL, cancerGenes = cancerGenes, nperm=20, input = "real", version = "normal", methods = methods)
 @
 
 The following methods are available: "OrtizEstevez", "intcngean",
