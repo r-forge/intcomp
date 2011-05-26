@@ -32,6 +32,13 @@ detection performance of each algorithm is evaluated by comparing the
 prioritized candidate gene list from each method to a golden standard
 list of known cancer genes in simulated and real data sets.
 
+The package is experimental beta-release and provided as is. The main
+purpose of this vignette is to provide reference to algorithmic
+details of the benchmarking framework used in \cite{Lahti11review} and
+sufficient documentation of the functionality such that similar
+experiments can be replicated by experienced R users.
+
+
 \subsection{Comparison methods}
 
 The current version implements the comparison of the following ge/cn
@@ -44,6 +51,7 @@ The current version implements the comparison of the following ge/cn
 
 
 \section{Examples}
+
 
 \subsection{Installing dependencies}
 
@@ -104,7 +112,7 @@ data(hyman)
 library("org.Hs.eg.db")
 dat <- read.hyman(cdna, cgh, genenames, chrs = 1:22, as.list(org.Hs.egALIAS2EG))
 ge <- dat$ge$data        # gene expression matrix
-cn.raw <- dat$cn$data        # copy number matrix
+cn.raw <- dat$cn        # copy number matrix
 gene.info <- dat$ge$info # gene location info
 @
 
@@ -114,8 +122,8 @@ Some methods require segmented and/or called copy number data, obtained with
 
 <<preprocess.cn>>=
 cgh <- process.copynumber(cn.raw)
-cn.seg <- list(data = assayDataElement(cgh, 'segmented'), info = cn.raw$info)
-cn.call <- list(data = assayDataElement(cgh, 'calls'), info = cn.raw$info)
+cn.seg <- list(data = assayDataElement(cgh, 'segmented'), info = gene.info)
+cn.call <- list(data = assayDataElement(cgh, 'calls'), info = gene.info)
 rownames(cn.call$data) <- rownames(cn.call$info) <- rownames(cn.seg$data) <- rownames(cn.seg$info) <- rownames(ge$data)
 @ 
 
