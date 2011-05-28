@@ -59,7 +59,7 @@ The benchmarking pipeline depends on various external R
 packages. Install the  dependencies from within R using the following
 commands:
 
-<<deps>>=
+<<deps, results = hide>>=
 source("http://www.bioconductor.org/biocLite.R") 
 biocLite(c("biomaRt", "DNAcopy", "DRI", "edira", 
 "hgu133ahsentrezg.db", "intCNGEan", "org.Hs.eg.db", 
@@ -87,11 +87,11 @@ integration algorithms.
 
 \subsubsection{Pollack et al. (2002)}
 
-The \cite{Pollack2002} data
+Loading Pollack et al. (2002) \cite{Pollack2002} data
 set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
-accessed June 2, 2010.}).
+  accessed June 2, 2010.}.
 
-<<getdata>>=
+<<getdata, results = hide>>=
 library(intcomp)
 data(pollack)
 dat <- read.pollack(chrs = 1:22, CopyNoGeneDataset4719, clone2geneid)
@@ -102,12 +102,12 @@ gene.info <- dat$ge$info # gene location info
 
 \subsubsection{Hyman et al. (2002)}
 
-The \cite{Hyman2002} data set\footnote{HymancdnaDataA.tab,
-HymancghDataA.tab and HymanAcc.mat obtained from
-http://www.ece.ucsb.edu/pubs/ieee/index.shtml accessed June 2,
-2010.}).
+Loading Hyman et al. (2002) \cite{Hyman2002} data
+set\footnote{HymancdnaDataA.tab, HymancghDataA.tab and HymanAcc.mat
+  obtained from http://www.ece.ucsb.edu/pubs/ieee/index.shtml accessed
+  June 2, 2010.}.
 
-<<getdata>>=
+<<getdata, results = hide>>=
 data(hyman)
 library("org.Hs.eg.db")
 dat <- read.hyman(cdna, cgh, genenames, chrs = 1:22, as.list(org.Hs.egALIAS2EG))
@@ -116,15 +116,16 @@ cn.raw <- dat$cn    # copy number matrix + info
 gene.info <- dat$cn.raw$info # gene location info
 @
 
-\subsection{Preprocessing copy number data
+\subsection{Preprocessing copy number data}
 
 Some methods require segmented and/or called copy number data, obtained with
 
-<<preprocess.cn>>=
+<<preprocess.cn, results = hide>>=
 cgh <- process.copynumber(cn.raw)
 cn.seg <- list(data = assayDataElement(cgh, 'segmented'), info = gene.info)
 cn.call <- list(data = assayDataElement(cgh, 'calls'), info = gene.info)
-rownames(cn.call$data) <- rownames(cn.call$info) <- rownames(cn.seg$data) <- rownames(cn.seg$info) <- rownames(ge$data)
+rownames(cn.call$data) <- rownames(cn.seg$data) <- rownames(ge$data)
+cn.call$info <- cn.seg$info <- cn.raw$info
 @ 
 
 
@@ -133,12 +134,12 @@ rownames(cn.call$data) <- rownames(cn.call$info) <- rownames(cn.seg$data) <- row
 The golden standard list of known breast cancer genes from The Breast
 Cancer Gene
 Database\footnote{http://www.tumor-gene.org/cgi-bin/TGDB/tgdb\_by\_name.cgi
-accessed 5.6.2010; 'tgdb\_by\_name.cgi.html' and 'tgdb.txt'})
+accessed 5.6.2010; 'tgdb\_by\_name.cgi.html' and 'tgdb.txt'}
 \cite{Baasiri99} was downloaded and stored to the tgdb object. This
 script details how to load the list, convert to Entrez GeneIDs and
 select the genes that are included in the experimental data:
 
-<<getcancergenes>>=
+<<getcancergenes, results = hide>>=
 library("org.Hs.eg.db")
 data(tgdb)
 cancerGenes <- get.brca.genes(rownames(dat$ge$data), as.list(org.Hs.egALIAS2EG), tgdb)
@@ -152,29 +153,30 @@ gene copy number data (cn), (iii) optional sample class labels
 (tumor/normal), and (iv) golden standard list of known cancer
 genes. The ge and cn data sets are lists containing $data$ and $info$
 fields. The probes in gene expression and gene copy number are paired;
-$data$ is a data matrix with gene expression (ge$data) or gene copy
-number (cn$data) data; $info$ field is a data frame containing
+$data$ is a data matrix with gene expression (ge\$data) or gene copy
+number (cn\$data) data; $info$ field is a data frame containing
 additional information about genes: $loc$ indicates the genomic
 location of the probes in base pairs (numeric); $chr$ and $arm$ are
 factors indicating the chromosome and chromosomal arm of the probe,
 respectively. To run the benchmarking tests for all methods, use:
 
-<<run>>=
-auc.ordered <- sort(unlist(res$auc))
-methods <- c("CNAmet", "edira", "pint")
+<<run, results = hide>>=
+methods <- c("CNAmet", "edira")
 res <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw, cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh, Labels = NULL, cancerGenes = cancerGenes, nperm=20, input = "real", version = "normal", methods = methods)
+auc.ordered <- sort(unlist(res$auc))
 @
 
-The following methods are available: "OrtizEstevez", "intcngean",
-"edira", "pint", "SIM.window", "SIM.full", "DRI.cp", "DRI.cs",
-"PMA.raw", "CNAmet", "PREDA" and for two-group comparisons (requires
-Labels) "DRI.ct", "DRI.ss", "DRI.srank", "DRI.sraw". The cancer gene
-prioritization of each method is compared to the golden standard list
-of known cancer genes; the result contains running times of the
-algorithms and the AUC values from ROC analysis
-\cite{Lahti11review}. The AUC values provide quantitative estimates of
-model performance in cancer gene detection and provide the basis for
-comparisons.
+The following {\it methods} are available: {\it OrtizEstevez}, {\it
+  intcngean}, {\it edira}, {\it pint}, {\it SIM.window\}, {\it
+    SIM.full\}, {\it DRI.cp}, {\it DRI.cs}, {\it PMA.raw}, {\it
+      CNAmet}, {\it PREDA} and for two-group comparisons (requiring
+    Labels) {\it DRI.ct}, {\it DRI.ss}, {\it DRI.srank}, {\it
+      DRI.sraw}. The cancer gene prioritization of each method is
+    compared to the golden standard list of known cancer genes; the
+    result contains running times of the algorithms and the AUC values
+    from ROC analysis \cite{Lahti11review}. The AUC values provide
+    quantitative estimates of model performance in cancer gene
+    detection and provide the basis for comparisons.
 
 \subsection*{Acknowledgements}
 
@@ -183,7 +185,7 @@ Genetic and Epigenetic Study on AML and MDS.
 
 %* references
 
-\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 \bibliography{intcomp}
 
 
