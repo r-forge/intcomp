@@ -3,14 +3,13 @@ import(methods)
 export(get.brca.genes,
        get.leukemia.genes,
        process.ge,
-       remove.sex.chromosomes,
        process.copynumber,
        read.pollack,
-       read.mullighan,       
+       read.mullighan,
        read.hyman,
        roc.auc,
        simulation,
-       test.geneorder.CNAmet,       
+       test.geneorder.CNAmet,
        test.geneorder.dri.cor,
        test.geneorder.dri.sam,
        test.geneorder.edira,
@@ -25,4 +24,4 @@ export(get.brca.genes,
        )
 
 
-#importFrom(PREDA, StatisticsForPREDAFromdataframe)
+#importFrom(PREDA, StatisticsForPREDAFromdataframe) 
