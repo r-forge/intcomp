@@ -1,4 +1,4 @@
-test.geneorder.intcngean <- function (ge, cn, Labels=NULL, meth, analysis.type, nperm, pth, callprobs=NULL) {
+test.geneorder.intcngean <- function (ge, cghCall, Labels=NULL, meth, analysis.type, nperm, pth, callprobs=NULL, match=TRUE) {
 
   # NOTE: assumes cghCall object in input!
   mrnaSet <- process.ge(ge, probespanGE = 16) # Convert ge into expressionSet object 
@@ -7,18 +7,25 @@ test.geneorder.intcngean <- function (ge, cn, Labels=NULL, meth, analysis.type, 
 	  
   print("callprobs")
   if(length(callprobs) > 0){
-    probgain(cn) <- callprobs$gain
-    probloss(cn) <- callprobs$loss
-    probnorm(cn) <- callprobs$norm
+    probgain(cghCall) <- callprobs$gain
+    probloss(cghCall) <- callprobs$loss
+    probnorm(cghCall) <- callprobs$norm
   }
  
   # meth = "wmw"    # weighted Mann-Whitney
   # meth = "wcvm"   # weighted Cramer-Von Mises; failed
   # analysis.type regional caused error
-
+  
+  if(match == TRUE){
+    print(" Match data sets")
+    matched <- intCNGEan.match(cghCall, mrnaSet, GEbpend = "yes", CNbpend = "yes")
+    cghcall <- matched$CNdata.matched
+    mrnaSet <- matched$GEdata.matched
+  }
+  
   print(" Tune model parameters")
-  tuned  <- intCNGEan.tune(cn, mrnaSet, test.statistic = meth, ngenetune = 250, nperm_tuning = 250, minCallProbMass = 0.01)
-  #tuned  <- intCNGEan.tune(cn, mrnaSet, test.statistic=meth, ngenetune = 250, nperm_tuning = 250, minCallProbMass = 0.01)
+  tuned  <- intCNGEan.tune(matched$CNdata.matched, matched$GEdata.matched, test.statistic = meth, ngenetune = 250, nperm_tuning = 250, minCallProbMass = 0.01)
+  #tuned  <- intCNGEan.tune(cghcall, mrnaSet, test.statistic=meth, ngenetune = 250, nperm_tuning = 250, minCallProbMass = 0.01)
   #tuned  <- intCNGEan.tune(matched$CNdata.matched, matched$GEdata.matched, test.statistic = meth)
   #tuned  <- intCNGEan.tune(cn, mrnaSet, test.statistic = meth) # try this if does not work with parameters
    

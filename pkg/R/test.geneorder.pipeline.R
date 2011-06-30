@@ -10,16 +10,16 @@
 test.geneorder.pipeline <- function (ge, cn.raw, cn.seg=NULL,
 cn.call=NULL, cghCall = NULL, ge.norm = NULL, cn.norm = NULL, Labels=NULL,
 cancerGenes, nperm = 1e2, input="real", version = "normal", methods =
-NULL, chromosomes = as.character(1:22)) {
+NULL, chromosomes = as.character(1:22), callprobs) {
 
   # Determine default cn to be used in all methods unless specified otherwise
   # (see intCNGEan and CNAmet)
   # By defalt use cn.raw; if not given use cn.seg; if not given, use cn.call
-  if (!is.null(cn.raw)) {
-    cn <- cn.raw
-  } else if (is.null(cn.raw) && !is.null(cn.seg)) {
+  if (!is.null(cn.seg)) {
     cn <- cn.seg
-  } else if (is.null(cn.raw) && is.null(cn.seg) && !is.null(cn.call)) {
+  } else if (is.null(cn.seg) && !is.null(cn.raw)) {
+    cn <- cn.raw
+  } else if (is.null(cn.seg) && is.null(cn.raw) && !is.null(cn.call)) {
     cn <- cn.call
   }
   
@@ -111,21 +111,21 @@ NULL, chromosomes = as.character(1:22)) {
     message("intCNGEan")
     start.time <- Sys.time()    
     if(input == "real"){
-      ordg <- test.geneorder.intcngean(ge, cn=cghCall, meth = "wmw", analysis.type = "univariate", 
-                                       nperm = nperm, pth = 0.1)
+      ordg <- test.geneorder.intcngean(ge, cghCall=cghCall, meth = "wmw", analysis.type = "univariate", 
+                                       nperm = nperm, pth = 0.1, match=TRUE)
     }                                 
 
     if(input == "simulations.equal.dimensions"){
-      ordg <- test.geneorder.intcngean(ge, cn=cn.call, 
+      ordg <- test.geneorder.intcngean(ge, cghCall=cghCall, 
                                        meth="wmw",
                                        analysis.type="univariate",
-                                       nperm = nperm, pth = 0.1, callprobs=sim$callprobs)
+                                       nperm = nperm, pth = 0.1, callprobs=callprobs, match=TRUE)
     }
     if(input == "simulations.unequal.dimensions"){
-      ordg <- test.geneorder.intcngean(ge, cn=cn.call, 
+      ordg <- test.geneorder.intcngean(ge, cghCall=cghCall, 
                                        meth="wmw",
                                        analysis.type="univariate", 
-                                       nperm = nperm, pth = 0.1, callprobs=sim$callprobs)
+                                       nperm = nperm, pth = 0.1, callprobs=callprobs, match=TRUE)
     }
     end.time <- Sys.time()
     runtime[["intCNGEan.wmw.univariate"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    

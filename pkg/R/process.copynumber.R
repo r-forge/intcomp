@@ -1,4 +1,4 @@
-process.copynumber <- function (cn.raw, cn.seg = NULL, probespanCN = 100, prior = "all", organism = "other") {
+process.copynumber <- function (cn.raw, cn.seg = NULL, probespanCN = 100, prior = "all", organism = "human") {
   
   require(CGHcall)
      
@@ -27,7 +27,7 @@ process.copynumber <- function (cn.raw, cn.seg = NULL, probespanCN = 100, prior 
 			 
     cgh.raw <- make_cghRaw(cbind(annots, as.data.frame(cn.raw$data)))
     cgh.pre <- preprocess(cgh.raw, nchrom=length(unique(cgh.raw@featureData@data$Chromosome)))
-    cgh.nor <- normalize(cgh.pre) # note: normalization median / smooth / none; using default: median
+    cgh.nor <- normalize(cgh.pre, method = "none") # note: normalization median / smooth / none; using default: median
     cgh.seg <- segmentData(cgh.nor)
   }
       
@@ -36,7 +36,7 @@ process.copynumber <- function (cn.raw, cn.seg = NULL, probespanCN = 100, prior 
   cgh.psn <- postsegnormalize(cgh.seg)
   cgh.cal <- CGHcall(cgh.psn, prior = prior, organism = organism) # number of copy number states can be changed with nclass parameter
 
-  cgh <- ExpandCGHcall(cgh.cal, cgh.psn)
+  cgh <- ExpandCGHcall(listcall=cgh.cal, inputSegmented=cgh.psn)
   
   return(cgh)
   
