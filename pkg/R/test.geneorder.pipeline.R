@@ -111,21 +111,23 @@ NULL, chromosomes = as.character(1:22), callprobs) {
     message("intCNGEan")
     start.time <- Sys.time()    
     if(input == "real"){
-      ordg <- test.geneorder.intcngean(ge, cghCall=cghCall, meth = "wmw", analysis.type = "univariate", 
+      ordg <- test.geneorder.intcngean(ge=ge, cghCall=cghCall, meth = "wmw", analysis.type = "univariate", 
                                        nperm = nperm, pth = 0.1, match=TRUE)
     }                                 
 
     if(input == "simulations.equal.dimensions"){
-      ordg <- test.geneorder.intcngean(ge, cghCall=cghCall, 
+      ordg <- test.geneorder.intcngean(ge=ge, cghCall=cghCall, 
                                        meth="wmw",
                                        analysis.type="univariate",
                                        nperm = nperm, pth = 0.1, callprobs=callprobs, match=TRUE)
     }
     if(input == "simulations.unequal.dimensions"){
-      ordg <- test.geneorder.intcngean(ge, cghCall=cghCall, 
+      ordg <- test.geneorder.intcngean(ge=ge, cghCall=cghCall, 
                                        meth="wmw",
                                        analysis.type="univariate", 
-                                       nperm = nperm, pth = 0.1, callprobs=callprobs, match=TRUE)
+                                       nperm = nperm, pth = 0.1, callprobs=NULL, match=TRUE)
+    
+    
     }
     end.time <- Sys.time()
     runtime[["intCNGEan.wmw.univariate"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
@@ -174,7 +176,7 @@ NULL, chromosomes = as.character(1:22), callprobs) {
     message("PREDA")
     start.time <- Sys.time()    
     ordg <- test.geneorder.preda(ge, cn, Labels, nperm=nperm, cancerGenes=cancerGenes,
-        ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod="lokern_scaledBandwidth_repeated",
+        ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod="spline",
         ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5,
         cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="fdr",
         chromosomes=unique(ge$info$chr))
