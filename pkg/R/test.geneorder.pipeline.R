@@ -157,7 +157,7 @@ NULL, chromosomes = as.character(1:22), callprobs) {
   if (!is.null(methods) && ("pint" %in% methods)) {
     message("pint")
     start.time <- Sys.time()    
-    ordg <- test.geneorder.pint(ge, cn, Labels)
+    ordg <- test.geneorder.pint(ge, cn.raw, Labels)
     end.time <- Sys.time()
     runtime[["pint"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["pint"]] <- roc.auc(ordg, cancerGenes)
