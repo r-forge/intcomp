@@ -119,7 +119,7 @@ NULL, chromosomes = as.character(1:22), callprobs) {
       ordg <- test.geneorder.intcngean(ge=ge, cghCall=cghCall, 
                                        meth="wmw",
                                        analysis.type="univariate",
-                                       nperm = nperm, pth = 0.1, callprobs=callprobs, match=TRUE)
+                                       nperm = nperm, pth = 0.1, callprobs=callprobs, match=FALSE)
     }
     if(input == "simulations.unequal.dimensions"){
       ordg <- test.geneorder.intcngean(ge=ge, cghCall=cghCall, 
@@ -171,7 +171,7 @@ NULL, chromosomes = as.character(1:22), callprobs) {
     runtime[["OrtizEstevez"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     auc[["OrtizEstevez"]] <- roc.auc(ordg, cancerGenes)              
   }                                      
-	      
+          
   if (!is.null(methods) && ("PREDA" %in% methods)) {
     message("PREDA")
     start.time <- Sys.time()    
