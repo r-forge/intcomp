@@ -10,7 +10,8 @@
 \usepackage{float}
 
 \usepackage{amsmath,amssymb,amsfonts}
-\usepackage[authoryear,round]{natbib}
+%\usepackage[authoryear,round]{natbib}
+
 
 \usepackage{hyperref}
 \newcommand{\Rfunction}[1]{{\texttt{#1}}}
@@ -43,10 +44,10 @@ experiments can be replicated by experienced R users.
 
 The current version implements the comparison of the following ge/cn
  integration algorithms: CNAmet \cite{Hautaniemi04,Louhimo11}, DRI
- \citep{Salari2010}, edira \citep{Schafer09}, intCNGEan
- \citep{Wieringen09}, Ortiz-Estevez \cite{Ortiz-Estevez11}, pint
- \citep{Lahti09mlsp}, PMA \citep{Witten09}, PREDA/SODEGIR
- \cite{Bicciato09}, and SIM \citep{Menezes2009}. Multiple variants are
+ \cite{Salari2010}, edira \cite{Schafer09}, intCNGEan
+ \cite{Wieringen09}, Ortiz-Estevez \cite{Ortiz-Estevez11}, pint
+ \cite{Lahti09mlsp}, PMA \cite{Witten09}, PREDA/SODEGIR
+ \cite{Bicciato09}, and SIM \cite{Menezes2009}. Multiple variants are
  evaluated for some methods \cite{Lahti11review}.
 
 
@@ -73,7 +74,9 @@ RCurl\footnote{http://www.omegahat.org/RCurl/},
 edira\footnote{http://www.statistik.tu-dortmund.de/~schaefer/},
 intCNGEan\footnote{http://www.few.vu.nl/~wvanwie/software/intCNGEan/intCNGEan.html},
 org.Hs.eg.db\footnote{http://www.bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html},
-PREDA/SODEGIR\footnote{http://www.xlab.unimo.it/PREDA/PREDAinstall.R},
+PREDA/SODEGIR\footnote{http://www.xlab.unimo.it/PREDA/PREDAinstall.R;
+http://www.xlab.unimo.it/PREDA/PREDAsampledata\_0.1.7.tar.gz;
+http://www.xlab.unimo.it/PREDA/PREDA\_0.2.12.tar.gz},
 and CNAmet\footnote{http://csbi.ltdk.helsinki.fi/CNAmet/}.
 
 \section{Running the comparison tests}

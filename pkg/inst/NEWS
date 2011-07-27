@@ -1,3 +1,8 @@
+CHANGES IN VERSION 0.2.97 (2011-07-26)
+
+  o assuming that the probe matching in intCNGEan for real data is
+    performed in advance by the user
+
 CHANGES IN VERSION 0.2.92 (2011-05-16)
 
   o added runtime checks in test.geneorder.pipeline

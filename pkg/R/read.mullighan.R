@@ -81,14 +81,17 @@ read.mullighan <- function(chrs = 1:22, location.table, cnAnnotation, cnData, cn
 
 get.TSS.locations.for.entrezids <- function (sets, location.table) {
 
-  chrlist <- location.table[["chr"]]
-  geneStart <- location.table[["geneStart"]]
-  geneEnd <- location.table[["geneEnd"]]
+  chrlist   <- location.table[["chr"]][sets]
+  geneStart <- location.table[["geneStart"]][sets]
+  geneEnd   <- location.table[["geneEnd"]][sets]
 
-  sets <- intersect(intersect(names(which(!is.na(geneStart))), names(which(!is.na(geneEnd)))), names(which(!is.na(chrlist))))
-  chrlist <- chrlist[sets]
+  sets <- intersect(intersect(names(which(!is.na(geneStart))),
+                              names(which(!is.na(geneEnd)))),
+                              names(which(!is.na(chrlist))))
+  
+  chrlist   <- chrlist[sets]
   geneStart <- geneStart[sets]
-  geneEnd <- geneEnd[sets]
+  geneEnd   <- geneEnd[sets]
   
    tss.list <- c()
   multi.tss <- c()
@@ -104,7 +107,7 @@ get.TSS.locations.for.entrezids <- function (sets, location.table) {
     if (all(c(sign(start) < 0, sign(end) < 0))) {
       tss <- unique(end)        
     } else if (all(c(sign(start) > 0, sign(end) > 0))) {
-    # If all positions positive, then gene is on pos. strand
+      # If all positions positive, then gene is on pos. strand
       tss <- unique(start)        
     } else {
       #stop("Both neg. and pos. location info given?")
@@ -116,7 +119,7 @@ get.TSS.locations.for.entrezids <- function (sets, location.table) {
       multi.tss <- c(multi.tss, i)
     }
     tss.list[[i]] <- abs(tss)
-  }   
+  }  
   message(paste("Proportion of sets with multiple TSSs: ", length(multi.tss)/length(sets)))
 
   # Sanity check
@@ -132,7 +135,7 @@ get.TSS.locations.for.entrezids <- function (sets, location.table) {
   message(paste("Proportion of sets with readings on both strands: ", sum(!inds)/length(sets)))  
 
   X.info <- cbind(chrlist, tss.list)
-  colnames(X.info) <- c("chr","loc")
+  colnames(X.info) <- c("chr", "loc")
   rownames(X.info) <- sets
   
   return(X.info)

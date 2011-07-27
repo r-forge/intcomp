@@ -48,7 +48,7 @@ test.geneorder.sim <- function (ge, cn, Labels=NULL, meth = "full", runname = "s
     integrated.analysis(samples = 6:(6+ncol(ge$data)-1), method = meth, run.name = runname, zscores = TRUE, input.regions = regs)
   }
 
-  table.dep <- tabulate.top.dep.features(method = meth, run.name = runname, input.regions = regs, adjust.method="none")                 
+  table.dep <- tabulate.top.dep.features(method = meth, run.name = runname, input.regions = regs, adjust.method="none")
   
   # List p-values for genes
   if (length(regs) > 1) {

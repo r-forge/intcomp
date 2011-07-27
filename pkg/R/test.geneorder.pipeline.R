@@ -112,8 +112,13 @@ NULL, chromosomes = as.character(1:22), callprobs) {
     message("intCNGEan")
     start.time <- Sys.time()    
     if(input == "real"){
-      ordg <- test.geneorder.intcngean(ge=ge, cghCall=cghCall, meth = "wmw", analysis.type = "univariate", 
-                                       nperm = nperm, pth = 0.1, match=TRUE)
+      ordg <- test.geneorder.intcngean(ge=ge,
+                                       cghCall=cghCall,
+                                       meth = "wmw",
+                                       analysis.type = "univariate",
+                                       nperm = nperm,
+                                       pth = 0.1,
+                                       match = FALSE)
     }                                 
 
     if(input == "simulations.equal.dimensions"){
