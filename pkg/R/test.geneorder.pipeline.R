@@ -118,7 +118,7 @@ NULL, chromosomes = as.character(1:22), callprobs) {
                                        analysis.type = "univariate",
                                        nperm = nperm,
                                        pth = 0.1,
-                                       match = FALSE)
+                                       match = TRUE)
     }                                 
 
     if(input == "simulations.equal.dimensions"){
