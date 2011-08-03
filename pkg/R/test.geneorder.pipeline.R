@@ -196,11 +196,10 @@ NULL, chromosomes = as.character(1:22), callprobs) {
         ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5,
         cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="fdr",
         chromosomes=unique(ge$info$chr))
-    best_case <- roc.auc2(ordg$best_case_order, cancerGenes)
-    worst_case <- roc.auc2(ordg$worst_case_order, cancerGenes)
-    end.time <- Sys.time()
+    end.time <- Sys.time()    
     runtime[["preda"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
-    roc[["preda"]] <- mean(c(best_case,worst_case))
+    roc[["preda.best.case"]] <- roc.auc2(ordg$best_case_order, cancerGenes)
+    roc[["preda.worst.case"]] <- roc.auc2(ordg$worst_case_order, cancerGenes)
   }
   
   # Run methods below only when we have two-group comparison setup
