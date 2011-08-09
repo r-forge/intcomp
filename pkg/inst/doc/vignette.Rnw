@@ -94,7 +94,7 @@ Loading Pollack et al. (2002) \cite{Pollack2002} data
 set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
   accessed June 2, 2010.}.
 
-<<getdata, results = hide>>=
+<<results=tex>>=
 library(intcomp)
 data(pollack)
 dat <- read.pollack(chrs = 1:22, CopyNoGeneDataset4719, clone2geneid)
@@ -110,7 +110,7 @@ set\footnote{HymancdnaDataA.tab, HymancghDataA.tab and HymanAcc.mat
   obtained from http://www.ece.ucsb.edu/pubs/ieee/index.shtml accessed
   June 2, 2010.}.
 
-<<getdata, results = hide>>=
+<<results=tex>>=
 data(hyman)
 library("org.Hs.eg.db")
 dat <- read.hyman(cdna, cgh, genenames, chrs = 1:22, as.list(org.Hs.egALIAS2EG))
@@ -142,12 +142,26 @@ accessed 5.6.2010; 'tgdb\_by\_name.cgi.html' and 'tgdb.txt'}
 script details how to load the list, convert to Entrez GeneIDs and
 select the genes that are included in the experimental data:
 
-<<getcancergenes, results = hide>>=
+<<results=tex>>=
 library("org.Hs.eg.db")
 data(tgdb)
 cancerGenes <- get.brca.genes(rownames(dat$ge$data), as.list(org.Hs.egALIAS2EG), tgdb)
 @
 
+\subsection{Simulating data}
+
+To evaluate the methods based on simulations, data can be simulated following roughly the approach given in \cite{Schafer09}, but with greater flexibility. The quantile grid to be simulated can be defined
+entirely by the user, as well as the mixing weight, the number of different variances to be considered and the call probabilities (for testing {\it intcngean}).
+
+<<test_schaefer, results = hide>>=
+library(ediraAMLdata)
+test_schaefer <- test.simulation(GE_data, CN_data, probespanGE = 16, probespanCN = 100, method="schaefer", Inner=3:5, Outer=c(1:2,6:7), probs_GE=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975), probs_CN=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975), cancer_GE=c(1,1,2,2,6,6,7,7),cancer_CN=c(1,2,1,2,3,4,3,4), n=100, weight=1/10, variances=c(1/4,1/2,1,2,4), GE_norm=4, CN_norm=2, seed=42, call_probs=c(0.001,0.005,0.01,0.0125,0.04,0.925,0.99))
+@
+
+Also, testing on the data simulated by Francesco Ferrari is provided. Here, the data are given, i.e., the user has no influence on their characteristics.
+<<test_ferrari, results = hide>>=
+test_ferrari <- test.simulation(GE_data, CN_data, method="ferrari", n=100)
+@
 
 \section{Running the benchmarking pipeline}
 
@@ -168,6 +182,13 @@ methods <- c("CNAmet", "edira")
 res <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw, cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh, Labels = NULL, cancerGenes = cancerGenes, nperm=20, input = "real", version = "normal", methods = methods)
 auc.ordered <- sort(unlist(res$auc))
 @
+
+<<run.simulation, results = hide>>=
+methods <- c("CNAmet", "edira")
+auc <- test.geneorder.pipeline(ge=test_schaefer$ge, cn.raw=test_schaefer$cn.raw, cn.seg=test_schaefer$cn,
+cn.call=test_schaefer$cn.call, cghCall = test_schaefer$cn.cghCall, ge.norm = test_schaefer$ge.norm, cn.norm = test_schaefer$cn.norm, Labels=test_schaefer$Labels, cancerGenes=test_schaefer$cancerGenes, nperm = 1000, input="simulations.equal.dimensions", version = "normal", methods=methods, callprobs=sim$callprobs)
+@
+
 
 The following {\it methods} are available: {\it OrtizEstevez}, {\it
   intcngean}, {\it edira}, {\it pint}, {\it SIM.window\}, {\it
