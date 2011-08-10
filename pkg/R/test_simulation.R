@@ -30,7 +30,7 @@ if(length(cancer_GE) != length(cancer_CN)){stop("cancer_GE and cancer_CN must ha
 require(ediraAMLdata)
 data(AMLdata, package="ediraAMLdata")
 
-sim <- simulation(GE_data[,1:33], CN_data[,1:33], Inner, Outer, probs_GE, probs_CN, n, weight, variances, GE_norm, CN_norm, seed, call_probs)
+sim <- simulation(GE_data, CN_data, Inner, Outer, probs_GE, probs_CN, n, weight, variances, GE_norm, CN_norm, seed, call_probs)
 ################################################################################################################
 
 # annotations for simulated data
