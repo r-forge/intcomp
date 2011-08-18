@@ -9,7 +9,7 @@ read.mullighan <- function(chrs = 1:22, location.table, cnAnnotation, cnData, cn
   X <- exprs(eSet)
   medExprs <- apply(exprs(eSet), 1, median) # median expression
   X <- exprs(eSet) <- exprs(eSet) - medExprs
-  
+
   # Annotations for the genes
   #data.path + hgu133ahsentrezgcdf_13.0.0.tar.gz
   #install.packages("hgu133ahsentrezg.db_13.0.0.tar.gz")
@@ -18,7 +18,7 @@ read.mullighan <- function(chrs = 1:22, location.table, cnAnnotation, cnData, cn
 
   sets <- removeAFFX(rownames(X))
   xinfo <- get.TSS.locations.for.entrezids(sets, location.table)
-  xdata <- X[rownames(xinfo),]
+  xdata <- X[rownames(xinfo), ]
 
   #?hgu133ahsentrezgCHRLOC
   #Mappings were based on data provided by: UCSC Genome

@@ -14,7 +14,7 @@ NULL, chromosomes = as.character(1:22), callprobs) {
 
   # Determine default cn to be used in all methods unless specified otherwise
   # (see intCNGEan and CNAmet)
-  # By defalt use cn.raw; if not given use cn.seg; if not given, use cn.call
+  # By defalt use cn.seg; if not given use cn.raw; if not given, use cn.call
   if (!is.null(cn.seg)) {
     cn <- cn.seg
   } else if (is.null(cn.seg) && !is.null(cn.raw)) {
@@ -161,19 +161,11 @@ NULL, chromosomes = as.character(1:22), callprobs) {
   }
   
   if (!is.null(methods) && ("pint" %in% methods)) {
-    # pint always uses raw data if available, otherwise segmented or called
+
     message("pint")
-    cn.pint <- cn.raw
-    if (is.null(cn.raw)) {
-      if (!is.null(cn.seg)) {
-        cn.pint <- cn.seg
-       } else {
-        cn.pint <- cn.call
-      }
-    }
   
     start.time <- Sys.time()    
-    ordg <- test.geneorder.pint(ge, cn.pint, Labels)
+    ordg <- test.geneorder.pint(ge, cn.raw, cn.seg, Labels)
     end.time <- Sys.time()
     runtime[["pint"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     roc[["pint"]] <- roc.auc2(ordg, cancerGenes)
