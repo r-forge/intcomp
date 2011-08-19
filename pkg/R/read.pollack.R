@@ -15,8 +15,8 @@ read.pollack <- function (chrs = 1:22, dat, clone2geneid) {
   ge <- as.matrix(impute(ge))
 
   # Normalize (unit variance and zero mean for each column)
-  cn <- centerData(unitscale(cn))
-  ge <- centerData(unitscale(ge))
+  #cn <- centerData(unitscale(cn))
+  #ge <- centerData(unitscale(ge))
       
   # Convert Pollack clone IDs to GeneIDs
   # Clone names in Pollack data (IMAGE:*****) refer to known

@@ -37,7 +37,7 @@ process.copynumber <- function (cn.raw, cn.seg = NULL, probespanCN = 100, prior 
   cgh.cal <- CGHcall(cgh.psn, prior = prior, organism = organism) # number of copy number states can be changed with nclass parameter
 
   cgh <- ExpandCGHcall(listcall=cgh.cal, inputSegmented=cgh.psn)
-  
+
   return(cgh)
   
 }
