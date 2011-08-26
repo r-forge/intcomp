@@ -10,7 +10,7 @@
 test.geneorder.pipeline <- function (ge, cn.raw, cn.seg=NULL,
 cn.call=NULL, cghCall = NULL, ge.norm = NULL, cn.norm = NULL, Labels=NULL,
 cancerGenes, nperm = 1e2, input="real", version = "normal", methods =
-NULL, chromosomes = as.character(1:22), callprobs) {
+NULL, chromosomes = as.character(1:22), callprobs, references) {
 
   # Determine default cn to be used in all methods unless specified otherwise
   # (see intCNGEan and CNAmet)
@@ -37,7 +37,7 @@ NULL, chromosomes = as.character(1:22), callprobs) {
   if (!is.null(methods) && ("edira" %in% methods)) {
       message("edira")
       start.time <- Sys.time()      
-      ordg <- test.geneorder.edira(ge, cn, Labels)
+      ordg <- test.geneorder.edira(ge, cn, Labels, references)
       end.time <- Sys.time()
       runtime[["edira"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
 
