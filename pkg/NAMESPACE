@@ -20,8 +20,9 @@ export(get.brca.genes,
        test.geneorder.pma,
        test.geneorder.pma.rawscore,
        test.geneorder.sim,
-       test.geneorder.preda
-       )
+       test.geneorder.preda,
+       test.simulation
+)
 
 
 #importFrom(PREDA, StatisticsForPREDAFromdataframe) 
