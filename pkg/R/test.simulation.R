@@ -19,7 +19,7 @@
 # seed         the seed (used only for method="schaefer")
 # call_probs   call probabilities to be specified for intCNGEan (used only for method="schaefer")
 
-test.simulation <- function(GE_data, CN_data, probespanGE = 16, probespanCN = 16, method, Inner=3:5, Outer=c(1:2,6:7),
+test.simulation <- function(GE, CN, probespanGE = 16, probespanCN = 16, method, Inner=3:5, Outer=c(1:2,6:7),
 probs_GE=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975), probs_CN=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975),
 cancer_GE=c(1,1,2,2,6,6,7,7),cancer_CN=c(1,2,1,2,3,4,3,4), n=100, weight=1/10, variances=c(1/4,1/2,1,2,4),
 GE_norm=4, CN_norm=2, seed=42, call_probs=c(0.001,0.005,0.01,0.0125,0.04,0.925,0.99)){
@@ -30,7 +30,7 @@ if(length(cancer_GE) != length(cancer_CN)){stop("cancer_GE and cancer_CN must ha
 require(ediraAMLdata)
 data(AMLdata, package="ediraAMLdata")
 
-sim <- simulation(GE_data, CN_data, Inner, Outer, probs_GE, probs_CN, n, weight, variances, GE_norm, CN_norm, seed, call_probs)
+sim <- simulation(GE, CN, Inner, Outer, probs_GE, probs_CN, n, weight, variances, GE_norm, CN_norm, seed, call_probs)
 ################################################################################################################
 
 # annotations for simulated data
@@ -92,8 +92,8 @@ cn.call <- list(data=assayDataElement(CN, 'calls'), info=cn_info)
 out=list(ge=ge, cn=cn, ge.norm=ge.norm, cn.norm=cn.norm, cn.raw=cn.raw, cn.call=cn.call, cn.cghCall=CN, Labels=Labels, cancerGenes=cancerGenes)
 }
 ####################################################################################### Ferrari simulations ####################################################################################
-#load("/home/schaefer/multiplatform review/ferrari/ferrari_simulations_aberration_width_10MBp.RData")
 if(method=="ferrari"){
+data(ferrari_simulations)
 # annotations for simulated data
 ge_data <- as.matrix(GE[,4:9])
 ge_norm_data <- as.matrix(GE.norm[,4:9])

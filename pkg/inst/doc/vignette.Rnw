@@ -155,12 +155,12 @@ entirely by the user, as well as the mixing weight, the number of different vari
 
 <<test_schaefer, results = hide>>=
 library(ediraAMLdata)
-test_schaefer <- test.simulation(GE_data, CN_data, probespanGE = 16, probespanCN = 100, method="schaefer", Inner=3:5, Outer=c(1:2,6:7), probs_GE=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975), probs_CN=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975), cancer_GE=c(1,1,2,2,6,6,7,7),cancer_CN=c(1,2,1,2,3,4,3,4), n=100, weight=1/10, variances=c(1/4,1/2,1,2,4), GE_norm=4, CN_norm=2, seed=42, call_probs=c(0.001,0.005,0.01,0.0125,0.04,0.925,0.99))
+test_schaefer <- test.simulation(GE$data, CN$data, probespanGE = 16, probespanCN = 100, method="schaefer", Inner=3:5, Outer=c(1:2,6:7), probs_GE=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975), probs_CN=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975), cancer_GE=c(1,1,2,2,6,6,7,7),cancer_CN=c(1,2,1,2,3,4,3,4), n=100, weight=1/10, variances=c(1/4,1/2,1,2,4), GE_norm=4, CN_norm=2, seed=42, call_probs=c(0.001,0.005,0.01,0.0125,0.04,0.925,0.99))
 @
 
 Also, testing on the data simulated by Francesco Ferrari is provided. Here, the data are given, i.e., the user has no influence on their characteristics.
 <<test_ferrari, results = hide>>=
-test_ferrari <- test.simulation(GE_data, CN_data, method="ferrari", n=100)
+test_ferrari <- test.simulation(GE$data, CN$data, method="ferrari", n=100)
 @
 
 \section{Running the benchmarking pipeline}
@@ -179,14 +179,14 @@ respectively. To run the benchmarking tests for all methods, use:
 
 <<run, results = hide>>=
 methods <- c("CNAmet", "edira")
-res <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw, cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh, Labels = NULL, cancerGenes = cancerGenes, nperm=20, input = "real", version = "normal", methods = methods)
+res <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw, cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh, Labels = NULL, cancerGenes = cancerGenes, nperm=20, input = "real", version = "normal", methods = methods, references="none")
 auc.ordered <- sort(unlist(res$auc))
 @
 
 <<run.simulation, results = hide>>=
 methods <- c("CNAmet", "edira")
 auc <- test.geneorder.pipeline(ge=test_schaefer$ge, cn.raw=test_schaefer$cn.raw, cn.seg=test_schaefer$cn,
-cn.call=test_schaefer$cn.call, cghCall = test_schaefer$cn.cghCall, ge.norm = test_schaefer$ge.norm, cn.norm = test_schaefer$cn.norm, Labels=test_schaefer$Labels, cancerGenes=test_schaefer$cancerGenes, nperm = 1000, input="simulations.equal.dimensions", version = "normal", methods=methods, callprobs=sim$callprobs)
+cn.call=test_schaefer$cn.call, cghCall = test_schaefer$cn.cghCall, ge.norm = test_schaefer$ge.norm, cn.norm = test_schaefer$cn.norm, Labels=test_schaefer$Labels, cancerGenes=test_schaefer$cancerGenes, nperm = 1000, input="simulations.equal.dimensions", version = "normal", methods=methods, callprobs=sim$callprobs, references="both")
 @
 
 
