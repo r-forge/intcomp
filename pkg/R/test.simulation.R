@@ -96,9 +96,9 @@ if(method=="ferrari"){
 data(ferrari_simulations)
 # annotations for simulated data
 ge_data <- as.matrix(GE[,4:9])
-ge_norm_data <- as.matrix(GE.norm[,4:9])
+#ge_norm_data <- as.matrix(GE.norm[,4:9])
 cn_data <- as.matrix(CN.seg[,4:9])
-cn_norm_data <- as.matrix(CN.norm.seg[,4:9])
+#cn_norm_data <- as.matrix(CN.norm.seg[,4:9])
 cn_raw_data <- as.matrix(CN[,4:9])
 rownames(ge_data) <- as.character(1:nrow(ge_data))   
 rownames(cn_data) <- as.character(1:nrow(cn_data))
@@ -130,8 +130,8 @@ ge <- list(data=ge_data, info=ge_info)
 cn <- list(data=cn_data, info=cn_info)
 
 # patient and reference data with copy number data unsegmented
-ge.norm <- list(data=ge_norm_data, info=ge_info)
-cn.norm <- list(data=cn_norm_data, info=cn_info)
+#ge.norm <- list(data=ge_norm_data, info=ge_info)
+#cn.norm <- list(data=cn_norm_data, info=cn_info)
 
 # raw (unsegmented copy number data)
 cn.raw <- list(data=cn_raw_data, info=cn_raw_info)
@@ -157,7 +157,7 @@ cancerGenes <- as.character(List_all)
 CN <- process.copynumber(cn.raw, cn.seg = NULL, probespanCN = 100, prior = "all", organism = "human")
 cn.call <- list(data=assayDataElement(CN, 'calls'), info=cn_info)
 
-out=list(ge=ge, cn=cn, ge.norm=ge.norm, cn.norm=cn.norm, cn.raw=cn.raw, cn.call=cn.call, cn.cghCall=CN, Labels=Labels, cancerGenes=cancerGenes)
+out=list(ge=ge, cn=cn, ge.norm=NULL, cn.norm=NULL, cn.raw=cn.raw, cn.call=cn.call, cn.cghCall=CN, Labels=Labels, cancerGenes=cancerGenes)
 }
 return(out)
 }
