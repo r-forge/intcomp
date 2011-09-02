@@ -179,13 +179,13 @@ factors indicating the chromosome and chromosomal arm of the probe,
 respectively. To run the benchmarking tests for all methods, use:
 
 <<run, results = hide>>=
-methods <- c("edira")
+methods <- c("edira","OrtizEstevez")
 res_real <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw, cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh, Labels = NULL, cancerGenes = cancerGenes, nperm=20, input = "real", version = "normal", methods = methods, references="none")
 auc.ordered <- sort(unlist(res_real$auc))
 @
 
 <<run.simulation, results = hide>>=
-methods <- c("edira")
+methods <- c("edira","OrtizEstevez")
 res_simulated  <- test.geneorder.pipeline(ge=test_schaefer$ge, cn.raw=test_schaefer$cn.raw, cn.seg=test_schaefer$cn,
 cn.call=test_schaefer$cn.call, cghCall = test_schaefer$cn.cghCall, ge.norm = test_schaefer$ge.norm, cn.norm = test_schaefer$cn.norm, Labels=test_schaefer$Labels, cancerGenes=test_schaefer$cancerGenes, nperm = 1000, input="simulations.equal.dimensions", version = "normal", methods=methods, callprobs=sim$callprobs, references="both")
 auc.ordered <- sort(unlist(res_simulated$auc))
