@@ -1,5 +1,5 @@
-# GE_data      a matrix of gene expression data, without annotation
-# CN_data      a matrix of copy number data, without annotaion
+# GE           either a matrix of gene expression data, without annotation, or a list containing an object 'data' (used only for method="schaefer"). If nothing is supplied, data from Schaefer et al. (2009) is taken.
+# CN           either a matrix of copy number data, without annotation, or a list containing an object 'data' (used only for method="schaefer"). If nothing is supplied, data from Schaefer et al. (2009) is taken.
 # probespanGE  the width of gene expression probes
 # probespanCN  the width of copy number probes
 # method       either "schaefer" or "ferrari". The option "schaefer" performs simulation following the approach presented in Schaefer et al. (2009): Integrated analysis of copy number alterations and gene expression: a bivariate assessment of equally directed abnormalities. Bioinformatics 25(24):3228–3235.
@@ -19,16 +19,25 @@
 # seed         the seed (used only for method="schaefer")
 # call_probs   call probabilities to be specified for intCNGEan (used only for method="schaefer")
 
-test.simulation <- function(GE, CN, probespanGE = 16, probespanCN = 16, method, Inner=3:5, Outer=c(1:2,6:7),
+test.simulation <- function(GE=NULL, CN=NULL, probespanGE = 16, probespanCN = 16, method, Inner=3:5, Outer=c(1:2,6:7),
 probs_GE=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975), probs_CN=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975),
 cancer_GE=c(1,1,2,2,6,6,7,7),cancer_CN=c(1,2,1,2,3,4,3,4), n=100, weight=1/10, variances=c(1/4,1/2,1,2,4),
 GE_norm=4, CN_norm=2, seed=42, call_probs=c(0.001,0.005,0.01,0.0125,0.04,0.925,0.99)){
 
 if(method=="schaefer"){
-if(length(probs_GE) != length(probs_CN)){stop("probs_GE and probs_CN must have equal length.")}
-if(length(cancer_GE) != length(cancer_CN)){stop("cancer_GE and cancer_CN must have equal length.")}
+if(length(GE) == 0 | length(CN) == 0){
 require(ediraAMLdata)
 data(AMLdata, package="ediraAMLdata")
+}
+if(is.list(GE)){
+    if(length(GE$data) > 0){GE <- as.matrix(GE$data)} else {stop("If GE is a list, it must contain an element 'data'.")}
+}
+if(is.list(CN)){
+    if(length(CN$data) > 0){CN <- as.matrix(CN$data)} else {stop("If CN is a list, it must contain an element 'data'.")}
+}
+if(is.matrix(GE) & is.matrix(CN)){
+if(length(probs_GE) != length(probs_CN)){stop("probs_GE and probs_CN must have equal length.")}
+if(length(cancer_GE) != length(cancer_CN)){stop("cancer_GE and cancer_CN must have equal length.")}
 
 sim <- simulation(GE, CN, Inner, Outer, probs_GE, probs_CN, n, weight, variances, GE_norm, CN_norm, seed, call_probs)
 ################################################################################################################
@@ -91,35 +100,36 @@ cn.call <- list(data=assayDataElement(CN, 'calls'), info=cn_info)
 
 out=list(ge=ge, cn=cn, ge.norm=ge.norm, cn.norm=cn.norm, cn.raw=cn.raw, cn.call=cn.call, cn.cghCall=CN, Labels=Labels, cancerGenes=cancerGenes)
 }
+}
 ####################################################################################### Ferrari simulations ####################################################################################
 if(method=="ferrari"){
 data(ferrari_simulations)
 # annotations for simulated data
-ge_data <- as.matrix(GE[,4:9])
+ge_data <- as.matrix(GE$data)
 #ge_norm_data <- as.matrix(GE.norm[,4:9])
-cn_data <- as.matrix(CN.seg[,4:9])
+cn_data <- as.matrix(CN.seg$data)
 #cn_norm_data <- as.matrix(CN.norm.seg[,4:9])
-cn_raw_data <- as.matrix(CN[,4:9])
+cn_raw_data <- as.matrix(CN$data)
 rownames(ge_data) <- as.character(1:nrow(ge_data))   
 rownames(cn_data) <- as.character(1:nrow(cn_data))
 rownames(cn_raw_data) <- as.character(1:nrow(cn_raw_data))
 
-mittelpunkte <- GE[,3]
+mittelpunkte <- GE$info$position
 anfang <- mittelpunkte-probespanGE
 ende <- mittelpunkte+probespanGE
-chr <- GE[,2]
+chr <- GE$info$chromosome
 ge_info <- data.frame(start=anfang,end=ende, chr=chr, loc=mittelpunkte)
 
-mittelpunkte <- CN.seg[,3]
+mittelpunkte <- CN.seg$info$position
 anfang <- mittelpunkte-probespanCN
 ende <- mittelpunkte+probespanCN
-chr <- CN.seg[,2]
+chr <- CN.seg$info$chromosome
 cn_info <- data.frame(start=anfang,end=ende, chr=chr, loc=mittelpunkte)
 
-mittelpunkte <- CN[,3]
+mittelpunkte <- CN$info$position
 anfang <- mittelpunkte-probespanCN
 ende <- mittelpunkte+probespanCN
-chr <- CN[,2]
+chr <- CN$info$chromosome
 cn_raw_info <- data.frame(start=anfang,end=ende, chr=chr, loc=mittelpunkte)
 rownames(ge_info) <- rownames(ge_data)
 rownames(cn_info) <- rownames(cn_data)
