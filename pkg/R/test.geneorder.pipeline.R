@@ -24,9 +24,8 @@ NULL, chromosomes = as.character(1:22), callprobs, references) {
   }
   
   ###########################
-      
-  ge2 <- list(data=cbind(ge$data,ge.norm$data), info=ge$info) 
-  cn2 <- list(data=cbind(cn$data,cn.norm$data), info=cn$info)
+  if(!is.null(ge.norm$data)) { ge2 <- list(data=cbind(ge$data,ge.norm$data), info=ge$info) }
+  if(!is.null(cn.norm$data)) { cn2 <- list(data=cbind(cn$data,cn.norm$data), info=cn$info) }
     
   # If no labels given, use the same Label for all samples
   if (is.null(Labels)) { Labels <- rep(1, ncol(ge$data)) }

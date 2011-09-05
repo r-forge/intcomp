@@ -11,7 +11,7 @@
 # probs_CN     the quantiles used to calculate the CN grid points (used only for method="schaefer")
 # cancer_GE    specifies the gene expression coordinates of the points in the quantile grid which should be defined as cancer genes (used only for method="schaefer")
 # cancer_CN    specifies the copy number coordinates of the points in the quantile grid which should be defined as cancer genes (used only for method="schaefer")
-# n            the number of sample to be generated in each data set
+# n            the number of sample to be generated in each data set (used only for method="schaefer")
 # weight       the proportion of samples to be generated for the mixture component corresponding to the minority of samples (used only for method="schaefer")
 # variances    the different variances to be simulated, specified as factor with respect to the MAD of the data (used only for method="schaefer")
 # GE_norm      which of the GE grid points should be assumed as the mean for the GE control data (used only for method="schaefer")
@@ -157,7 +157,7 @@ starts <- c(20,150,30,120,135,30,20,40,60,40)
 List_all <- list()
 List <- list()
 for(j in 1:length(starts)){
-    List[[j]] <- which(GE$Chromosome == chr[j] & GE$Position >= starts[j]*10^6 & GE$Position <= (starts[j]+10)*10^6)
+    List[[j]] <- which(GE$info$chromosome == chr[j] & GE$info$position >= starts[j]*10^6 & GE$info$position <= (starts[j]+10)*10^6)
     List_all <- c(List_all, List[[j]])
 }
 

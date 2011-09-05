@@ -169,7 +169,7 @@ call_probs=c(0.001,0.005,0.01,0.0125,0.04,0.925,0.99))
 Also, testing on the data simulated by Francesco Ferrari is provided. Here, the data are given, i.e., the user has no influence on their characteristics.
 <<test_ferrari, results = hide>>=
 test_ferrari <- test.simulation(GE, CN, probespanGE = 16, probespanCN = 100,
-method="ferrari", n=100)
+method="ferrari")
 @
 
 \section{Running the benchmarking pipeline}
@@ -199,7 +199,7 @@ auc.ordered <- sort(unlist(res_real$auc))
 <<run.simulation, results = hide>>=
 methods <- c("CNAmet","edira")
 res_simulated  <- test.geneorder.pipeline(ge=test_schaefer$ge,
-cn.raw=test_schaefer$cn.raw, cn.seg=test_schaefer$cn,
+cn.raw=test_schaefer$cn.raw, cn.seg=NULL,
 cn.call=test_schaefer$cn.call, cghCall = test_schaefer$cn.cghCall,
 ge.norm = test_schaefer$ge.norm, cn.norm = test_schaefer$cn.norm,
 Labels=test_schaefer$Labels, cancerGenes=test_schaefer$cancerGenes,
@@ -208,6 +208,9 @@ methods=methods, callprobs=sim$callprobs, references="both")
 auc.ordered <- sort(unlist(res_simulated$auc))
 @
 
+If segmented data is supplied, then it will be used for analysis.
+If segmented data is missing, then raw data will be used if supplied.
+If both segmented and raw data are missing, then called data will be used if supplied.\\
 
 The following {\it methods} are available: {\it OrtizEstevez}, {\it
   intcngean}, {\it edira}, {\it pint}, {\it SIM.window\}, {\it
