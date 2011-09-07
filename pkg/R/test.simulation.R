@@ -98,7 +98,7 @@ cancerGenes <- as.character(cancerGenes_temp)[alles][1:(nr_inner*length(variance
 CN <- process.copynumber(cn.raw, cn.seg = NULL, probespanCN = 16, prior = "all", organism = "human")
 cn.call <- list(data=assayDataElement(CN, 'calls'), info=cn_info)
 
-out=list(ge=ge, cn=cn, ge.norm=ge.norm, cn.norm=cn.norm, cn.raw=cn.raw, cn.call=cn.call, cn.cghCall=CN, Labels=Labels, cancerGenes=cancerGenes)
+out=list(ge=ge, cn=cn, ge.norm=ge.norm, cn.norm=cn.norm, cn.raw=cn.raw, cn.call=cn.call, cn.cghCall=CN, Labels=Labels, cancerGenes=cancerGenes, callprobs=sim$callprobs)
 }
 }
 ####################################################################################### Ferrari simulations ####################################################################################
