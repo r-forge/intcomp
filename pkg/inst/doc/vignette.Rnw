@@ -50,9 +50,7 @@ The current version implements the comparison of the following ge/cn
  \cite{Bicciato09}, and SIM \cite{Menezes2009}. Multiple variants are
  evaluated for some methods \cite{Lahti11review}.
 
-
 \section{Examples}
-
 
 \subsection{Installing dependencies}
 
@@ -97,10 +95,10 @@ set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719Copy
 <<results=tex>>=
 library(intcomp)
 data(pollack)
-dat <- read.pollack(chrs = 1:22, CopyNoGeneDataset4719, clone2geneid)
-ge <- dat$ge$data        # gene expression matrix
-cn.raw <- dat$cn$data        # copy number matrix
-gene.info <- dat$ge$info # gene location info
+pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid)
+ge <- pollack$ge     # expression matrix (ge$data); gene info (ge$info)
+cn.raw <- pollack$cn # copy number matrix (cn$data); info (cn.raw$info)
+gene.info <- pollack$ge$info # gene location info
 @
 
 \subsubsection{Hyman et al. (2002)}
@@ -113,23 +111,11 @@ set\footnote{HymancdnaDataA.tab, HymancghDataA.tab and HymanAcc.mat
 <<results=tex>>=
 data(hyman)
 library("org.Hs.eg.db")
-dat <- read.hyman(cdna, cgh, genenames, chrs = 1:22, as.list(org.Hs.egALIAS2EG))
-ge <- dat$ge        # gene expression matrix + info
-cn.raw <- dat$cn    # copy number matrix + info
-gene.info <- dat$cn.raw$info # gene location info
+hyman <- read.hyman(cdna, cgh, genenames, xx = as.list(org.Hs.egALIAS2EG))
+ge <- hyman$ge        # gene expression matrix + info
+cn.raw <- hyman$cn    # copy number matrix + info
+gene.info <- hyman$cn.raw$info # gene location info
 @
-
-\subsection{Preprocessing copy number data}
-
-Some methods require segmented and/or called copy number data, obtained with
-
-<<preprocess.cn, results = hide>>=
-cgh <- process.copynumber(cn.raw)
-cn.seg <- list(data = assayDataElement(cgh, 'segmented'), info = gene.info)
-cn.call <- list(data = assayDataElement(cgh, 'calls'), info = gene.info)
-rownames(cn.call$data) <- rownames(cn.seg$data) <- rownames(ge$data)
-cn.call$info <- cn.seg$info <- cn.raw$info
-@ 
 
 
 \subsection{Golden standard list of known cancer genes}
@@ -145,13 +131,17 @@ select the genes that are included in the experimental data:
 <<results=tex>>=
 library("org.Hs.eg.db")
 data(tgdb)
-cancerGenes <- get.brca.genes(rownames(dat$ge$data), as.list(org.Hs.egALIAS2EG), tgdb)
+cancerGenes <- get.brca.genes(rownames(ge$data), as.list(org.Hs.egALIAS2EG), tgdb)
 @
 
 \subsection{Simulating data}
 
-To evaluate the methods based on simulations, data can be simulated following roughly the approach given in \cite{Schafer09}, but with greater flexibility. The quantile grid to be simulated can be defined
-entirely by the user, as well as the mixing weight, the number of different variances to be considered and the call probabilities (for testing {\it intcngean}).
+To evaluate the methods based on simulations, data can be simulated
+following roughly the approach given in \cite{Schafer09}, but with
+greater flexibility. The quantile grid to be simulated can be defined
+entirely by the user, as well as the mixing weight, the number of
+different variances to be considered and the call probabilities (for
+testing {\it intcngean}).
 
 <<test_schaefer, results = hide, eval=FALSE>>=
 library(ediraAMLdata)
@@ -177,20 +167,39 @@ method="ferrari")
 
 The example data set now contains (i) gene expression data (ge), (ii)
 gene copy number data (cn), (iii) optional sample class labels
-(tumor/normal), and (iv) golden standard list of known cancer
-genes. The ge and cn data sets are lists containing $data$ and $info$
-fields. The probes in gene expression and gene copy number are paired;
-$data$ is a data matrix with gene expression (ge\$data) or gene copy
-number (cn\$data) data; $info$ field is a data frame containing
-additional information about genes: $loc$ indicates the genomic
-location of the probes in base pairs (numeric); $chr$ and $arm$ are
-factors indicating the chromosome and chromosomal arm of the probe,
-respectively. To run the benchmarking tests for all methods, use:
+(tumor/normal), and (iv) golden standard list of known cancer genes.
+The ge and cn data sets are lists containing $data$ and $info$ fields.
+The probes in gene expression and gene copy number are paired; $data$
+is a data matrix with gene expression (ge\$data) or gene copy number
+(cn\$data) data; $info$ field is a data frame containing additional
+information about genes: $loc$ indicates the genomic location of the
+probes in base pairs (numeric); $chr$ and $arm$ are factors indicating
+the chromosome and chromosomal arm of the probe, respectively. For
+Hyman and Pollack data sets, the original data sets are used (cn.seg =
+cn.raw) in the experiments (except intCNGEan and CNAmet that require
+segmented and called data, respectively). 
+
+To run the benchmarking tests for particular methods, use the
+following. Note that some methods require segmented or called copy
+number data. With Hyman and Pollack data sets, raw copy number data is
+used, except in intCNGEan (segmented) and CNAmet (called). To use
+segmented copy number data in all methods, set 'cn.seg = cn.raw' in
+the test.geneorder.pipeline arguments.
 
 <<run, results = hide, eval=FALSE>>=
+# Set comparison methods
 methods <- c("CNAmet","edira")
+# Expression and raw copy number data
+ge <- hyman$ge
+cn.raw <- hyman$cn
+# Segmentation/calling for copy number data
+cgh <- process.copynumber(cn.raw)
+cn.seg <- list(data = assayDataElement(cgh, 'segmented'), info = gene.info)
+cn.call <- list(data = assayDataElement(cgh, 'calls'), info = gene.info)
+rownames(cn.call$data) <- rownames(cn.seg$data) <- rownames(ge$data)
+# Run method comparison pipeline
 res_real <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw,
-cn.seg = cn.seg, cn.call = cn.call, cghCall = cgh,
+cn.seg = cn.raw, cn.call = cn.call, cghCall = cgh,
 Labels = NULL, cancerGenes = cancerGenes, nperm=20,
 input = "real", version = "normal",
 methods = methods, references="none")
@@ -218,29 +227,32 @@ If segmented data is supplied, then it will be used for analysis.
 If segmented data is missing, then raw data will be used if supplied.
 If both segmented and raw data are missing, then called data will be used if supplied.\\
 
+The list of available methods in the pipeline is retrieved with:
+    
+<<methods>>=
+list.methods()
+@
+    
 The following {\it methods} are available: {\it OrtizEstevez}, {\it
   intcngean}, {\it edira}, {\it pint}, {\it SIM.window\}, {\it
     SIM.full\}, {\it DRI.cp}, {\it DRI.cs}, {\it PMA.raw}, {\it
       CNAmet}, {\it PREDA} and for two-group comparisons (requiring
     Labels) {\it DRI.ct}, {\it DRI.ss}, {\it DRI.srank}, {\it
-      DRI.sraw}. The cancer gene prioritization of each method is
-    compared to the golden standard list of known cancer genes; the
-    result contains running times of the algorithms and the AUC values
-    from ROC analysis \cite{Lahti11review}. The AUC values provide
-    quantitative estimates of model performance in cancer gene
-    detection and provide the basis for comparisons.
+      DRI.sraw}. 
+      
+The cancer gene prioritization of each method is compared to the
+golden standard list of known cancer genes; the result contains
+running times of the algorithms and the AUC values from ROC analysis
+\cite{Lahti11review}. The AUC values provide quantitative estimates of
+model performance in cancer gene detection and provide the basis for
+comparisons.
 
 \subsection*{Acknowledgements}
 
 The package has been supported by EuGESMA COST Action BM0801: European
 Genetic and Epigenetic Study on AML and MDS.
 
-%* references
-
 \bibliographystyle{ieeetr}
 \bibliography{intcomp}
-
-
-
 
 \end{document}

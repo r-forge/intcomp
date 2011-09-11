@@ -21,7 +21,8 @@ export(get.brca.genes,
        test.geneorder.pma.rawscore,
        test.geneorder.sim,
        test.geneorder.preda,
-       test.simulation
+       test.simulation,
+       list.methods
 )
 
 

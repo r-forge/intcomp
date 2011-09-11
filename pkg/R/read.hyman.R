@@ -9,9 +9,9 @@ read.hyman <- function (cdna, cgh, genenames, chrs = 1:22, xx) {
   # genenames: HymanAcc.mat
   # obtained from http://www.ece.ucsb.edu/pubs/ieee/index.shtml
   # Preprocessed as in Berger et al., 2002
-  #cdna <- as.matrix(read.csv("/share/mi/data/pint10/Hyman2002/HymancdnaDataA.tab", sep = " ", header = FALSE))
-  #cgh <- as.matrix(read.csv("/share/mi/data/pint10/Hyman2002/HymancghDataA.tab", sep = " ", header = FALSE))
-  #genenames <- readLines("/share/mi/data/pint10/Hyman2002/HymanAcc.mat")
+  # cdna <- as.matrix(read.csv("HymancdnaDataA.tab", sep = " ", header = FALSE))
+  # cgh <- as.matrix(read.csv("HymancghDataA.tab", sep = " ", header = FALSE))
+  # genenames <- readLines("HymanAcc.mat")
   
   # Remove rows with no gene name
   keep <- !genenames == ""   
@@ -45,7 +45,7 @@ read.hyman <- function (cdna, cgh, genenames, chrs = 1:22, xx) {
   geneExp <- list(data = cdna, info = info) 
   geneCopyNum <- list(data = cgh, info = info)
 
-  # match the probes
+  # match the probes using tools in pint package
   require(pint)
   tmp <- pint.match(geneExp, geneCopyNum, chrs = chrs)
        
