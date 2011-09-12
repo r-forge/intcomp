@@ -146,21 +146,12 @@ testing {\it intcngean}).
 <<test_schaefer, results = hide, eval=FALSE>>=
 library(ediraAMLdata)
 data(AMLdata, package="ediraAMLdata")
-test_schaefer <- test.simulation(GE, CN, probespanGE = 16, probespanCN = 100,
-method="schaefer", Inner=3:5, Outer=c(1:2,6:7),
-probs_GE=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975),
-probs_CN=c(0.025,0.075,0.3,0.5,0.7,0.925,0.975),
-cancer_GE=c(1,1,2,2,6,6,7,7),
-cancer_CN=c(1,2,1,2,3,4,3,4),
-n=100, weight=1/10, variances=c(1/4,1/2,1,2,4),
-GE_norm=4, CN_norm=2, seed=42,
-call_probs=c(0.001,0.005,0.01,0.0125,0.04,0.925,0.99))
+test_schaefer <- test.simulation(GE, CN, method="schaefer")
 @
 
 Also, testing on the data simulated by Francesco Ferrari is provided. Here, the data are given, i.e., the user has no influence on their characteristics.
 <<test_ferrari, results = hide, eval=FALSE>>=
-test_ferrari <- test.simulation(GE, CN, probespanGE = 16, probespanCN = 100,
-method="ferrari")
+test_ferrari <- test.simulation(GE, CN, method="ferrari")
 @
 
 \section{Running the benchmarking pipeline}
