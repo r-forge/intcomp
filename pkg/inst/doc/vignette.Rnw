@@ -232,7 +232,7 @@ The following {\it implementations} are available in the
 \cite{Hautaniemi04,Louhimo11}, variants of {\it DRI}
 \cite{Salari2010}, {\it edira} \cite{Schafer09}, {\it intcngean}
 \cite{Wieringen09}, {\it OrtizEstevez} \cite{Ortiz-Estevez11}, {\it
-pint} \cite{Lahti09mlsp}, variants of {\it SIM\} \cite{Menezes2009}, 
+pint} \cite{Lahti09mlsp}, variants of {\it SIM} \cite{Menezes2009}, 
 {\it PMA} \cite{Witten09}, {\it PREDA} \cite{Bicciato09} and
 exclusively for two-group comparisons (requiring Labels) {\it DRI.ct},
 {\it DRI.ss}, {\it DRI.srank}, {\it DRI.sraw} \cite{Salari2010}. 
