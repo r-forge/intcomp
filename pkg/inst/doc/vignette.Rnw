@@ -252,7 +252,95 @@ reported in \cite{Lahti11review}.
 The package has been supported by EuGESMA COST Action BM0801: European
 Genetic and Epigenetic Study on AML and MDS.
 
-\bibliographystyle{ieeetr}
-\bibliography{intcomp}
+%\bibliographystyle{ieeetr}
+%\bibliography{intcomp}
+
+\begin{thebibliography}{10}
+
+\bibitem{Lahti11review}
+L.~Lahti, M.~Sch{\"a}fer, H.-U. Klein, S.~Bicciato, and M.~Dugas, ``Cancer gene
+  prioritization by multi-platform data integration: a comparative review.
+  upcoming,''
+
+\bibitem{Hautaniemi04}
+S.~Hautaniemi, M.~Ringn{\'e}r, P.~Kauraniemi, R.~Autio, H.~Edgren,
+  O.~Yli-Harja, J.~Astola, A.~Kallioniemi, and O.~Kallioniemi, ``A strategy for
+  identifying putative causes of gene expression variation in human cancers,''
+  {\em Journal of the Franklin Institute}, vol.~341, no.~1-2, pp.~77--88, 2004.
+
+\bibitem{Louhimo11}
+R.~Louhimo and S.~Hautaniemi, ``{CNAmet: an R package for integrating copy
+  number, methylation and expression data},'' {\em Bioinformatics}, vol.~27,
+  no.~6, pp.~887--888, 2011.
+
+\bibitem{Salari2010}
+K.~Salari, R.~Tibshirani, and J.~R. Pollack, ``{DR-Integrator: a new analytic
+  tool for integrating DNA copy number and gene expression data.},'' {\em
+  Bioinformatics}, vol.~26, no.~3, pp.~414--6, 2010.
+
+\bibitem{Schafer09}
+M.~Sch{\"a}fer, H.~Schwender, S.~Merk, C.~Haferlach, K.~Ickstadt, and M.~Dugas,
+  ``{Integrated analysis of copy number alterations and gene expression: a
+  bivariate assessment of equally directed abnormalities},'' {\em
+  Bioinformatics}, vol.~25, no.~24, pp.~3228--3235, 2009.
+
+\bibitem{Wieringen09}
+W.~N. van Wieringen and M.~A. van~de Wiel, ``{Nonparametric testing for DNA
+  copy number induced differential mRNA gene expression},'' {\em Biometrics},
+  vol.~65, pp.~19--29, 2009.
+
+\bibitem{Ortiz-Estevez11}
+M.~Ortiz-Estevez, J.~De~Las~Rivas, C.~Fontanillo, and A.~Rubio, ``Segmentation
+  of genomic and transcriptomic microarrays data reveals major correlation
+  between {DNA} copy number aberrations and gene-loci expression,'' {\em
+  Genomics}, vol.~97, pp.~86--93, 2011.
+
+\bibitem{Lahti09mlsp}
+L.~Lahti, S.~Myllykangas, S.~Knuutila, and S.~Kaski, ``Dependency detection
+  with similarity constraints,'' in {\em Proceedings MLSP'09 IEEE International
+  Workshop on Machine Learning for Signal Processing XIX}, (Piscataway, NJ),
+  pp.~89--94, IEEE Signal Processing Society, September 2-4 2009.
+\newblock Implementation available in pint package of R/BioConductor
+  http://www.bioconductor.org/packages/release/bioc/html/pint.html.
+
+\bibitem{Witten09}
+D.~M. Witten, R.~Tibshirani, and T.~Hastie, ``{A penalized matrix
+  decomposition, with applications to sparse principal components and canonical
+  correlation analysis},'' {\em Biostatistics}, vol.~10, no.~3, pp.~515--534,
+  2009.
+
+\bibitem{Bicciato09}
+S.~Bicciato, R.~Spinelli, M.~Zampieri, E.~Mangano, F.~Ferrari, L.~Beltrame,
+  I.~Cifola, C.~Peano, A.~Solari, and C.~Battaglia, ``{A computational
+  procedure to identify significant overlap of differentially expressed and
+  genomic imbalanced regions in cancer datasets},'' {\em Nucleic Acids
+  Research}, vol.~37, pp.~5057--5070, 2009.
+
+\bibitem{Menezes2009}
+R.~X. Menezes, M.~Boetzer, M.~Sieswerda, G.-J.~B. van Ommen, and J.~M. Boer,
+  ``{Integrated analysis of DNA copy number and gene expression microarray data
+  using gene sets.},'' {\em BMC bioinformatics}, vol.~10, no.~1, p.~203, 2009.
+
+\bibitem{Hyman2002}
+E.~Hyman, P.~Kauraniemi, S.~Hautaniemi, M.~Wolf, S.~Mousses, E.~Rozenblum,
+  M.~Ringner, G.~Sauter, O.~Monni, A.~Elkahloun, O.-P. Kallioniemi, and
+  A.~Kallioniemi, ``{Impact of DNA Amplification on Gene Expression Patterns in
+  Breast Cancer},'' {\em Cancer Res.}, vol.~62, pp.~6240--6245, Nov. 2002.
+
+\bibitem{Pollack2002}
+J.~R. Pollack, T.~S\o~rlie, C.~M. Perou, C.~A. Rees, S.~S. Jeffrey, P.~E.
+  Lonning, R.~Tibshirani, D.~Botstein, A.-L. B\o~rresen Dale, and P.~O. Brown,
+  ``{Microarray analysis reveals a major direct role of DNA copy number
+  alteration in the transcriptional program of human breast tumors.},'' {\em
+  Proceedings of the National Academy of Sciences of the United States of
+  America}, vol.~99, pp.~12963--8, Oct. 2002.
+
+\bibitem{Baasiri99}
+R.~Baasiri, S.~Glasser, D.~Steffen, and D.~Wheeler, ``{The Breast Cancer Gene
+  Database: a collaborative information resource},'' {\em Oncogene}, vol.~18,
+  no.~56, pp.~7958--7965, 1999.
+
+\end{thebibliography}
+
 
 \end{document}
