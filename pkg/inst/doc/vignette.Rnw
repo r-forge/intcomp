@@ -41,18 +41,15 @@ gene list, and the resulting order is compared to golden standard
 lists of known cancer genes on simulated and real data sets. For
 details, see \cite{Lahti11review}.
 
+\section{Installation}
 
-\subsection{Comparison methods}
+\subsection{Installing the intcomp benchmarking pipeline}
 
-The current version implements the comparison of the following ge/cn
- integration algorithms: CNAmet \cite{Hautaniemi04,Louhimo11}, DRI
- \cite{Salari2010}, edira \cite{Schafer09}, intCNGEan
- \cite{Wieringen09}, Ortiz-Estevez \cite{Ortiz-Estevez11}, pint
- \cite{Lahti09mlsp}, PMA \cite{Witten09}, PREDA/SODEGIR
- \cite{Bicciato09}, and SIM \cite{Menezes2009}. Multiple variants are
- evaluated for some methods \cite{Lahti11review}.
+To install this package directly within R type:
 
-\section{Examples}
+<<inst, results = hide, eval = FALSE>>=
+install.packages("intcomp", repos="http://R-Forge.R-project.org")
+@
 
 \subsection{Installing dependencies}
 
@@ -60,7 +57,7 @@ The benchmarking pipeline depends on various external R
 packages. Install the  dependencies from within R using the following
 commands:
 
-<<deps, results = hide>>=
+<<deps, results = hide, eval = FALSE>>=
 source("http://www.bioconductor.org/biocLite.R") 
 biocLite(c("biomaRt", "DNAcopy", "DRI", "edira", 
 "hgu133ahsentrezg.db", "intCNGEan", "org.Hs.eg.db", 
@@ -95,7 +92,8 @@ set\footnote{HymancdnaDataA.tab, HymancghDataA.tab and HymanAcc.mat
   obtained from http://www.ece.ucsb.edu/pubs/ieee/index.shtml accessed
   June 2, 2010.}.
 
-<<results=tex>>=
+<<results=hide>>=
+library(intcomp)
 data(hyman)
 library("org.Hs.eg.db")
 hyman <- read.hyman(cdna, cgh, genenames, xx = as.list(org.Hs.egALIAS2EG))
@@ -111,7 +109,6 @@ set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719Copy
 accessed June 2, 2010.}.
 
 <<results = hide>>=
-library(intcomp)
 data(pollack)
 pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid)
 GE <- pollack$ge     # expression matrix (GE$data); gene info (GE$info)
@@ -222,21 +219,24 @@ If segmented data is supplied, then it will be used for analysis.
 If segmented data is missing, then raw data will be used if supplied.
 If both segmented and raw data are missing, then called data will be used if supplied.\\
 
+\section{Comparison methods}
+
 The list of available methods in the pipeline is retrieved with:
     
 <<methods>>=
 list.methods()
 @
     
-\section{Comparison methods}
-    
 The following {\it implementations} are available in the
-\Rpackage{intcomp} benchmarking pipeline: {\it OrtizEstevez}, {\it
-intcngean}, {\it edira}, {\it pint}, {\it SIM.window\}, {\it
-SIM.full\}, {\it DRI.cp}, {\it DRI.cs}, {\it PMA.raw}, {\it CNAmet},
-{\it PREDA} and for two-group comparisons (requiring Labels) {\it
-DRI.ct}, {\it DRI.ss}, {\it DRI.srank}, {\it DRI.sraw}. 
-      
+\Rpackage{intcomp} benchmarking pipeline: {\it CNAmet}
+\cite{Hautaniemi04,Louhimo11}, variants of {\it DRI}
+\cite{Salari2010}, {\it edira} \cite{Schafer09}, {\it intcngean}
+\cite{Wieringen09}, {\it OrtizEstevez} \cite{Ortiz-Estevez11}, {\it
+pint} \cite{Lahti09mlsp}, variants of {\it SIM\} \cite{Menezes2009}, 
+{\it PMA} \cite{Witten09}, {\it PREDA} \cite{Bicciato09} and
+exclusively for two-group comparisons (requiring Labels) {\it DRI.ct},
+{\it DRI.ss}, {\it DRI.srank}, {\it DRI.sraw} \cite{Salari2010}. 
+
 \section{Benchmarking results}
       
 The prioritized cancer gene list provided by each method is compared
