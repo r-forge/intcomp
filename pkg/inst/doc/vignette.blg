@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99c (Web2C 7.5.6)
+The top-level auxiliary file: vignette.aux
+The style file: ieeetr.bst
+Database file #1: intcomp.bib
+Warning--empty journal in Lahti11review
+Warning--empty year in Lahti11review
+You've used 14 entries,
+            1876 wiz_defined-function locations,
+            584 strings with 7337 characters,
+and the built_in function-call counts, 5058 in all, are:
+= -- 485
+> -- 265
+< -- 0
++ -- 93
+- -- 79
+* -- 411
+:= -- 732
+add.period$ -- 14
+call.type$ -- 14
+change.case$ -- 14
+chr.to.int$ -- 0
+cite$ -- 16
+duplicate$ -- 234
+empty$ -- 402
+format.name$ -- 79
+if$ -- 1200
+int.to.chr$ -- 0
+int.to.str$ -- 14
+missing$ -- 14
+newline$ -- 46
+num.names$ -- 14
+pop$ -- 27
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 190
+stack$ -- 0
+substring$ -- 380
+swap$ -- 119
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 2
+while$ -- 49
+width$ -- 16
+write$ -- 148
+(There were 2 warnings)
