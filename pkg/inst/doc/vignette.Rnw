@@ -132,7 +132,7 @@ by {\it the get.brca.genes} function:
 <<results=tex>>=
 library("org.Hs.eg.db")
 data(tgdb)
-cancerGenes <- get.brca.genes(rownames(ge$data), as.list(org.Hs.egALIAS2EG), tgdb)
+cancerGenes <- get.brca.genes(rownames(GE$data), as.list(org.Hs.egALIAS2EG), tgdb)
 @
 
 \subsection{Simulating data}
@@ -182,16 +182,16 @@ the test.geneorder.pipeline arguments.
 # Set comparison methods
 methods <- c("CNAmet","edira")
 # Expression and raw copy number data
-ge <- hyman$ge
-cn.raw <- hyman$cn
+GE <- hyman$ge
+CN.raw <- hyman$cn
 # Segmentation/calling for copy number data
-cgh <- process.copynumber(cn.raw)
-cn.seg <- list(data = assayDataElement(cgh, 'segmented'), info = gene.info)
-cn.call <- list(data = assayDataElement(cgh, 'calls'), info = gene.info)
-rownames(cn.call$data) <- rownames(cn.seg$data) <- rownames(ge$data)
+cgh <- process.copynumber(CN.raw)
+CN.seg <- list(data = assayDataElement(cgh, 'segmented'), info = gene.info)
+CN.call <- list(data = assayDataElement(cgh, 'calls'), info = gene.info)
+rownames(CN.call$data) <- rownames(CN.seg$data) <- rownames(GE$data)
 # Run method comparison pipeline
-res_real <- test.geneorder.pipeline(ge = ge, cn.raw = cn.raw,
-cn.seg = cn.raw, cn.call = cn.call, cghCall = cgh,
+res_real <- test.geneorder.pipeline(ge = GE, cn.raw = CN.raw,
+cn.seg = CN.raw, cn.call = CN.call, cghCall = cgh,
 Labels = NULL, cancerGenes = cancerGenes, nperm=20,
 input = "real", version = "normal",
 methods = methods, references="none")
