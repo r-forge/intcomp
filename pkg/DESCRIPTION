@@ -1,8 +1,8 @@
 Package: intcomp
 Type: Package
 Title: Multiplatform data integration for gene expression and copy number.
-Version: 0.3.22
-Date: 2011-09-12
+Version: 0.3.23
+Date: 2011-09-16
 Author: Leo Lahti and Martin Schaefer
 Maintainer: Leo Lahti <leo.lahti@iki.fi>
 Description: Simulated test data and comparison pipeline for pairwise data integration methods for paired copy number and gene expression measurements.
@@ -10,4 +10,4 @@ License: FreeBSD
 LazyLoad: yes
 Depends: affy, biomaRt, DNAcopy, DRI, edira, methods, org.Hs.eg.db, pint, PMA, SIM, CGHcall, CNAmet, ediraAMLdata, PREDA, intCNGEan
 biocViews: aCGH, GeneExpression, Genetics, DifferentialExpression, Microarray
-Packaged: 2011-02-04 19:58:29 UTC; lmlahti
+Packaged: 2011-09-16 19:58:29 UTC; lmlahti
