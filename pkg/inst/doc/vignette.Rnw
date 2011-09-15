@@ -25,19 +25,21 @@
 \section{Introduction}
 
 Several algorithms have been suggested to integrate gene expression
-and DNA copy number measurement to discover novel cancer-associated
-genes and chromosomal regions. However, quantitative comparison of
-these models has been missing. This R package provides a benchmarking
-pipeline for integrative cancer gene detection methods. Cancer gene
-detection performance of each algorithm is evaluated by comparing the
-prioritized candidate gene list from each method to a golden standard
-list of known cancer genes in simulated and real data sets.
+and DNA copy number measurement to discover cancer-associated
+chromosomal regions, but quantitative comparison of these models has
+been missing. The \Rpackage{intcomp} R package provides a benchmarking
+pipeline for quantitative comparisons between the different
+implementations for integrative analysis of ge/cn data. This vignette
+provides installation instructions, practical examples and references
+to the algorithmic details of the \Rpackage{intcomp} benchmarking
+pipeline \cite{Lahti11review}.
 
-The package is experimental beta-release and provided as is. The main
-purpose of this vignette is to provide reference to algorithmic
-details of the benchmarking framework used in \cite{Lahti11review} and
-sufficient documentation of the functionality such that similar
-experiments can be replicated by experienced R users.
+In the \Rpackage{intcomp} pipeline, the cancer gene detection
+performance of each algorithm is evaluated based on gene
+prioritization by using each method. Each method is used to order the
+gene list, and the resulting order is compared to golden standard
+lists of known cancer genes on simulated and real data sets. For
+details, see \cite{Lahti11review}.
 
 
 \subsection{Comparison methods}
@@ -72,34 +74,19 @@ RCurl\footnote{http://www.omegahat.org/RCurl/},
 edira\footnote{http://www.statistik.tu-dortmund.de/~schaefer/},
 intCNGEan\footnote{http://www.few.vu.nl/~wvanwie/software/intCNGEan/intCNGEan.html},
 org.Hs.eg.db\footnote{http://www.bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html},
-PREDA/SODEGIR\footnote{http://www.xlab.unimo.it/PREDA/PREDAinstall.R;
-http://www.xlab.unimo.it/PREDA/PREDAsampledata\_0.1.7.tar.gz;
-http://www.xlab.unimo.it/PREDA/PREDA\_0.2.12.tar.gz},
+PREDA/SODEGIR\footnote{http://www.bioconductor.org/packages/devel/bioc/html/PREDA.html},
 and CNAmet\footnote{http://csbi.ltdk.helsinki.fi/CNAmet/}.
 
 \section{Running the comparison tests}
 
 \subsection{Loading example data}
 
-The package contains the data sets from \cite{Hyman2002} and
-\cite{Pollack2002}. These two data sets are available from public
-sources and have been used to validate multiple alternative
-integration algorithms.
-
-\subsubsection{Pollack et al. (2002)}
-
-Loading Pollack et al. (2002) \cite{Pollack2002} data
-set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
-  accessed June 2, 2010.}.
-
-<<results=tex>>=
-library(intcomp)
-data(pollack)
-pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid)
-ge <- pollack$ge     # expression matrix (ge$data); gene info (ge$info)
-cn.raw <- pollack$cn # copy number matrix (cn$data); info (cn.raw$info)
-gene.info <- pollack$ge$info # gene location info
-@
+The package contains a copy of the publicly available cancer data sets
+from \cite{Hyman2002} and \cite{Pollack2002} to benchmark the cancer
+gene detection algorithms on real experimental data. The gene symbols
+are converted into Entrez Gene IDs, and the probes are matched between
+gene expression and copy number data, as detailed in the {\it
+read.hyman} and {\it read.pollack} functions.
 
 \subsubsection{Hyman et al. (2002)}
 
@@ -112,21 +99,38 @@ set\footnote{HymancdnaDataA.tab, HymancghDataA.tab and HymanAcc.mat
 data(hyman)
 library("org.Hs.eg.db")
 hyman <- read.hyman(cdna, cgh, genenames, xx = as.list(org.Hs.egALIAS2EG))
-ge <- hyman$ge        # gene expression matrix + info
-cn.raw <- hyman$cn    # copy number matrix + info
+GE <- hyman$ge        # gene expression matrix + info
+CN.raw <- hyman$cn    # copy number matrix + info
 gene.info <- hyman$cn.raw$info # gene location info
+@
+
+\subsubsection{Pollack et al. (2002)}
+
+Loading Pollack et al. (2002) \cite{Pollack2002} data
+set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
+accessed June 2, 2010.}.
+
+<<results = hide>>=
+library(intcomp)
+data(pollack)
+pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid)
+GE <- pollack$ge     # expression matrix (GE$data); gene info (GE$info)
+CN.raw <- pollack$cn # copy number matrix (CN.raw$data); info (CN.raw$info)
+gene.info <- pollack$ge$info # gene location info
 @
 
 
 \subsection{Golden standard list of known cancer genes}
 
-The golden standard list of known breast cancer genes from The Breast
-Cancer Gene
-Database\footnote{http://www.tumor-gene.org/cgi-bin/TGDB/tgdb\_by\_name.cgi
-accessed 5.6.2010; 'tgdb\_by\_name.cgi.html' and 'tgdb.txt'}
-\cite{Baasiri99} was downloaded and stored to the tgdb object. This
-script details how to load the list, convert to Entrez GeneIDs and
-select the genes that are included in the experimental data:
+A gloden standard list of known breast cancer genes from The Breast
+Cancer Gene Database \cite{Baasiri99} is used to benchmark the
+different methods on the Hyman and Pollack data sets. The cancer gene
+list was
+downloaded\footnote{http://www.tumor-gene.org/cgi-bin/TGDB/tgdb\_by\_name.cgi
+accessed 5.6.2010; 'tgdb\_by\_name.cgi.html' and 'tgdb.txt'} and
+stored to the tgdb object. The list is converted to Entrez GeneIDs,
+the genes included in the experimental data are selected, as detailed
+by {\it the get.brca.genes} function:
 
 <<results=tex>>=
 library("org.Hs.eg.db")
@@ -149,7 +153,7 @@ data(AMLdata, package="ediraAMLdata")
 test_schaefer <- test.simulation(GE, CN, method="schaefer")
 @
 
-Also, testing on the data simulated by Francesco Ferrari is provided. Here, the data are given, i.e., the user has no influence on their characteristics.
+Also, testing on the data simulated by Francesco Ferrari is provided:
 <<test_ferrari, results = hide, eval=FALSE>>=
 test_ferrari <- test.simulation(GE, CN, method="ferrari")
 @
@@ -166,9 +170,9 @@ is a data matrix with gene expression (ge\$data) or gene copy number
 information about genes: $loc$ indicates the genomic location of the
 probes in base pairs (numeric); $chr$ and $arm$ are factors indicating
 the chromosome and chromosomal arm of the probe, respectively. For
-Hyman and Pollack data sets, the original data sets are used (cn.seg =
-cn.raw) in the experiments (except intCNGEan and CNAmet that require
-segmented and called data, respectively). 
+Hyman and Pollack data sets, the original non-segmented data sets are
+used (cn.seg = cn.raw) in the experiments (except with intCNGEan and
+CNAmet that require segmented and called data, respectively). 
 
 To run the benchmarking tests for particular methods, use the
 following. Note that some methods require segmented or called copy
@@ -224,19 +228,24 @@ The list of available methods in the pipeline is retrieved with:
 list.methods()
 @
     
-The following {\it methods} are available: {\it OrtizEstevez}, {\it
-  intcngean}, {\it edira}, {\it pint}, {\it SIM.window\}, {\it
-    SIM.full\}, {\it DRI.cp}, {\it DRI.cs}, {\it PMA.raw}, {\it
-      CNAmet}, {\it PREDA} and for two-group comparisons (requiring
-    Labels) {\it DRI.ct}, {\it DRI.ss}, {\it DRI.srank}, {\it
-      DRI.sraw}. 
+\section{Comparison methods}
+    
+The following {\it implementations} are available in the
+\Rpackage{intcomp} benchmarking pipeline: {\it OrtizEstevez}, {\it
+intcngean}, {\it edira}, {\it pint}, {\it SIM.window\}, {\it
+SIM.full\}, {\it DRI.cp}, {\it DRI.cs}, {\it PMA.raw}, {\it CNAmet},
+{\it PREDA} and for two-group comparisons (requiring Labels) {\it
+DRI.ct}, {\it DRI.ss}, {\it DRI.srank}, {\it DRI.sraw}. 
       
-The cancer gene prioritization of each method is compared to the
-golden standard list of known cancer genes; the result contains
-running times of the algorithms and the AUC values from ROC analysis
-\cite{Lahti11review}. The AUC values provide quantitative estimates of
-model performance in cancer gene detection and provide the basis for
-comparisons.
+\section{Benchmarking results}
+      
+The prioritized cancer gene list provided by each method is compared
+to the golden standard list of known cancer genes; the result contains
+running times of the algorithms and the AUC values from ROC analysis.
+The AUC values provide quantitative estimates of model performance in
+cancer gene detection and provide the basis for the comparisons as
+reported in \cite{Lahti11review}.
+
 
 \subsection*{Acknowledgements}
 
