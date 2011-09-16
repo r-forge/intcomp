@@ -156,7 +156,7 @@ accessed June 2, 2010.} is also used in combination with the golden
 standard list from the TGDB (See Hyman data set). To run the
 benchmarking tests on Pollack data set, use
 
-<<results = hide, eval = FALSE>>=
+<<pollack, results = hide, eval = FALSE>>=
 # Set comparison methods for benchmarking
 methods <- c("CNAmet","edira")
 
@@ -195,7 +195,7 @@ auc.ordered <- sort(unlist(res.pollack$auc))
 The first simulated data set, where the exact ground truth is known,
 is provided by the simulation approach given in \cite{Bicciato09}:
 
-<<test_ferrari, results = hide, eval=FALSE>>=
+<<ferrari, results = hide, eval=FALSE>>=
 # Generate simulated data
 library(intcomp)
 ferrari <- test.simulation(GE, CN, method="ferrari")
@@ -227,7 +227,7 @@ be simulated can be defined by the user, as well as the mixing weight,
 the number of different variances to be considered and the call
 probabilities.
 
-<<test_schaefer, results = hide, eval=FALSE>>=
+<<schaefer, results = hide, eval=FALSE>>=
 # Set the methods for benchmarking
 methods <- c("CNAmet","edira")
 
@@ -279,6 +279,7 @@ If both segmented and raw data are missing, then called data will be used if sup
 The list of available methods in the pipeline is retrieved with:
     
 <<methods>>=
+library(intcomp)
 list.methods()
 @
     
