@@ -74,146 +74,201 @@ org.Hs.eg.db\footnote{http://www.bioconductor.org/packages/release/data/annotati
 PREDA/SODEGIR\footnote{http://www.bioconductor.org/packages/devel/bioc/html/PREDA.html},
 and CNAmet\footnote{http://csbi.ltdk.helsinki.fi/CNAmet/}.
 
-\section{Running the comparison tests}
-
-\subsection{Loading example data}
+\section{Benchmarking the comparison methods}
 
 The package contains a copy of the publicly available cancer data sets
 from \cite{Hyman2002} and \cite{Pollack2002} to benchmark the cancer
-gene detection algorithms on real experimental data. The gene symbols
-are converted into Entrez Gene IDs, and the probes are matched between
-gene expression and copy number data, as detailed in the {\it
-read.hyman} and {\it read.pollack} functions.
+gene detection algorithms on real experimental data, and two simulated
+data sets from previous publications \cite{Bicciato09, Schafer09},
+called Ferrari and Schaefer data sets, respectively. The data sets
+have varying setups, depending on whether they include two-group
+comparisons or segmented/called copy number data. Showcases running
+the benchmarking pipeline on each data set are described below.
 
-\subsubsection{Hyman et al. (2002)}
+\subsection{Hyman et al. (2002)}
 
-Loading Hyman et al. (2002) \cite{Hyman2002} data
+The Hyman et al. (2002) \cite{Hyman2002} breast cancer data
 set\footnote{HymancdnaDataA.tab, HymancghDataA.tab and HymanAcc.mat
-  obtained from http://www.ece.ucsb.edu/pubs/ieee/index.shtml accessed
-  June 2, 2010.}.
-
-<<results=hide>>=
-library(intcomp)
-data(hyman)
-library("org.Hs.eg.db")
-hyman <- read.hyman(cdna, cgh, genenames, xx = as.list(org.Hs.egALIAS2EG))
-GE <- hyman$ge        # gene expression matrix + info
-CN.raw <- hyman$cn    # copy number matrix + info
-gene.info <- hyman$cn.raw$info # gene location info
-@
-
-\subsubsection{Pollack et al. (2002)}
-
-Loading Pollack et al. (2002) \cite{Pollack2002} data
-set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
-accessed June 2, 2010.}.
-
-<<results = hide>>=
-data(pollack)
-pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid)
-GE <- pollack$ge     # expression matrix (GE$data); gene info (GE$info)
-CN.raw <- pollack$cn # copy number matrix (CN.raw$data); info (CN.raw$info)
-gene.info <- pollack$ge$info # gene location info
-@
-
-
-\subsection{Golden standard list of known cancer genes}
-
-A gloden standard list of known breast cancer genes from The Breast
-Cancer Gene Database \cite{Baasiri99} is used to benchmark the
-different methods on the Hyman and Pollack data sets. The cancer gene
-list was
+obtained from http://www.ece.ucsb.edu/pubs/ieee/index.shtml accessed
+June 2, 2010.}, and a golden standard list of known breast cancer
+genes from The Breast Cancer Gene Database \cite{Baasiri99} provide
+the first example data set for benchmarking the comparison algorithms.
+The cancer gene list was
 downloaded\footnote{http://www.tumor-gene.org/cgi-bin/TGDB/tgdb\_by\_name.cgi
 accessed 5.6.2010; 'tgdb\_by\_name.cgi.html' and 'tgdb.txt'} and
-stored to the tgdb object. The list is converted to Entrez GeneIDs,
-the genes included in the experimental data are selected, as detailed
-by {\it the get.brca.genes} function:
+stored to the tgdb object. The gene symbols are converted into Entrez
+Gene IDs, the probes are matched between gene expression and copy
+number data, as detailed in the {\it read.hyman} function, and the
+known breast cancer genes from the TGDB golden standard list present
+in the ge/cn data are selected. Further details are detailed in the
+{\it read.hyman} and {\it the get.brca.genes} functions. 
 
-<<results=tex>>=
+For Hyman, the original non-segmented data set from the publication is
+used (cn.seg = cn.raw) in the experiments (except with intCNGEan and
+CNAmet that require segmented and called data, respectively). To run
+the intcomp benchmarking pipeline on Hyman data set, use
+
+
+<<results=hide, eval = FALSE>>=
+# Set comparison methods for benchmarking
+methods <- c("CNAmet","edira")
+
+# Load the benchmarking pipeline
+library(intcomp)
+# Load Hyman data set
+data(hyman)
+library("org.Hs.eg.db")
+# Preprocess the Hyman data
+hyman <- read.hyman(cdna, cgh, genenames, xx = as.list(org.Hs.egALIAS2EG))
+GE <- hyman$ge        # gene expression data (expression and location info)
+CN.raw <- hyman$cn    # copy number data (copy number and location info)
+# Load the known breast cancer genes
 library("org.Hs.eg.db")
 data(tgdb)
+# Convert to EntrezIDs and select genes common with the ge/cn data
 cancerGenes <- get.brca.genes(rownames(GE$data), as.list(org.Hs.egALIAS2EG), tgdb)
-@
 
-\subsection{Simulating data}
-
-To evaluate the methods based on simulations, data can be simulated
-following roughly the approach given in \cite{Schafer09}, but with
-greater flexibility. The quantile grid to be simulated can be defined
-entirely by the user, as well as the mixing weight, the number of
-different variances to be considered and the call probabilities (for
-testing {\it intcngean}).
-
-<<test_schaefer, results = hide, eval=FALSE>>=
-library(ediraAMLdata)
-data(AMLdata, package="ediraAMLdata")
-test_schaefer <- test.simulation(GE, CN, method="schaefer")
-@
-
-Also, testing on the data simulated by Francesco Ferrari is provided:
-<<test_ferrari, results = hide, eval=FALSE>>=
-test_ferrari <- test.simulation(GE, CN, method="ferrari")
-@
-
-\section{Running the benchmarking pipeline}
-
-The example data set now contains (i) gene expression data (ge), (ii)
-gene copy number data (cn), (iii) optional sample class labels
-(tumor/normal), and (iv) golden standard list of known cancer genes.
-The ge and cn data sets are lists containing $data$ and $info$ fields.
-The probes in gene expression and gene copy number are paired; $data$
-is a data matrix with gene expression (ge\$data) or gene copy number
-(cn\$data) data; $info$ field is a data frame containing additional
-information about genes: $loc$ indicates the genomic location of the
-probes in base pairs (numeric); $chr$ and $arm$ are factors indicating
-the chromosome and chromosomal arm of the probe, respectively. For
-Hyman and Pollack data sets, the original non-segmented data sets are
-used (cn.seg = cn.raw) in the experiments (except with intCNGEan and
-CNAmet that require segmented and called data, respectively). 
-
-To run the benchmarking tests for particular methods, use the
-following. Note that some methods require segmented or called copy
-number data. With Hyman and Pollack data sets, raw copy number data is
-used, except in intCNGEan (segmented) and CNAmet (called). To use
-segmented copy number data in all methods, set 'cn.seg = cn.raw' in
-the test.geneorder.pipeline arguments.
-
-<<run, results = hide, eval=FALSE>>=
-# Set comparison methods
-methods <- c("CNAmet","edira")
 # Expression and raw copy number data
 GE <- hyman$ge
 CN.raw <- hyman$cn
 # Segmentation/calling for copy number data
 cgh <- process.copynumber(CN.raw)
-CN.seg <- list(data = assayDataElement(cgh, 'segmented'), info = gene.info)
-CN.call <- list(data = assayDataElement(cgh, 'calls'), info = gene.info)
+CN.seg <- list(data = assayDataElement(cgh, 'segmented'), info = CN.raw$info)
+CN.call <- list(data = assayDataElement(cgh, 'calls'), info = CN.raw$info)
 rownames(CN.call$data) <- rownames(CN.seg$data) <- rownames(GE$data)
-# Run method comparison pipeline
-res_real <- test.geneorder.pipeline(ge = GE, cn.raw = CN.raw,
+
+# Run the benchmarking pipeline
+res.hyman <- test.geneorder.pipeline(ge = GE, cn.raw = CN.raw,
 cn.seg = CN.raw, cn.call = CN.call, cghCall = cgh,
 Labels = NULL, cancerGenes = cancerGenes, nperm=20,
 input = "real", version = "normal",
 methods = methods, references="none")
-auc.ordered <- sort(unlist(res_real$auc))
+
+# Check the AUC values for the methods
+auc.ordered <- sort(unlist(res.hyman$auc))
 @
 
-<<run.simulation, results = hide, eval=FALSE>>=
+\subsection{Pollack et al. (2002)}
+
+The Pollack et al. (2002) \cite{Pollack2002} data
+set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
+accessed June 2, 2010.} is also used in combination with the golden
+standard list from the TGDB (See Hyman data set). To run the
+benchmarking tests on Pollack data set, use
+
+<<results = hide, eval = FALSE>>=
+# Set comparison methods for benchmarking
 methods <- c("CNAmet","edira")
-res_simulated  <- test.geneorder.pipeline(ge=test_schaefer$ge,
-cn.raw=test_schaefer$cn.raw, cn.seg=NULL,
-cn.call=test_schaefer$cn.call,
-cghCall = test_schaefer$cn.cghCall,
-ge.norm = test_schaefer$ge.norm,
-cn.norm = test_schaefer$cn.norm,
-Labels=test_schaefer$Labels,
-cancerGenes=test_schaefer$cancerGenes,
+
+# Load and preprocess the GE/CN data
+library(intcomp)
+data(pollack)
+pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid)
+GE <- pollack$ge     # expression matrix (GE$data); gene info (GE$info)
+CN.raw <- pollack$cn # copy number matrix (CN.raw$data); info (CN.raw$info)
+# Segmentation/calling for copy number data
+cgh <- process.copynumber(CN.raw)
+CN.seg <- list(data = assayDataElement(cgh, 'segmented'), info = CN.raw$info)
+CN.call <- list(data = assayDataElement(cgh, 'calls'), info = CN.raw$info)
+rownames(CN.call$data) <- rownames(CN.seg$data) <- rownames(GE$data)
+
+# Load the known breast cancer genes
+library("org.Hs.eg.db")
+data(tgdb)
+# Convert to EntrezIDs and select genes common with the ge/cn data
+cancerGenes <- get.brca.genes(rownames(GE$data), as.list(org.Hs.egALIAS2EG), tgdb)
+
+# Run the benchmarking pipeline
+res.pollack <- test.geneorder.pipeline(ge = GE, cn.raw = CN.raw,
+cn.seg = CN.raw, cn.call = CN.call, cghCall = cgh,
+Labels = NULL, cancerGenes = cancerGenes, nperm=20,
+input = "real", version = "normal",
+methods = methods, references="none")
+
+# Check the AUC values for the methods
+auc.ordered <- sort(unlist(res.pollack$auc))
+
+@
+
+\subsection{Ferrari data set (2009)}
+
+The first simulated data set, where the exact ground truth is known,
+is provided by the simulation approach given in \cite{Bicciato09}:
+
+<<test_ferrari, results = hide, eval=FALSE>>=
+# Generate simulated data
+library(intcomp)
+ferrari <- test.simulation(GE, CN, method="ferrari")
+
+# Run the benchmarking pipeline
+res.ferrari  <- test.geneorder.pipeline(ge=ferrari$ge,
+cn.raw=ferrari$cn.raw, cn.seg=NULL,
+cn.call=ferrari$cn.call,
+cghCall = ferrari$cn.cghCall,
+ge.norm = ferrari$ge.norm,
+cn.norm = ferrari$cn.norm,
+Labels=ferrari$Labels,
+cancerGenes=ferrari$cancerGenes,
 nperm = 20, input="simulations.equal.dimensions",
 version = "normal",
 methods=methods, callprobs=sim$callprobs,
 references="both")
-auc.ordered <- sort(unlist(res_simulated$auc))
+
+# Check the AUC values from comparison methods
+auc.ordered <- sort(unlist(res.ferrari$auc))
 @
+
+
+\subsection{Schaefer data set (2009)}
+
+The second simulated data set is provided by the simulation approach
+given in \cite{Schafer09} with added flexibility. The quantile grid to
+be simulated can be defined by the user, as well as the mixing weight,
+the number of different variances to be considered and the call
+probabilities.
+
+<<test_schaefer, results = hide, eval=FALSE>>=
+# Set the methods for benchmarking
+methods <- c("CNAmet","edira")
+
+# Generate simulated data
+library(intcomp)
+library(ediraAMLdata)
+data(AMLdata, package="ediraAMLdata")
+schaefer <- test.simulation(GE, CN, method="schaefer")
+
+# Run the benchmarking pipeline
+res.schaefer  <- test.geneorder.pipeline(ge=schaefer$ge,
+cn.raw=schaefer$cn.raw, cn.seg=NULL,
+cn.call=schaefer$cn.call,
+cghCall = schaefer$cn.cghCall,
+ge.norm = schaefer$ge.norm,
+cn.norm = schaefer$cn.norm,
+Labels=schaefer$Labels,
+cancerGenes=schaefer$cancerGenes,
+nperm = 20, input="simulations.equal.dimensions",
+version = "normal",
+methods=methods, callprobs=sim$callprobs,
+references="both")
+
+# Check the AUC values from comparison methods
+auc.ordered <- sort(unlist(res.schaefer$auc))
+@
+
+
+
+\section{Notes on the benchmarking pipeline}
+
+The example data sets contains (i) gene expression data (GE), (ii)
+gene copy number data (CN), (iii) optional sample class labels
+(tumor/normal), and (iv) a golden standard list of known cancer genes.
+The GE and CN data sets are lists containing $data$ and $info$ fields.
+The probes in gene expression and gene copy number are paired; $data$
+is a data matrix with gene expression (GE\$data) or gene copy number
+(CN\$data) data; $info$ field is a data frame containing additional
+information about genes: $loc$ indicates the genomic location of the
+probes in base pairs (numeric); $chr$ and $arm$ are factors indicating
+the chromosome and chromosomal arm of the probe, respectively. 
 
 If segmented data is supplied, then it will be used for analysis.
 If segmented data is missing, then raw data will be used if supplied.
