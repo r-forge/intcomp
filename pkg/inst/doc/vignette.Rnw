@@ -51,7 +51,7 @@ To install this package directly within R type:
 install.packages("intcomp", repos="http://R-Forge.R-project.org")
 @
 
-\subsection{Installing dependencies}
+\subsection{Dependencies}
 
 The benchmarking pipeline depends on various external R
 packages. Install the  dependencies from within R using the following
@@ -108,41 +108,46 @@ used (cn.seg = cn.raw) in the experiments (except with intCNGEan and
 CNAmet that require segmented and called data, respectively). To run
 the intcomp benchmarking pipeline on Hyman data set, use
 
-
 <<results=hide, eval = FALSE>>=
 # Set comparison methods for benchmarking
 methods <- c("CNAmet","edira")
 
 # Load the benchmarking pipeline
 library(intcomp)
-# Load Hyman data set
+
+# LOad and preprocess the Hyman data
 data(hyman)
 library("org.Hs.eg.db")
-# Preprocess the Hyman data
 hyman <- read.hyman(cdna, cgh, genenames, xx = as.list(org.Hs.egALIAS2EG))
 GE <- hyman$ge        # gene expression data (expression and location info)
 CN.raw <- hyman$cn    # copy number data (copy number and location info)
-# Load the known breast cancer genes
-library("org.Hs.eg.db")
-data(tgdb)
-# Convert to EntrezIDs and select genes common with the ge/cn data
-cancerGenes <- get.brca.genes(rownames(GE$data), as.list(org.Hs.egALIAS2EG), tgdb)
 
-# Expression and raw copy number data
-GE <- hyman$ge
-CN.raw <- hyman$cn
 # Segmentation/calling for copy number data
 cgh <- process.copynumber(CN.raw)
 CN.seg <- list(data = assayDataElement(cgh, 'segmented'), info = CN.raw$info)
 CN.call <- list(data = assayDataElement(cgh, 'calls'), info = CN.raw$info)
 rownames(CN.call$data) <- rownames(CN.seg$data) <- rownames(GE$data)
 
+# Load the known breast cancer genes
+library("org.Hs.eg.db")
+data(tgdb)
+# Convert to EntrezIDs and select genes common with the ge/cn data
+cancerGenes <- get.brca.genes(rownames(GE$data), as.list(org.Hs.egALIAS2EG), tgdb)
+
 # Run the benchmarking pipeline
-res.hyman <- test.geneorder.pipeline(ge = GE, cn.raw = CN.raw,
-cn.seg = CN.raw, cn.call = CN.call, cghCall = cgh,
-Labels = NULL, cancerGenes = cancerGenes, nperm=20,
-input = "real", version = "normal",
-methods = methods, references="none")
+res.hyman <- test.geneorder.pipeline(
+  ge = GE, 
+  cn.raw = CN.raw,
+  cn.seg = CN.raw, 
+  cn.call = CN.call, 
+  cghCall = cgh,
+  Labels = NULL, 
+  cancerGenes = cancerGenes, 
+  nperm=20,
+  input = "real", 
+  version = "normal",
+  methods = methods, 
+  references="none")
 
 # Check the AUC values for the methods
 auc.ordered <- sort(unlist(res.hyman$auc))
@@ -153,7 +158,8 @@ auc.ordered <- sort(unlist(res.hyman$auc))
 The Pollack et al. (2002) \cite{Pollack2002} data
 set\footnote{http://www.pnas.org/content/suppl/2002/09/23/162471999.DC1/4719CopyNoGeneDatsetLegend.html
 accessed June 2, 2010.} is also used in combination with the golden
-standard list from the TGDB (See Hyman data set). To run the
+standard list from the TGDB (See Hyman data set). The gene identifiers
+in the Pollack data are converted into Entrez Gene IDs. To run the
 benchmarking tests on Pollack data set, use
 
 <<pollack, results = hide, eval = FALSE>>=
@@ -201,23 +207,26 @@ library(intcomp)
 ferrari <- test.simulation(GE, CN, method="ferrari")
 
 # Run the benchmarking pipeline
-res.ferrari  <- test.geneorder.pipeline(ge=ferrari$ge,
-cn.raw=ferrari$cn.raw, cn.seg=NULL,
-cn.call=ferrari$cn.call,
-cghCall = ferrari$cn.cghCall,
-ge.norm = ferrari$ge.norm,
-cn.norm = ferrari$cn.norm,
-Labels=ferrari$Labels,
-cancerGenes=ferrari$cancerGenes,
-nperm = 20, input="simulations.equal.dimensions",
-version = "normal",
-methods=methods, callprobs=sim$callprobs,
-references="both")
+res.ferrari  <- test.geneorder.pipeline(
+       ge = ferrari$ge,
+  cn.raw  = ferrari$cn.raw, 
+   cn.seg = NULL,
+  cn.call = ferrari$cn.call,
+  cghCall = ferrari$cn.cghCall,
+  ge.norm = ferrari$ge.norm,
+  cn.norm = ferrari$cn.norm,
+  Labels = ferrari$Labels,
+  cancerGenes = ferrari$cancerGenes,
+  nperm = 20, 
+  input = "simulations.equal.dimensions",
+  version = "normal",
+  methods = methods, 
+  callprobs = sim$callprobs,
+  references = "both")
 
 # Check the AUC values from comparison methods
 auc.ordered <- sort(unlist(res.ferrari$auc))
 @
-
 
 \subsection{Schaefer data set (2009)}
 
@@ -228,6 +237,7 @@ the number of different variances to be considered and the call
 probabilities.
 
 <<schaefer, results = hide, eval=FALSE>>=
+
 # Set the methods for benchmarking
 methods <- c("CNAmet","edira")
 
@@ -235,21 +245,25 @@ methods <- c("CNAmet","edira")
 library(intcomp)
 library(ediraAMLdata)
 data(AMLdata, package="ediraAMLdata")
-schaefer <- test.simulation(GE, CN, method="schaefer")
+schaefer <- test.simulation(GE, CN, method = "schaefer")
 
 # Run the benchmarking pipeline
-res.schaefer  <- test.geneorder.pipeline(ge=schaefer$ge,
-cn.raw=schaefer$cn.raw, cn.seg=NULL,
-cn.call=schaefer$cn.call,
-cghCall = schaefer$cn.cghCall,
-ge.norm = schaefer$ge.norm,
-cn.norm = schaefer$cn.norm,
-Labels=schaefer$Labels,
-cancerGenes=schaefer$cancerGenes,
-nperm = 20, input="simulations.equal.dimensions",
-version = "normal",
-methods=methods, callprobs=sim$callprobs,
-references="both")
+res.schaefer  <- test.geneorder.pipeline(
+       ge = schaefer$ge,
+   cn.raw = schaefer$cn.raw, 
+   cn.seg = NULL,
+  cn.call = schaefer$cn.call,
+  cghCall = schaefer$cn.cghCall,
+  ge.norm = schaefer$ge.norm,
+  cn.norm = schaefer$cn.norm,
+   Labels = schaefer$Labels,
+ cancerGenes = schaefer$cancerGenes,
+    nperm = 20, 
+    input = "simulations.equal.dimensions",
+  version = "normal",
+  methods = methods, 
+  callprobs = sim$callprobs,
+  references = "both")
 
 # Check the AUC values from comparison methods
 auc.ordered <- sort(unlist(res.schaefer$auc))
@@ -282,7 +296,7 @@ The list of available methods in the pipeline is retrieved with:
 library(intcomp)
 list.methods()
 @
-    
+
 The following {\it implementations} are available in the
 \Rpackage{intcomp} benchmarking pipeline: {\it CNAmet}
 \cite{Hautaniemi04,Louhimo11}, variants of {\it DRI}
@@ -292,6 +306,7 @@ pint} \cite{Lahti09mlsp}, variants of {\it SIM} \cite{Menezes2009},
 {\it PMA} \cite{Witten09}, {\it PREDA} \cite{Bicciato09} and
 exclusively for two-group comparisons (requiring Labels) {\it DRI.ct},
 {\it DRI.ss}, {\it DRI.srank}, {\it DRI.sraw} \cite{Salari2010}. 
+
 
 \section{Benchmarking results}
       

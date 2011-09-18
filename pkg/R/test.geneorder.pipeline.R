@@ -7,10 +7,23 @@
 # version       (applies to some methods only) "normal" performs gene-sampling, while "approximate" performs sample-sampling
 # methods       which methods should be performed? at least one of c("edira","DRI.cp","DRI.cs","DRI.ct","SIM.full","SIM.window","intcngean","PMA","PMA.raw","pint","PREDA","DRI.ss","DRI.srank","DRI.sraw")
 
-test.geneorder.pipeline <- function (ge, cn.raw, cn.seg=NULL,
-cn.call=NULL, cghCall = NULL, ge.norm = NULL, cn.norm = NULL, Labels=NULL,
-cancerGenes, nperm = 1e2, input="real", version = "normal", methods =
-NULL, chromosomes = as.character(1:22), callprobs, references, evaluate = TRUE) {
+test.geneorder.pipeline <- function ( ge, 
+                                      cn.raw, 
+ 				      cn.seg = NULL,
+				     cn.call = NULL, 
+				     cghCall = NULL, 
+				     ge.norm = NULL, 
+				     cn.norm = NULL, 
+				      Labels = NULL, 
+				     cancerGenes, 
+				     nperm = 1e2, 
+				     input = "real", 
+				     version = "normal", 
+				     methods = NULL, 
+				     chromosomes = as.character(1:22), 
+				     callprobs, 
+				     references, 
+				     evaluate = TRUE) {
 
   # Determine default cn to be used in all methods unless specified otherwise
   # (see intCNGEan and CNAmet)
@@ -22,8 +35,43 @@ NULL, chromosomes = as.character(1:22), callprobs, references, evaluate = TRUE) 
   } else if (is.null(cn.seg) && is.null(cn.raw) && !is.null(cn.call)) {
     cn <- cn.call
   }
-  
+
+# cn & segmented = FALSE & called = FALSE
+# cn & segmented = TRUE & called = FALSE
+# cn & segmented = TRUE & called = TRUE (called used for everything)
+# Form cgh object only within test.geneorder.pipeline 
+#
+#  if (!is.null(cn.raw) && (is.null(cn.seg) || is.null(cn.call))) {
+#  # Raw CN data given, need to segment or call
+#    # Segmentation/calling for copy number data
+#    cgh <- process.copynumber(cn.raw)
+#    if (is.null(cn.seg)) { cn.seg <- list(data = assayDataElement(cgh, 'segmented'), info = cn.raw$info) }
+#    if (is.null(cn.call) { cn.call <- list(data = assayDataElement(cgh, 'calls'), info = cn.raw$info) }
+#    rownames(cn.call$data) <- rownames(cn.seg$data) <- rownames(cn.raw$data)
+#  } else if (is.null(cn.raw) && !is.null(cn.seg) && is.null(cn.call)) {
+#  # Raw CN data not given, need to call
+#     # Use CGHcall tools for calling
+#      # Segment the data if segmented data is not available
+#      # assume 200 bp probes
+#      probespan <- 100
+#        annots <- data.frame(name = rownames(cn.seg$data),
+#	                      Chromosome = as.integer(cn.seg$info$chr),
+#			      Start = as.integer(cn.seg$info$loc) - probespan,
+#                             End = as.integer(cn.seg$info$loc) + probespan)
+#
+#     seg.object <- new(’cghSeg’, phenoData = NULL, experimentData = NULL,
+#        annotation = NULL, copynumber = NULL, segmented = cn.seg$data,
+#        featureData = annots)
+#
+#     cgh.cal <- CGHcall(seg.object, prior = "all", organism = "human") 
+#     # Also form CGHcall object (for intCNGEan)
+#     cgh <- ExpandCGHcall(listcall = cgh.cal, inputSegmented = seg.object)
+#
+#  }
+
+
   ###########################
+  
   if(!is.null(ge.norm$data)) { ge2 <- list(data=cbind(ge$data,ge.norm$data), info=ge$info) }
   if(!is.null(cn.norm$data)) { cn2 <- list(data=cbind(cn$data,cn.norm$data), info=cn$info) }
     
