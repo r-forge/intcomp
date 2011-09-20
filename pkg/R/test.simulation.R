@@ -170,14 +170,28 @@ CN <- process.copynumber(cn.raw, cn.seg = NULL,
                          probespanCN = 100, 
 			 prior = "all", organism = "human")
 
-cn.call <- list(data=assayDataElement(CN, 'calls'), info=cn_info)
+cn.call <- list(data=assayDataElement(CN, 'calls'), info = cn.raw$info)
+
+# For each ge probe, find the closest cn.call segment
+cn.inds <- c()
+for (i in 1:nrow(ge$info)) {
+  chr <- ge$info[i, "chr"]
+  loc <- ge$info[i, "start"]
+  inds <- which(cn.call$info$chr == chr) # For each ge probe, find the closest cn.call segment
+  starts <- cn.call$info[inds, "start"]
+  ind <- which.min(abs(starts - loc))
+  cn.inds[[i]] <- ind
+}
+cn.call.matched <- list()
+cn.call.matched$data <- as.matrix(cn.call$data)[cn.inds,]
+cn.call.matched$info <- ge$info
 
 out <- list(ge = ge, 
             cn = cn, 
 	    ge.norm = ge.norm, 
 	    cn.norm = cn.norm, 
 	    cn.raw = cn.raw, 
-	    cn.call = cn.call, 
+	    cn.call = cn.call.matched,
 	    cn.cghCall = CN, 
 	    Labels = Labels, 
 	    cancerGenes = cancerGenes)
