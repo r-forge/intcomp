@@ -64,12 +64,17 @@ read.pollack <- function (chrs = 1:22, dat, clone2geneid) {
   geneExp <- list(data = ge, info = info) 
   geneCopyNum <- list(data = cn, info = info)
 
-  # Match cn/ge measurements, exclude sex chromosomes
-  # since they are problematic for some methods
-  #tmp <- pairmatch(geneExp, geneCopyNum, chrs = chrs)
-
+  # Note we can match ge/cn already before segmentation
+  # as they have the same resolution
   require(pint)                                             
   tmp <- pint.match(geneExp, geneCopyNum, chrs = chrs)
 
-  list(ge = tmp$X, cn = tmp$Y, Labels = NULL)   
+  # Segmentation/calling for copy number data
+  CN.raw <- tmp$Y
+  cgh <- process.copynumber(CN.raw)
+  #CN.seg <- list(data = assayDataElement(cgh, 'segmented'), info = CN.raw$info)
+  #CN.call <- list(data = assayDataElement(cgh, 'calls'), info = CN.raw$info)
+  #rownames(CN.call$data) <- rownames(CN.seg$data) <- rownames(geneExp$data)
+
+  list(ge = tmp$X, cn.raw = tmp$Y, cghCall = cgh)
 }

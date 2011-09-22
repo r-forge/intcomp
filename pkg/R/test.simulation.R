@@ -187,12 +187,12 @@ cn.call.matched$data <- as.matrix(cn.call$data)[cn.inds,]
 cn.call.matched$info <- ge$info
 
 out <- list(ge = ge, 
-            cn = cn, 
-	    ge.norm = ge.norm, 
-	    cn.norm = cn.norm, 
-	    cn.raw = cn.raw, 
+	    cn.raw = cn.raw,
+            cn.seg = cn, 	    
 	    cn.call = cn.call.matched,
 	    cn.cghCall = CN, 
+	    ge.norm = ge.norm, 
+	    cn.norm = cn.norm, 
 	    Labels = Labels, 
 	    cancerGenes = cancerGenes)
 

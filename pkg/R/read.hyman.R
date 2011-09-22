@@ -46,10 +46,17 @@ read.hyman <- function (cdna, cgh, genenames, chrs = 1:22, xx) {
   geneCopyNum <- list(data = cgh, info = info)
 
   # match the probes using tools in pint package
+  # note: cn and ge already at the same resolution,
+  # no need to segment cn before matching!
   require(pint)
   tmp <- pint.match(geneExp, geneCopyNum, chrs = chrs)
-       
-  list(ge = tmp$X, cn = tmp$Y, Labels = NULL)
+
+  # Segmentation/calling for copy number data
+  CN.raw <- tmp$Y
+  cgh <- process.copynumber(CN.raw)
+
+  #list(ge = tmp$X, cn = tmp$Y, Labels = NULL)
+  list(ge = tmp$X, cn.raw = tmp$Y, cghCall = cgh)
 
 }
 	    

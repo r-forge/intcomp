@@ -1,4 +1,4 @@
-test.geneorder.dri.sam <- function (ge, cn, Labels=NULL, nperm = 1e2, transform.type, version) {
+test.geneorder.dri.sam <- function (ge, cn, Labels=NULL, nperm = 1e2, transform.type, version = "normal") {
   require(DRI)
   
   DNA.data <- as.matrix(cn$data[,Labels==1])

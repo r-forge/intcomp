@@ -1,5 +1,6 @@
 list.methods <- function (Labels = c(1,2)) {
-  res <- test.geneorder.pipeline(cn.raw = NULL, cn.seg = NULL, cn.call = NULL, 
-          Labels = Labels, cancerGenes = NULL, evaluate = FALSE)
+  res <- test.geneorder.pipeline(ge = list(data = matrix(rnorm(9),3,3)),
+                                 cn.raw = list(data = matrix(rnorm(9),3,3)), 
+          cancerGenes = NULL, evaluate = FALSE, cn.default = "raw")
   res$available.methods
 }

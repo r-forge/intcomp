@@ -1,13 +1,13 @@
 test.geneorder.pint <- function (ge, cn.raw, cn.seg, Labels = NULL) {
 
-  # If the ge and raw cn have same resolution
-  # then use the raw data, not segmented: pint will 
-  # automatically detect the dependent variation.
+  # If the ge and cn.raw are already matched
+  # (are having equal resolution)
+  # then always use the raw data, not segmented
 
   # Both raw and segmented given
   if (!is.null(cn.raw$data) && !is.null(cn.seg$data)) {
     # if raw cn resolution is same than with ge
-    if (nrow(cn.raw$data)/nrow(ge$data) == 1) {
+    if (nrow(cn.raw$data) == nrow(ge$data)) {
       cn <- cn.raw    
     } else {
       cn <- cn.seg
