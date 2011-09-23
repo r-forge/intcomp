@@ -112,9 +112,10 @@ div.menu th.selected, div.menu th.selected a{
 </style> 
  
 <div id="wrapper"> 
-<div class="h2">intcomp: a benchmarking pipeline for cancer gene detection
-algorithms based on integrative analysis of gene expression and copy
-number data
+
+<div class="h2">intcomp: a benchmarking pipeline for integrative
+cancer gene detection
+algorithms 
 </div> 
 <table width="100%" cellpadding="0" cellspacing="0"> 
 <tr> 
@@ -128,14 +129,30 @@ Germany (4) University of Modena and Reggio Emilia, Italy.
 </p> 
 </small> 
 
-<p></p><p></p>The intcomp R package 
-provides tools for benchmarking various cancer gene detection
-algorithms that are based on integrative analysis of DNA copy number
-and gene expression data. The pipeline is used to quantify cancer gene
-prioritization performance of alternative methods based on
-golden-standard lists of known cancer genes in real and simulated data
-sets [1]. We welcome contributions to include new methods and
-benchmarking tests to the pipeline.
+<p></p><p></p>
+The intcomp R package provides a benchmarking pipeline for
+quantitative comparison of cancer gene detection algorithms based on
+integrative analysis of DNA copy number and gene expression data. 
+
+The cancer gene prioritization performance of the methods is compared
+with respect to golden-standard lists of known cancer genes in real
+and simulated data sets [1]. 
+
+The comparison methods include the publicly available implementations
+<a href="http://csbi.ltdk.helsinki.fi/CNAmet">CNAmet</a>, 
+<a href="http://cran.r-project.org/web/packages/DRI/">DRI</a>, 
+<a href="http://www.statistik.tu-dortmund.de/~schaefer/">edira</a>, 
+<a href="http://www.few.vu.nl/~wvanwie/software/intCNGEan/intCNGEan.html">intCNGEan</a>, 
+<a href="http://www.bioconductor.org/packages/release/bioc/html/pint.html">pint/simcca</a>, 
+<a href="http://cran.r-project.org/web/packages/PMA/index.html">PMA</a>,
+<a href="http://www.bioconductor.org/packages/devel/bioc/html/PREDA.html">PREDA/SODEGIR</a>, and 
+<a
+href="http://www.bioconductor.org/packages/release/bioc/html/SIM.html">SIM</a>.
+Some packages include multiple variants of the algorithms.
+
+Contributions are welcome to include new methods, data sets and benchmarking tests
+to the pipeline.
+
 </td>
 <td>
 <a title='By Apers0n (DNA Double Helix by NHGRI.jpg) [Public domain],
@@ -148,20 +165,18 @@ src='http://upload.wikimedia.org/wikipedia/commons/9/97/DNA_Double_Helix.png'/><
 </td> 
 </tr></table> 
  
-
 <table width="100%"><tr> 
 <td valign="top" width="45%"> 
 
 <h3>Installation</h3>
 
-Source code is available from <a target="_new"
+The source code is available from <a target="_new"
 href="http://r-forge.r-project.org/projects/intcomp/">R-Forge</a>. 
 
 See
 the package 
-<a href="https://r-forge.r-project.org/scm/viewvc.php/*checkout*/pkg/inst/doc/vignette.pdf?root=intcomp">vignette</a>
-for
-installation instructions and functionality. 
+<a href="vignette.pdf">vignette</a>
+for installation instructions, further details and references.
 
 
 <h3>Acknowledgements</h3> 
