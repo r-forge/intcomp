@@ -2,8 +2,8 @@
 %The above line is needed to remove a warning in R CMD check
 \documentclass[a4paper]{article}
 
-\title{intcomp:\\Benchmarking pipeline for gene expression / copy number data
-integration algorithms}
+\title{intcomp:\\Benchmarking pipeline for integrative cancer gene
+prioritization algorithms based on gene expression and copy number data}
 
 \author{Leo Lahti\footnote{leo.lahti@iki.fi} and Martin Sch{\"a}fer}
 
@@ -272,7 +272,7 @@ The list of available methods in the pipeline is retrieved with:
     
 <<methods>>=
 library(intcomp)
-list.methods()
+as.matrix(list.methods())
 @
 
 The following {\it implementations} are available in the
@@ -298,6 +298,13 @@ The AUC values provide quantitative estimates of model performance in
 cancer gene detection and provide the basis for the comparisons as
 reported in \cite{Lahti11review}.
 
+\subsection{Version details}
+
+The following package versions were used to produce this vignette:
+
+<<sessioinfo>>
+sessionInfo()
+@
 
 \subsection*{Acknowledgements}
 
