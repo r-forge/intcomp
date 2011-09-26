@@ -1,4 +1,4 @@
-test.geneorder.OrtizEstevez <- function (ge, cn, Labels = NULL) {
+test.geneorder.OrtizEstevez <- function (ge, cn) {
 
   require("DNAcopy")
 

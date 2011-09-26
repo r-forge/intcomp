@@ -1,6 +1,6 @@
 
 
-test.geneorder.pma <- function (ge, cn, Labels = NULL, nperm = 1e2) {
+test.geneorder.pma <- function (ge, cn, nperm = 1e2) {
 
   # Note that this method does not utilize Label information, option added for compatibility
 

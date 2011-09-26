@@ -1,4 +1,4 @@
-test.geneorder.CNAmet <- function (ge, cn, Labels=NULL, nperm) {
+test.geneorder.CNAmet <- function (ge, cn, nperm) {
 
   # NOTE: assumes called data (cn.call) in input!
 

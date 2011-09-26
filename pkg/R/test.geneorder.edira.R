@@ -1,4 +1,4 @@
-test.geneorder.edira <- function(ge, cn, Labels=NULL, references){
+test.geneorder.edira <- function(ge, cn, references){
   require(edira)
   # calculate edira
   edi <- edira_ratios(ge, cn, references)

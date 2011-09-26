@@ -1,4 +1,4 @@
-test.geneorder.pint <- function (ge, cn.raw, cn.seg, Labels = NULL) {
+test.geneorder.pint <- function (ge, cn.raw, cn.seg) {
 
   # If the ge and cn.raw are already matched
   # (are having equal resolution)

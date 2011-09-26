@@ -133,7 +133,8 @@ res.hyman <- test.geneorder.pipeline(ge = hyman$ge,           # expression
 				     cghCall = hyman$cghCall, # segm/called cn
 				     cancerGenes = cancerGenes, 
 				     methods = methods, 
-				     cn.default = "raw") # use with ge 
+				     cn.default = "raw", # use with ge 
+             references="none")  # no real reference data included 
 
 # Check the AUC values for the methods
 auc.ordered <- sort(unlist(res.hyman$auc))
@@ -161,7 +162,7 @@ pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid
 library("org.Hs.eg.db")
 data(tgdb)
 # Convert to EntrezIDs and select genes common with the ge/cn data
-cancerGenes <- get.brca.genes(rownames(GE$data), as.list(org.Hs.egALIAS2EG), tgdb)
+cancerGenes <- get.brca.genes(rownames(pollack$ge$data), as.list(org.Hs.egALIAS2EG), tgdb)
 
 # Run the benchmarking pipeline
 res.pollack <- test.geneorder.pipeline(ge = pollack$ge, 
@@ -169,7 +170,8 @@ res.pollack <- test.geneorder.pipeline(ge = pollack$ge,
 				       cghCall = pollack$cghCall,
 				       cancerGenes = cancerGenes, 
 				       methods = methods, 
-				       cn.default = "raw")
+				       cn.default = "raw",
+               references="none") 
 
 # Check the AUC values for the methods
 auc.ordered <- sort(unlist(res.pollack$auc))
@@ -226,8 +228,9 @@ res.schaefer  <- test.geneorder.pipeline(
   cghCall = schaefer$cn.cghCall,
  cancerGenes = schaefer$cancerGenes,
   methods = methods, 
-  callprobs = schaefer$callprobs)
-
+  callprobs = schaefer$callprobs,
+  cn.default = "raw")
+  
 # Check the AUC values from comparison methods
 auc.ordered <- sort(unlist(res.schaefer$auc))
 @

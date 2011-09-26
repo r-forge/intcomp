@@ -1,10 +1,10 @@
-Package: intcomp
+Package: intcomp 
 Type: Package
 Title: Multiplatform data integration for gene expression and copy number.
-Version: 0.3.25
-Date: 2011-09-18
+Version: 0.3.26 
+Date: 2011-09-24
 Author: Leo Lahti and Martin Schaefer
-Maintainer: Leo Lahti <leo.lahti@iki.fi>
+Maintainer: Leo Lahti <leo.lahti@iki.fi> 
 Description: Simulated test data and comparison pipeline for pairwise data integration methods for paired copy number and gene expression measurements.
 License: FreeBSD
 LazyLoad: yes

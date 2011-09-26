@@ -1,4 +1,4 @@
-test.geneorder.sim <- function (ge, cn, Labels=NULL, meth = "full", runname = "simtest", regs = 1, win = 1e6) {
+test.geneorder.sim <- function (ge, cn, meth = "full", runname = "simtest", regs = 1, win = 1e6) {
   
   require(SIM)
   cn$data <- as.matrix(cn$data)

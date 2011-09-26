@@ -1,4 +1,4 @@
-test.geneorder.intcngean <- function (ge, cghCall, Labels=NULL, meth, analysis.type, nperm, pth, callprobs=NULL, match=TRUE) {
+test.geneorder.intcngean <- function (ge, cghCall, meth, analysis.type, nperm, pth, callprobs=NULL, match=TRUE) {
 
   # NOTE: assumes cghCall object in input!
   mrnaSet <- process.ge(ge, probespanGE = 16) # Convert ge into expressionSet object 

@@ -1,4 +1,4 @@
-test.geneorder.dri.cor <- function (ge, cn, Labels = NULL, nperm, meth, version = "normal") {
+test.geneorder.dri.cor <- function (ge, cn, nperm, meth, version = "normal") {
   require(DRI)
   
   DNA.data <- as.matrix(cn$data)

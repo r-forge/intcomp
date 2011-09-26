@@ -7,7 +7,7 @@
 
 test.geneorder.pipeline <- function (ge, 
                                       cn.raw = NULL,
-				      cn.seg = NULL,
+				     cn.seg = NULL,
 				     cn.call = NULL,				    
 				     cghCall = NULL,
 				     cancerGenes, 
@@ -15,7 +15,8 @@ test.geneorder.pipeline <- function (ge,
 				     methods = NULL, 
 				     callprobs = NULL, 
 				     evaluate = TRUE, 
-				     cn.default = "segmented"
+				     cn.default = "segmented",
+             references ="both"
 				     ) {
 
   #########################################################
@@ -37,7 +38,7 @@ test.geneorder.pipeline <- function (ge,
     if (is.null(cn.call)) {
       dat <- assayDataElement(cghCall, 'calls')
       cn.info <- ge$info
-      if (nrow(dat) == nrow(cn.info)) {      
+      if (nrow(dat) == nrow(cn.info)) {     
         cn.call <- list(data = dat, info = cn.info)
         rownames(cn.call$data) <- rownames(ge$data)
       }
@@ -74,7 +75,7 @@ test.geneorder.pipeline <- function (ge,
   if (!is.null(methods) && ("edira" %in% methods) && evaluate) {
       message("edira")
       start.time <- Sys.time()      
-      ordg <- test.geneorder.edira(ge, cn, Labels, references = "none")
+      ordg <- test.geneorder.edira(ge, cn, references = references)
       end.time <- Sys.time()
       runtime[["edira"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
       roc[["edira"]] <- roc.auc(ordg, cancerGenes)
@@ -140,7 +141,7 @@ test.geneorder.pipeline <- function (ge,
   if (!is.null(methods) && ("CNAmet" %in% methods) && evaluate) {
      message("CNAmet")
      start.time <- Sys.time()     
-     ordg <- test.geneorder.CNAmet(ge, cn = cn.call, Labels = NULL, nperm)
+     ordg <- test.geneorder.CNAmet(ge, cn = cn.call, nperm)
      end.time <- Sys.time()
      runtime[["CNAmet"]] <- as.numeric(difftime(end.time, start.time, units='mins'))     
      roc[["CNAmet"]] <- roc.auc(ordg, cancerGenes)
@@ -185,7 +186,7 @@ test.geneorder.pipeline <- function (ge,
   if (!is.null(methods) && ("PMA.raw" %in% methods) && evaluate) {
     message("PMA.raw")
     start.time <- Sys.time()    
-    ordg <- test.geneorder.pma.rawscore(ge, cn, Labels)
+    ordg <- test.geneorder.pma.rawscore(ge, cn)
     end.time <- Sys.time()
     runtime[["PMA.raw"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     roc[["PMA.raw"]]  <- roc.auc(ordg, cancerGenes)
@@ -198,7 +199,7 @@ test.geneorder.pipeline <- function (ge,
     message("pint")
   
     start.time <- Sys.time()
-    ordg <- test.geneorder.pint(ge, cn.raw, cn.seg, Labels)
+    ordg <- test.geneorder.pint(ge, cn.raw, cn.seg)
     end.time <- Sys.time()
     runtime[["pint"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     roc[["pint"]] <- roc.auc(ordg, cancerGenes)
@@ -209,7 +210,7 @@ test.geneorder.pipeline <- function (ge,
   if (!is.null(methods) && ("OrtizEstevez" %in% methods) && evaluate) {
     message("OrtizEstevez")
     start.time <- Sys.time()    
-    ordg <- test.geneorder.OrtizEstevez(ge, cn, Labels)
+    ordg <- test.geneorder.OrtizEstevez(ge, cn)
     end.time <- Sys.time()
     runtime[["OrtizEstevez"]] <- as.numeric(difftime(end.time, start.time, units='mins'))    
     roc[["OrtizEstevez"]] <- roc.auc(ordg, cancerGenes)
@@ -220,17 +221,30 @@ test.geneorder.pipeline <- function (ge,
   if (!is.null(methods) && ("PREDA" %in% methods) && evaluate) {
     message("PREDA")
     start.time <- Sys.time()    
-    ordg <- test.geneorder.preda(ge, cn, Labels, nperm=nperm, cancerGenes=cancerGenes,
+    ordg <- test.geneorder.preda(ge, cn, nperm=nperm, cancerGenes=cancerGenes,
         ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod="spline",
         ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5,
         cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="fdr",
         chromosomes=unique(ge$info$chr))
     end.time <- Sys.time()    
     runtime[["preda"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
-    roc[["preda.best.case"]] <- roc.auc(ordg$best_case_order, cancerGenes)
-    roc[["preda.worst.case"]] <- roc.auc(ordg$worst_case_order, cancerGenes)
-    ordered.genes[["preda.best.case"]] <- ordg$best_case_order        
-    ordered.genes[["preda.worst.case"]] <- ordg$worst_case_order            
+    
+    #ordg_num <- apply(ordg,2,as.numeric)
+    #sort_ind <-function(x){
+     # sort(x, index.return = TRUE)$ix
+    #}
+    
+    #ordg_num_rank <- t(apply(ordg_num,1,sort_ind))
+    #median_ranks <- apply(ordg_num_rank,2,median)
+    
+    roc_preda <- function(x){
+       roc.auc(x, cancerGenes)$auc
+    }
+
+    roc_perms <- apply(ordg,1,roc_preda)
+    choice <- which(roc_perms == median_int(roc_perms))
+    roc[["preda"]] <- roc.auc(ordg[choice,], cancerGenes)
+    ordered.genes[["preda"]] <- ordg[choice,]                
   }
   
   return(list(auc = sapply(roc, function(x) {x$auc}), roc = roc, 

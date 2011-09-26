@@ -1,4 +1,4 @@
-test.geneorder.preda <- function(ge, cn, Labels, nperm, ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod, ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5, cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, chromosomes=1:22, correction.method, cancerGenes){
+test.geneorder.preda <- function(ge, cn, nperm, ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod, ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5, cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, chromosomes=1:22, correction.method, cancerGenes){
 require(PREDA)
 
 # If no start/end positions given for the probes,
@@ -99,8 +99,17 @@ false_positive_genes <- all_genes[false_positive_index]
 true_positive_genes <- setdiff(found_genes,false_positive_genes)
 true_negative_genes <- setdiff(not_found_genes,false_negative_genes)
 
-ordg_best_case <- as.character(c(true_positive_genes,false_positive_genes,false_negative_genes,true_negative_genes))
-ordg_worst_case <- as.character(c(false_positive_genes,true_positive_genes,true_negative_genes,false_negative_genes))
+positives <- c(true_positive_genes,false_positive_genes)
+negatives <- c(false_negative_genes,true_negative_genes)
 
-list(best_case_order=ordg_best_case, worst_case_order=ordg_worst_case)
+perms <- 1000
+positives_perms <- matrix(rep(positives,perms),nrow=perms,byrow=TRUE)
+negatives_perms <- matrix(rep(negatives,perms),nrow=perms,byrow=TRUE)
+
+positives_perms_new <- t(apply(positives_perms, 1, sample_genes))
+negatives_perms_new <- t(apply(negatives_perms, 1, sample_genes))
+
+genes <- cbind(positives_perms_new,negatives_perms_new)
+
+genes
 }

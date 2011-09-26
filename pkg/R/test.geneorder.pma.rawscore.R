@@ -1,5 +1,5 @@
 
-test.geneorder.pma.rawscore <- function (ge, cn, Labels = NULL) {
+test.geneorder.pma.rawscore <- function (ge, cn) {
 
   # Note that this method does not utilize Label information, option added for compatibility
 
