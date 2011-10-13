@@ -78,8 +78,23 @@ SDGsignature_amplified <- computeDatasetSignature(SODEGIRGEDataForPREDA, genomic
 SDGsignature_deleted <- computeDatasetSignature(SODEGIRGEDataForPREDA, genomicRegionsList = SODEGIR_DELETED)
 
 # Compare found significant regions with
+if(length(SDGsignature_amplified[[1]]) > 0 & length(SDGsignature_deleted[[1]]) > 0){
+found <- 1
 regions <- rbind(GenomicRegions2dataframe(SDGsignature_amplified[[1]]),GenomicRegions2dataframe(SDGsignature_deleted[[1]]))
+}
+if(length(SDGsignature_amplified[[1]]) == 0 & length(SDGsignature_deleted[[1]]) > 0){
+found <- 1
+regions <- GenomicRegions2dataframe(SDGsignature_deleted[[1]])
+}
+if(length(SDGsignature_amplified[[1]]) > 0 & length(SDGsignature_deleted[[1]]) == 0){
+found <- 1
+regions <- GenomicRegions2dataframe(SDGsignature_amplified[[1]])
+}
+if(length(SDGsignature_amplified[[1]]) == 0 & length(SDGsignature_deleted[[1]]) == 0){
+found <- 0
+}
 
+if(found == 1){
 found_index <- numeric()
 for(j in 1:nrow(regions)){
     neu <- which(ge$info$chr == regions$chr[j] & ge$info$loc >= regions$start[j] & ge$info$loc <= regions$end[j])
@@ -110,6 +125,9 @@ positives_perms_new <- t(apply(positives_perms, 1, sample_genes))
 negatives_perms_new <- t(apply(negatives_perms, 1, sample_genes))
 
 genes <- cbind(positives_perms_new,negatives_perms_new)
+} else {
+genes <- NULL
+}
 
 genes
 }

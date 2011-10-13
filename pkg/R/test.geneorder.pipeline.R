@@ -7,17 +7,17 @@
 
 test.geneorder.pipeline <- function (ge, 
                                       cn.raw = NULL,
-				     cn.seg = NULL,
-				     cn.call = NULL,				    
-				     cghCall = NULL,
-				     cancerGenes, 
-				     nperm = 1e2, 
-				     methods = NULL, 
-				     callprobs = NULL, 
-				     evaluate = TRUE, 
-				     cn.default = "segmented",
+                     cn.seg = NULL,
+                     cn.call = NULL,                    
+                     cghCall = NULL,
+                     cancerGenes, 
+                     nperm = 1e2, 
+                     methods = NULL, 
+                     callprobs = NULL, 
+                     evaluate = TRUE, 
+                     cn.default = "segmented",
              references ="both"
-				     ) {
+                     ) {
 
   #########################################################
 
@@ -217,15 +217,17 @@ test.geneorder.pipeline <- function (ge,
     ordered.genes[["OrtizEstevez"]] <- ordg        
   }                                      
           
-  available.methods <- c(available.methods, "PREDA")	  
+  available.methods <- c(available.methods, "PREDA")      
   if (!is.null(methods) && ("PREDA" %in% methods) && evaluate) {
     message("PREDA")
-    start.time <- Sys.time()    
+    cond <- 0
+    start.time <- Sys.time()
+    if(exists("ordg")){rm(ordg)}
     ordg <- test.geneorder.preda(ge, cn, nperm=nperm, cancerGenes=cancerGenes,
         ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod="spline",
         ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5,
-        cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="fdr",
-        chromosomes=unique(ge$info$chr))
+        cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, correction.method="fdr", chromosomes=unique(ge$info$chr))   
+    if(is.null(ordg) == FALSE){cond <- 1}
     end.time <- Sys.time()    
     runtime[["preda"]] <- as.numeric(difftime(end.time, start.time, units='mins'))
     
@@ -240,11 +242,16 @@ test.geneorder.pipeline <- function (ge,
     roc_preda <- function(x){
        roc.auc(x, cancerGenes)$auc
     }
-
+    if(cond==1){
     roc_perms <- apply(ordg,1,roc_preda)
     choice <- which(roc_perms == median_int(roc_perms))
     roc[["preda"]] <- roc.auc(ordg[choice,], cancerGenes)
-    ordered.genes[["preda"]] <- ordg[choice,]                
+    ordered.genes[["preda"]] <- ordg[choice,]
+    } else {
+    roc[["preda"]] <- list(auc = 0.5, tpr = NULL, fpr = NULL)
+    ordered.genes[["preda"]] <- NULL
+    }
+                    
   }
   
   return(list(auc = sapply(roc, function(x) {x$auc}), roc = roc, 
