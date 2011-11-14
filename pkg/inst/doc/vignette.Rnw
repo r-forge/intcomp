@@ -49,13 +49,17 @@ details, see \cite{Lahti11review}.
 To install this package directly within R type:
 
 <<inst, results = hide, eval = FALSE>>=
-install.packages("intcomp", repos="http://R-Forge.R-project.org")
+install.packages("intcomp", type = "source", 
+  repos="http://R-Forge.R-project.org", dependencies = TRUE)
 @
+
+In case of error messages, see below.
 
 \subsection{Dependencies}
 
-The benchmarking pipeline depends on various external R
-packages. Install the  dependencies from within R using the following
+You may need to install dependencies before the intcomp package can be
+installed. The benchmarking pipeline depends on various external R
+packages. Install the dependencies from within R using the following
 commands:
 
 <<deps, results = hide, eval = FALSE>>=
@@ -240,9 +244,9 @@ auc.ordered <- sort(unlist(res.schaefer$auc))
 
 The minimal input data for the test.geneorder.pipeline banchmarking
 function includes (i) gene expression data (ge), (ii) gene copy number
-data (cn.raw/cn.seg/cn.call/cghCall), (iii) a golden standard list of
-known cancer genes (cancerGenes), and (iv) the list of methods to
-compare (mehods).
+data (cn.raw / cn.seg / cn.call / cghCall), (iii) a golden standard
+list of known cancer genes (cancerGenes), and (iv) the list of methods
+to compare (mehods).
 
 The gene expression and copy number data sets are lists containing
 $data$ and $info$ fields; the probes in gene expression and gene copy
@@ -271,13 +275,6 @@ investigated.
 
 \section{Comparison methods}
 
-The list of available methods in the pipeline is retrieved with:
-    
-<<methods>>=
-library(intcomp)
-as.matrix(list.methods())
-@
-
 The following {\it implementations} are available in the
 \Rpackage{intcomp} benchmarking pipeline: {\it CNAmet}
 \cite{Hautaniemi04,Louhimo11}, variants of {\it DRI}
@@ -285,11 +282,16 @@ The following {\it implementations} are available in the
 \cite{Wieringen09}, {\it OrtizEstevez} \cite{Ortiz-Estevez11}, {\it
 pint} \cite{Lahti09mlsp}, variants of {\it SIM} \cite{Menezes2009}, 
 {\it PMA} \cite{Witten09}, {\it PREDA/SODEGIR}
-\cite{Bicciato09,Ferrari11}.
+\cite{Bicciato09,Ferrari11}. The list of available methods in the
+pipeline is retrieved with:
+    
+<<methods,results=hide>>=
+library(intcomp)
+@
 
-%and %exclusively for two-group comparisons (requiring Labels) {\it
-%DRI.ct}, %{\it DRI.ss}, {\it DRI.srank}, {\it DRI.sraw}
-%\cite{Salari2010}. 
+<<methods2>>=
+list.methods()
+@
 
 
 \section{Benchmarking results}
@@ -305,14 +307,15 @@ reported in \cite{Lahti11review}.
 
 The following package versions were used to produce this vignette:
 
-<<sessioinfo>>
+<<sessioninfo>>=
 sessionInfo()
 @
 
 \subsection*{Acknowledgements}
 
-The package has been supported by EuGESMA COST Action BM0801: European
-Genetic and Epigenetic Study on AML and MDS.
+This work has been supported by EuGESMA COST Action BM0801: European
+Genetic and Epigenetic Study on AML and MDS. We would also like to
+thank Fransesco Ferrari for providing simulated data for the study.
 
 %\bibliographystyle{ieeetr}
 %\bibliography{intcomp}
