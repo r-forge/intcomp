@@ -1,3 +1,6 @@
+# License: FreeBSD, http://en.wikipedia.org/wiki/BSD_licenses
+# Copyright 2011 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
+# rights reserved.
 
 removeAFFX <- function (sets) {                                      
   # Remove AFFX control sets from set list            

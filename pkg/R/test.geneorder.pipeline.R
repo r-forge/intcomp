@@ -1,3 +1,9 @@
+# This script is part of the intcomp project: 
+# http://intcomp.r-forge.r-project.org/
+# License: FreeBSD, http://en.wikipedia.org/wiki/BSD_licenses
+# Copyright 2011 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
+# rights reserved.
+
 # ge            list object contain a data matrix with gene expression data and a matrix with annotations for gene expression data
 # cn            object contain a data matrix with copy number data and a matrix with annotations for copy number data
 # Labels        labels to distinguish between patient (1) and reference (0) samples

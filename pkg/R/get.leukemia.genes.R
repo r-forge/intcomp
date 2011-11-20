@@ -1,3 +1,5 @@
+# License: FreeBSD, http://en.wikipedia.org/wiki/BSD_licenses
+# Copyright 2011 Leo Lahti, leo.lahti@iki.fi. All rights reserved.
 
 get.leukemia.genes <- function (stratton.cancer.gene.census) {
 

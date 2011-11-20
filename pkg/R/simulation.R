@@ -1,3 +1,10 @@
+# This script is part of the intcomp project: 
+# http://intcomp.r-forge.r-project.org/
+# License: FreeBSD, http://en.wikipedia.org/wiki/BSD_licenses
+# Copyright 2011 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
+# rights reserved.
+
+
 #### Generates four data sets, one cases and one control data set for each copy number and gene expression (no ratios of cases and controls),
 #### based on the input of one real copy number data set and one real gene expression data set, both supposedly from cases.
 #### The simulation setup roughly follows the one of Schäfer et al. (2009): Integrated analysis of copy number alterations and gene expression: a bivariate assessment of equally directed abnormalities.

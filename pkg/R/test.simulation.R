@@ -1,3 +1,10 @@
+# This script is part of the intcomp project: 
+# http://intcomp.r-forge.r-project.org/
+# License: FreeBSD, http://en.wikipedia.org/wiki/BSD_licenses
+# Copyright 2011 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
+# rights reserved.
+
+
 # GE           either a matrix of gene expression data, without annotation, or a list containing an object 'data' (used only for method="schaefer"). If nothing is supplied, data from Schaefer et al. (2009) is taken.
 # CN           either a matrix of copy number data, without annotation, or a list containing an object 'data' (used only for method="schaefer"). If nothing is supplied, data from Schaefer et al. (2009) is taken.
 # probespanGE  the width of gene expression probes

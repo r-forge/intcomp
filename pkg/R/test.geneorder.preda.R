@@ -1,3 +1,9 @@
+# This script is part of the intcomp project: 
+# http://intcomp.r-forge.r-project.org/
+# License: FreeBSD, http://en.wikipedia.org/wiki/BSD_licenses
+# Copyright 2011 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
+# rights reserved.
+
 test.geneorder.preda <- function(ge, cn, nperm, ge.qval.threshold=0.05, cn.qval.threshold=0.01, smoothMethod, ge.smoothStatistic.threshold.up=0.5, ge.smoothStatistic.threshold.down=-0.5, cn.smoothStatistic.threshold.gain=0.1, cn.smoothStatistic.threshold.loss=-0.1, chromosomes=1:22, correction.method, cancerGenes){
 require(PREDA)
 

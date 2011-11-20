@@ -1,3 +1,10 @@
+# This script is part of the intcomp project: 
+# http://intcomp.r-forge.r-project.org/
+# License: FreeBSD, http://en.wikipedia.org/wiki/BSD_licenses
+# Copyright 2011 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
+# rights reserved.
+
+
 process.ge <- function (ge, probespanGE) {
 
   # Convert gene expression data into mrnaSet object required by intCNGEan
