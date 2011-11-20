@@ -25,22 +25,19 @@ prioritization algorithms based on gene expression and copy number data}
 
 \section{Introduction}
 
-Several algorithms have been suggested to integrate gene expression
-and DNA copy number measurement to discover cancer-associated
-chromosomal regions, but quantitative comparison of these models has
-been missing. The \Rpackage{intcomp} R package provides a benchmarking
-pipeline for quantitative comparisons between the different
-implementations for integrative analysis of ge/cn data. This vignette
-provides installation instructions, practical examples and references
-to the algorithmic details of the \Rpackage{intcomp} benchmarking
-pipeline \cite{Lahti11review}.
+Various algorithms have been suggested to discover cancer-associated
+genes and chromosomal regions based on integrative analysis of
+genome-wide gene expression and DNA copy number profiling
+data. However, quantitative comparison of these models has been
+missing. The \Rpackage{intcomp} R package provides a benchmarking
+pipeline for quantitative comparisons of the alternative methods.
 
-In the \Rpackage{intcomp} pipeline, the cancer gene detection
-performance of each algorithm is evaluated based on gene
-prioritization by using each method. Each method is used to order the
-gene list, and the resulting order is compared to golden standard
-lists of known cancer genes on simulated and real data sets. For
-details, see \cite{Lahti11review}.
+This vignette is aimed to provide installation instructions, examples
+and algorithmic details of the \Rpackage{intcomp} benchmarking
+pipeline used in \cite{Lahti11review}. Each algorithm is used to
+prioritize the gene list, and the resulting order is compared to
+golden standard lists of known cancer genes on simulated and real data
+sets. For details, see \cite{Lahti11review}.
 
 \section{Installation}
 
@@ -57,10 +54,9 @@ In case of error messages, see below.
 
 \subsection{Dependencies}
 
-You may need to install dependencies before the intcomp package can be
-installed. The benchmarking pipeline depends on various external R
-packages. Install the dependencies from within R using the following
-commands:
+You may need to install dependencies before the \Rpackage{intcomp}
+package can be installed. The benchmarking pipeline depends on various
+external R packages. Install the dependencies from within R: 
 
 <<deps, results = hide, eval = FALSE>>=
 source("http://www.bioconductor.org/biocLite.R") 
@@ -79,16 +75,46 @@ org.Hs.eg.db\footnote{http://www.bioconductor.org/packages/release/data/annotati
 PREDA/SODEGIR\footnote{http://www.bioconductor.org/packages/devel/bioc/html/PREDA.html},
 and CNAmet\footnote{http://csbi.ltdk.helsinki.fi/CNAmet/}.
 
-\section{Benchmarking the comparison methods}
+\section{Using the benchmarking pipeline}
+
+The minimal input data for the test.geneorder.pipeline banchmarking
+function includes (i) gene expression data (ge), (ii) gene copy number
+data (cn.raw / cn.seg / cn.call / cghCall), (iii) a golden standard
+list of known cancer genes (cancerGenes), and (iv) the list of methods
+to compare (mehods). For practical examples, see below.
+
+The gene expression and copy number data sets are lists containing
+$data$ and $info$ fields; the probes in gene expression and gene copy
+number need to be matched; $data$ is a data matrix with gene
+expression (GE\$data) or gene copy number (CN\$data) data; $info$
+field is a data frame containing additional information about genes:
+$loc$ indicates the genomic location of the probes in base pairs
+(numeric); $chr$ and $arm$ are factors indicating the chromosome and
+chromosomal arm of the probe, respectively. The user can provide the
+copy number data as raw (cn.raw), segmented (cn.seg) or called
+(cn.call) version. Certain methods require specific versions of the
+copy number. For instance, the CNAmet requires called copy number
+data. The intCNGEan algorithm requires copy number as a cghCall object
+from the \Rpackage{CGHcall} R package. It is advisable to provide all
+four versions - cn.raw, cn.seg, cn.call and cghCall - in the input to
+the test.geneorder.pipeline function when possible. The cn.raw, cn.seg
+and cn.call should follow the data + info format explained above, and
+the cghCall contains the raw, segmented and called data in the cghCall
+format. Finally, if multiple versions of copy number data are
+available, the user can specify (through the cn.default argument)
+which version is coupled with gene expression data unless otherwise
+specified by particular methods. By default, the associations between
+gene expression and segmented copy number data (ge + cn.seg) are
+investigated.
+
+\section{Benchmarking examples}
 
 The package contains a copy of the publicly available cancer data sets
-from \cite{Hyman2002} and \cite{Pollack2002} to benchmark the cancer
-gene detection algorithms on real experimental data, and two simulated
-data sets from previous publications \cite{Bicciato09, Schafer09},
-called Ferrari and Schaefer data sets, respectively. The data sets
-have varying setups, depending on whether they include two-group
-comparisons or segmented/called copy number data. Showcases running
-the benchmarking pipeline on each data set are described below.
+from \cite{Hyman2002} and \cite{Pollack2002} ('Hyman' and 'Pollack'
+data sets) and two simulated data sets from previous publications
+\cite{Bicciato09, Schafer09} ('Ferrari' and 'Schaefer' data sets). For
+details, see \cite{Lahti11review} Showcases running the benchmarking
+pipeline on each data set are described below.
 
 \subsection{Hyman et al. (2002)}
 
@@ -240,50 +266,19 @@ auc.ordered <- sort(unlist(res.schaefer$auc))
 @
 
 
-\section{Notes on the benchmarking pipeline}
 
-The minimal input data for the test.geneorder.pipeline banchmarking
-function includes (i) gene expression data (ge), (ii) gene copy number
-data (cn.raw / cn.seg / cn.call / cghCall), (iii) a golden standard
-list of known cancer genes (cancerGenes), and (iv) the list of methods
-to compare (mehods).
-
-The gene expression and copy number data sets are lists containing
-$data$ and $info$ fields; the probes in gene expression and gene copy
-number need to be matched; $data$ is a data matrix with gene
-expression (GE\$data) or gene copy number (CN\$data) data; $info$
-field is a data frame containing additional information about genes:
-$loc$ indicates the genomic location of the probes in base pairs
-(numeric); $chr$ and $arm$ are factors indicating the chromosome and
-chromosomal arm of the probe, respectively. The user can provide the
-copy number data as raw (cn.raw), segmented (cn.seg) or called
-(cn.call) version. Certain methods require specific versions of the
-copy number. For instance, the CNAmet requires called copy number
-data. The intCNGEan algorithm requires copy number as a cghCall object
-from the \Rpackage{CGHcall} R package. It is advisable to provide all
-four versions - cn.raw, cn.seg, cn.call and cghCall - in the input to
-the test.geneorder.pipeline function when possible. The cn.raw, cn.seg
-and cn.call should follow the data + info format explained above, and
-the cghCall contains the raw, segmented and called data in the cghCall
-format. Finally, if multiple versions of copy number data are
-available, the user can specify (through the cn.default argument)
-which version is coupled with gene expression data unless otherwise
-specified by particular methods. By default, the associations between
-gene expression and segmented copy number data (ge + cn.seg) are
-investigated.
 
 
 \section{Comparison methods}
 
-The following {\it implementations} are available in the
-\Rpackage{intcomp} benchmarking pipeline: {\it CNAmet}
-\cite{Hautaniemi04,Louhimo11}, variants of {\it DRI}
-\cite{Salari2010}, {\it edira} \cite{Schafer09}, {\it intcngean}
-\cite{Wieringen09}, {\it OrtizEstevez} \cite{Ortiz-Estevez11}, {\it
-pint} \cite{Lahti09mlsp}, variants of {\it SIM} \cite{Menezes2009}, 
-{\it PMA} \cite{Witten09}, {\it PREDA/SODEGIR}
-\cite{Bicciato09,Ferrari11}. The list of available methods in the
-pipeline is retrieved with:
+The following implementations included in the \Rpackage{intcomp}
+benchmarking pipeline: {\it CNAmet} \cite{Hautaniemi04,Louhimo11},
+variants of {\it DRI} \cite{Salari2010}, {\it edira} \cite{Schafer09},
+{\it intCNGEan} \cite{Wieringen09}, {\it Ortiz-Estevez}
+\cite{Ortiz-Estevez11}, {\it pint} \cite{Lahti09mlsp}, variants of
+{\it SIM} \cite{Menezes2009}, {\it PMA} \cite{Witten09}, {\it
+PREDA/SODEGIR} \cite{Bicciato09,Ferrari11}. The list of available
+methods in the pipeline is retrieved with:
     
 <<methods,results=hide>>=
 library(intcomp)
