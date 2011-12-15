@@ -1,0 +1,20 @@
+This directory contains the result files for the five benchmarking
+data sets, as reported in Lahti et al. (in review; preprint available
+at arXiv: http://arxiv.org/abs/1111.4639). Each R data file (see
+http://r-project.org) corresponds to a specific benchmarking data set,
+and contains a result list with the following elements:
+
+auc: ROC/AUC scores for the comparison algorithms
+
+roc: for each comparison algorithm, this element contains the ROC/AUC
+score (auc) and the true positive rate (tpr) and false positive rate
+(fpr) along the prioritized gene list.
+
+runtime: running times for the comparison algorithms
+
+ordered.genes: prioritized gene list for each comparison algorithm
+
+cancerGenes: list of known cancer genes for this data set
+
+available.methods: list of the comparison algorithm names
+
