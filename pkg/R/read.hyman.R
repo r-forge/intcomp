@@ -5,7 +5,10 @@
 # rights reserved.
 
 
-read.hyman <- function (cdna, cgh, genenames, chrs = 1:22, xx) {
+read.hyman <- function (cdna, cgh, genenames, chrs = 1:22, xx, useSegmentedData = FALSE, remove.duplicates = TRUE) {
+
+ #for (f in list.files("~/local/Rpackages/intcomp/intcomp/intcomp/pkg/R/", full.names = TRUE, pattern = ".R$")) {source(f)}
+ #xx = as.list(org.Hs.egALIAS2EG); useSegmentedData = TRUE; remove.duplicates = FALSE; chrs <- 1:22
 
   # Load cdna, cgh, genenames 
   # preprocessed as in Berger et al., 2002
@@ -54,10 +57,15 @@ read.hyman <- function (cdna, cgh, genenames, chrs = 1:22, xx) {
   # note: cn and ge already at the same resolution,
   # no need to segment cn before matching!
   require(pint)
-  tmp <- pint.match(geneExp, geneCopyNum, chrs = chrs)
+  tmp <- pint.match(geneExp, geneCopyNum, chrs = chrs, useSegmentedData = useSegmentedData, remove.duplicates = remove.duplicates)
 
   # Segmentation/calling for copy number data
   CN.raw <- tmp$Y
+  if (any(duplicated(rownames(CN.raw$data)))) {
+    nams <- apply(cbind(rownames(CN.raw$data), 1:nrow(CN.raw$data)), 1, function (x) {paste(x, collapse = "-rowid")})
+    rownames(CN.raw$data) <- nams
+    rownames(CN.raw$info) <- nams
+  } 
   cgh <- process.copynumber(CN.raw)
 
   #list(ge = tmp$X, cn = tmp$Y, Labels = NULL)

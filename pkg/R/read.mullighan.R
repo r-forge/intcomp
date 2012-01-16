@@ -4,8 +4,10 @@
 # Copyright 2011 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
 # rights reserved.
 
-
-read.mullighan <- function(chrs = 1:22, location.table, cnAnnotation, cnData, cn, eSet) {
+read.mullighan <- function(chrs = 1:22, location.table, cnAnnotation,
+                           cnData, cn, eSet, useSegmentedData = FALSE, remove.duplicates = TRUE) {
+  
+  # chrs = 1:22; remove.duplicates = FALSE
   
   require(affy)
 
@@ -76,11 +78,17 @@ read.mullighan <- function(chrs = 1:22, location.table, cnAnnotation, cnData, cn
   ge <- list(data = as.matrix(xdata), info = as.data.frame(xinfo))
   cn <- list(data = as.matrix(cnData), info = as.data.frame(cnAnnotation))
   cn.raw <- list(data = as.matrix(cn.raw), info = as.data.frame(info.raw))
+
+  # max.dist = 1e7; chrs <- 1:22; save(ge, cn, max.dist, chrs, remove.duplicates, file = "tmp.mullighan.RData")
+  # load("tmp.mullighan.RData")
   
   # Match rows
   library(pint)
-  matched <- pint.match(ge, cn, max.dist = 1e7, chrs = chrs)
+  matched <- pint.match(ge, cn, max.dist = 1e7, chrs = chrs,
+useSegmentedData = useSegmentedData, remove.duplicates = remove.duplicates)
   
+  # dat <- list(ge = matched$X, cn = matched$Y, labels = unname(sapply(colnames(matched$X$data), function(x){strsplit(x,"_")[[1]][[1]]})), 
+  # cn.raw = cn.raw)
   list(ge = matched$X, cn = matched$Y, labels = unname(sapply(colnames(matched$X$data), function(x){strsplit(x,"_")[[1]][[1]]})), cn.raw = cn.raw)
 
 }
