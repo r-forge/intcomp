@@ -142,8 +142,6 @@ CNAmet that require segmented and called data, respectively). To run
 the intcomp benchmarking pipeline on Hyman data set, use
 
 <<hyman, results=hide, eval = FALSE>>=
-# Set comparison methods for benchmarking
-methods <- c("CNAmet","edira")
 
 # Load the benchmarking pipeline
 library(intcomp)
@@ -159,15 +157,22 @@ data(tgdb)
 # Convert to EntrezIDs and select genes common with the ge/cn data
 cancerGenes <- get.brca.genes(rownames(hyman$ge$data), symbol2entrezid, tgdb)
 
-# Run the benchmarking pipeline
-res.hyman <- test.geneorder.pipeline(ge = hyman$ge,           # expression
-                                     cn.raw = hyman$cn.raw,   # raw copy number
-				     cghCall = hyman$cghCall, # segm/called cn
-				     cancerGenes = cancerGenes, 
-				     methods = methods, 
-				     cn.default = "raw", # use with ge 
-             references="none")  # no real reference data included 
+# Set comparison methods
+methods <- c("OrtizEstevez","intcngean", "edira", "pint", 
+	     "SIM.window",  "SIM.full", "DRI.cp", "DRI.cs",
+	     "PMA.raw", "CNAmet", "DRI.ct")
 
+# Run the benchmarking pipeline
+set.seed(244441)
+res.hyman <- test.geneorder.pipeline(
+                    ge = hyman$ge,
+                cn.raw = hyman$cn.raw,
+               cghCall = hyman$cghCall,
+           cancerGenes = cancerGenes,
+               methods = methods,
+            cn.default = "raw", 
+                 nperm = 1e3)
+         
 # Check the AUC values for the methods
 auc.ordered <- sort(unlist(res.hyman$auc))
 @
@@ -182,13 +187,12 @@ in the Pollack data are converted into Entrez Gene IDs. To run the
 benchmarking tests on Pollack data set, use
 
 <<pollack, results = hide, eval = FALSE>>=
-# Set comparison methods for benchmarking
-methods <- c("CNAmet","edira")
 
 # Load and preprocess the GE/CN data
 library(intcomp)
 data(pollack)
-pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid)
+pollack <- read.pollack(dat = CopyNoGeneDataset4719, 
+	                clone2geneid = clone2geneid)
 
 # Load the known breast cancer genes
 library("org.Hs.eg.db")
@@ -197,18 +201,22 @@ data(tgdb)
 cancerGenes <- get.brca.genes(rownames(pollack$ge$data), 
 	                   as.list(org.Hs.egALIAS2EG), tgdb)
 
-# Run the benchmarking pipeline
-res.pollack <- test.geneorder.pipeline(ge = pollack$ge, 
-                                       cn.raw = pollack$cn.raw,
-				       cghCall = pollack$cghCall,
-				       cancerGenes = cancerGenes, 
-				       methods = methods, 
-				       cn.default = "raw",
-               references="none") 
+# Set comparison methods for benchmarking
+methods <- c("OrtizEstevez","intcngean", "edira", "pint", "SIM.window",
+             "SIM.full", "DRI.cp", "DRI.cs", "DRI.ct", "PMA.raw", "CNAmet")
 
+
+# Run the benchmarking pipeline
+res.pollack <- test.geneorder.pipeline(ge = pollack$ge,
+                                       cn.raw = pollack$cn.raw,
+                                       cghCall = pollack$cghCall,
+                                       cancerGenes = cancerGenes,
+                                       methods = methods,
+                                       cn.default = "raw", 
+                                       nperm = 1e3)
+                                               
 # Check the AUC values for the methods
 auc.ordered <- sort(unlist(res.pollack$auc))
-
 @
 
 \subsection{Ferrari data set (2009)}
@@ -217,19 +225,27 @@ The first simulated data set, where the exact ground truth is known,
 is provided by the simulation approach given in \cite{Bicciato09}:
 
 <<ferrari, results = hide, eval=FALSE>>=
-# Generate simulated data
 library(intcomp)
+
+# Generate simulated data
 ferrari <- test.simulation(GE, CN, method = "ferrari")
 
-# Run the benchmarking pipeline
+# Set comparison methods
+methods <- c("edira" , "DRI.cp" , "DRI.cs" , "SIM.full" , "SIM.window", 
+	     "CNAmet" , "intcngean" , "PMA.raw", "pint" , "OrtizEstevez",
+	     "PREDA")
+
+#Run benchmarking pipeline
+set.seed(335)
 res.ferrari  <- test.geneorder.pipeline(
-       ge = ferrari$ge, 
-  cn.raw  = ferrari$cn.raw,
-  cn.seg  = ferrari$cn.seg, 
-  cn.call  = ferrari$cn.call,
-  cghCall = ferrari$cn.cghCall, 
-  cancerGenes = ferrari$cancerGenes,
-      methods = methods)
+            ge = ferrari$ge,
+       cn.raw  = ferrari$cn.raw,       
+       cn.seg  = ferrari$cn.seg,
+       cn.call  = ferrari$cn.call,       
+       cghCall = ferrari$cn.cghCall,
+       cancerGenes = ferrari$cancerGenes,
+       methods = methods, 
+       nperm = 1e3)
 
 # Check the AUC values from comparison methods
 auc.ordered <- sort(unlist(res.ferrari$auc))
@@ -245,25 +261,29 @@ probabilities.
 
 <<schaefer, results = hide, eval=FALSE>>=
 
-# Set the methods for benchmarking
-methods <- c("CNAmet","edira")
 
-# Generate simulated data
-library(intcomp)
-library(ediraAMLdata)
-data(AMLdata, package = "ediraAMLdata")
+library(intcomp)                                       
+library(ediraAMLdata)                                  
+
+# Generate simulated data                                      
+data(AMLdata, package="ediraAMLdata")                                  
 schaefer <- test.simulation(GE, CN, method = "schaefer")
+
+# Set the methods for benchmarking 
+methods <- c("edira" , "DRI.cp" , "DRI.cs" , "DRI.ct", "SIM.full", 
+	     "SIM.window", "CNAmet" , "intcngean" , "PMA.raw", "pint" , 
+	     "OrtizEstevez", "PREDA")
 
 # Run the benchmarking pipeline
 res.schaefer  <- test.geneorder.pipeline(
        ge = schaefer$ge,
-   cn.raw = schaefer$cn.raw, 
-  cghCall = schaefer$cn.cghCall,
- cancerGenes = schaefer$cancerGenes,
-  methods = methods, 
-  callprobs = schaefer$callprobs,
-  cn.default = "raw")
-  
+       cn.raw = schaefer$cn.raw,
+       cghCall = schaefer$cn.cghCall,
+       cancerGenes = schaefer$cancerGenes,
+       methods = methods,
+       callprobs = schaefer$callprobs, 
+       nperm = 1e3)
+                     
 # Check the AUC values from comparison methods
 auc.ordered <- sort(unlist(res.schaefer$auc))
 @
