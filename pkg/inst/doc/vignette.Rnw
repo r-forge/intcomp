@@ -41,39 +41,41 @@ sets. For details, see \cite{Lahti11review}.
 
 \section{Installation}
 
-\subsection{Installing the intcomp benchmarking pipeline}
-
-To install this package directly within R type:
-
-<<inst, results = hide, eval = FALSE>>=
-install.packages("intcomp", type = "source", 
-  repos="http://R-Forge.R-project.org", dependencies = TRUE)
-@
-
-In case of error messages, see below.
 
 \subsection{Dependencies}
 
-You may need to install dependencies before the \Rpackage{intcomp}
+You need to check dependencies are installed before the \Rpackage{intcomp}
 package can be installed. The benchmarking pipeline depends on various
 external R packages. Install the dependencies from within R: 
 
 <<deps, results = hide, eval = FALSE>>=
 source("http://www.bioconductor.org/biocLite.R") 
-biocLite(c("biomaRt", "DNAcopy", "DRI", "edira", 
-"hgu133ahsentrezg.db", "intCNGEan", "org.Hs.eg.db", 
-"PMA", "SIM", "PREDA", "CGHcall", "CNAmet"))
+biocLite(c("biomaRt", "DNAcopy", "DRI", "hgu133ahsentrezg.db", 
+           "org.Hs.eg.db", "pint", "PMA", "SIM", "PREDA", 
+           "CGHcall"))
+install.packages("XML")
+install.packages("RCurl")
 @
 
 You may need to install the following packages manually: curl
 library\footnote{http://curl.haxx.se/download.html} and the R packages
 XML\footnote{http://cran.r-project.org/web/packages/XML/index.html},
 RCurl\footnote{http://www.omegahat.org/RCurl/},
-edira\footnote{http://www.statistik.tu-dortmund.de/~schaefer/},
-intCNGEan\footnote{http://www.few.vu.nl/~wvanwie/software/intCNGEan/intCNGEan.html},
-org.Hs.eg.db\footnote{http://www.bioconductor.org/packages/release/data/annotation/html/org.Hs.eg.db.html},
-PREDA/SODEGIR\footnote{http://www.bioconductor.org/packages/devel/bioc/html/PREDA.html},
-and CNAmet\footnote{http://csbi.ltdk.helsinki.fi/CNAmet/}.
+edira and ediraAMLdata\footnote{http://www.statistik.tu-dortmund.de/~schaefer/},
+intCNGEan\footnote{http://www.few.vu.nl/~wvanwie/software/intCNGEan/intCNGEan.html}, and CNAmet\footnote{http://csbi.ltdk.helsinki.fi/CNAmet/}.
+
+\subsection{Installing the intcomp benchmarking pipeline}
+
+After installing the dependencies, download the source package from
+http://intcomp.r-forge.r-project.org/archive/intcomp\_latest.tar.gz
+
+To install this package directly from within R:
+<<inst, results = hide, eval = FALSE>>=
+install.packages("intcomp_latest.tar.gz", type = "source")
+@
+
+Let us know if you encounter problems in the installation.
+
 
 \section{Using the benchmarking pipeline}
 
@@ -192,7 +194,8 @@ pollack <- read.pollack(dat = CopyNoGeneDataset4719, clone2geneid = clone2geneid
 library("org.Hs.eg.db")
 data(tgdb)
 # Convert to EntrezIDs and select genes common with the ge/cn data
-cancerGenes <- get.brca.genes(rownames(pollack$ge$data), as.list(org.Hs.egALIAS2EG), tgdb)
+cancerGenes <- get.brca.genes(rownames(pollack$ge$data), 
+	                   as.list(org.Hs.egALIAS2EG), tgdb)
 
 # Run the benchmarking pipeline
 res.pollack <- test.geneorder.pipeline(ge = pollack$ge, 
