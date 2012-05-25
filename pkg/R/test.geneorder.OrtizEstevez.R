@@ -1,7 +1,7 @@
 # This script is part of the intcomp project: 
 # http://intcomp.r-forge.r-project.org/
 # License: FreeBSD, http://en.wikipedia.org/wiki/BSD_licenses
-# Copyright 2011 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
+# Copyright 2011-2012 Leo Lahti and Martin Schafer, <leo.lahti@iki.fi>. All
 # rights reserved.
 
 
@@ -15,15 +15,15 @@ test.geneorder.OrtizEstevez <- function (ge, cn) {
 }
 
 
-getOrderedGenes <- function(cn, ge, N=300)
+getOrderedGenes <- function(cn, ge, N = 300)
 {	
 	umbral_pos <- 0.10
 	umbral_neg <- -0.10
 	
 	allDataGE <- list();
 	for(ii in 1:(dim(ge$data)[2])){
- 		aux <- CNA(ge$data[,ii], as.numeric(ge$info$chr), as.numeric(ge$info$loc), data.type="logratio");
- 		auxSeg <- segment(aux)
+ 		aux <- DNAcopy::CNA(ge$data[,ii], as.numeric(ge$info$chr), as.numeric(ge$info$loc), data.type="logratio");
+ 		auxSeg <- DNAcopy::segment(aux)
  		allDataGE <- c(allDataGE,list(auxSeg));
 	}
 
@@ -32,8 +32,8 @@ getOrderedGenes <- function(cn, ge, N=300)
 
 	allDataCN <- list();
 	for(ii in 1:(dim(cn$data)[2])){
- 		aux <- CNA(cn$data[,ii], as.numeric(cn$info$chr), as.numeric(cn$info$loc), data.type="logratio");
- 		auxSeg <- segment(aux)
+ 		aux <- DNAcopy::CNA(cn$data[,ii], as.numeric(cn$info$chr), as.numeric(cn$info$loc), data.type="logratio");
+ 		auxSeg <- DNAcopy::segment(aux)
 		allDataCN <- c(allDataCN,list(auxSeg));
 	}
 
@@ -149,8 +149,4 @@ getRanking <- function(x){
 	}
 	return (rankedGenes)
 }
-
-
-
-
 

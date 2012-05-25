@@ -1,7 +1,7 @@
 Package: intcomp 
 Type: Package
 Title: Multiplatform data integration for gene expression and copy number.
-Version: 0.3.29
+Version: 0.3.30
 Date: 2012-05-23
 Author: Leo Lahti and Martin Schaefer
 Maintainer: Leo Lahti <leo.lahti@iki.fi> 

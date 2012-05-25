@@ -1,3 +1,12 @@
+CHANGES IN VERSION 0.3.30 (2012-05-23)
+
+  o Specified the R package for the segment function in 
+    test.geneorder.OrtizEstevez.R and simulation.R 
+    by DNAcopy::segment
+
+  o removed many functions from the NAMESPACE, just keeping the
+    ones necessary to run experiments in the manuscript
+
 CHANGES IN VERSION 0.3.29 (2012-05-23)
 
   o updated installation instructions in the vignette for R-2.15.0

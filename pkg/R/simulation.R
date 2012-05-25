@@ -202,7 +202,7 @@ simulation_y_r_doppelt_geordnet_ratios <- simulation_y_r_doppelt_geordnet[,(n+1)
 require(DNAcopy)
 CNA <- CNA(genomdat=simulation_x_doppelt_geordnet_ratios, chrom=rep(1,nrow(simulation_x_doppelt_geordnet_ratios)), maploc=1:nrow(simulation_x_doppelt_geordnet_ratios), data.type="logratio",sampleid=1:n)
 smoothed.CNA <- smooth.CNA(CNA)
-segment.smoothed.CNA <- segment(smoothed.CNA, verbose = 1)
+segment.smoothed.CNA <- DNAcopy::segment(smoothed.CNA, verbose = 1)
 
 samples_liste <- strsplit(segment.smoothed.CNA$output$ID, split="X")
 nehme_2 <- function(x){
@@ -223,7 +223,7 @@ for(s in 1:ncol(simulation_x_doppelt_geordnet_ratios_segmentiert)){
 
 CNA_r <- CNA(genomdat=simulation_x_r_doppelt_geordnet_ratios, chrom=rep(1,nrow(simulation_x_r_doppelt_geordnet_ratios)), maploc=1:nrow(simulation_x_r_doppelt_geordnet_ratios), data.type="logratio",sampleid=1:n)
 smoothed.CNA_r <- smooth.CNA(CNA_r)
-segment.smoothed.CNA_r <- segment(smoothed.CNA_r, verbose = 1)
+segment.smoothed.CNA_r <- DNAcopy::segment(smoothed.CNA_r, verbose = 1)
 
 samples_r_liste <- strsplit(segment.smoothed.CNA_r$output$ID, split="X")
 nehme_2 <- function(x){
